@@ -2,7 +2,6 @@ package com.silicium.otusfilmcatalog.UI;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -25,7 +24,6 @@ public class MainActivity extends AppCompatActivity {
 
         for(View v : instance.GetFilmViews(this)) {
             v.setOnClickListener(new View.OnClickListener() {
-                @SuppressLint("ResourceAsColor")
                 @Override
                 public void onClick(View v) {
                     setSelectedFilmTag(v.getTag().toString());
