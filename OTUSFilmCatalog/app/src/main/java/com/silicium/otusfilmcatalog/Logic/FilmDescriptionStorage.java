@@ -1,6 +1,7 @@
 package com.silicium.otusfilmcatalog.Logic;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -67,7 +68,7 @@ public class FilmDescriptionStorage {
      * @param parent родитель
      * @return представление с картинкой и описанием
      */
-    public View GetFilmViewDetails(String ID, Context parent)
+    public View GetFilmViewDetails(final String ID, final Context parent)
     {
         LinearLayout ret = new LinearLayout(parent);
         ret.setOrientation(LinearLayout.VERTICAL);
@@ -80,6 +81,24 @@ public class FilmDescriptionStorage {
         Button btn = new Button(parent);
         btn.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 100));
         btn.setText(R.string.shareTextBtn);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String textMessage = parent.getString(R.string.info_shareFilmMsg) + GetFilmUrl(ID);
+                Intent sendIntent = new Intent();
+                sendIntent.setAction(Intent.ACTION_SEND);
+                sendIntent.putExtra(Intent.EXTRA_TEXT, textMessage);
+                sendIntent.setType("text/html");
+
+                String title = parent.getResources().getString(R.string.info_shareFilmTitle);
+                Intent chooser = Intent.createChooser(sendIntent, title);
+
+                if (sendIntent.resolveActivity(parent.getPackageManager()) != null) {
+                    parent.startActivity(chooser);
+                }
+            }
+        });
+
         ret.addView(btn);
         return ret;
     }
@@ -96,6 +115,22 @@ public class FilmDescriptionStorage {
             views.add(GetFilmView(ID, parent));
         }
         return views;
+    }
+
+    public String GetFilmUrl(String ID)
+    {
+        switch (ID)
+        {
+            case "film1":
+                return "<a href=\"https://www.kinopoisk.ru/film/1040419/\">Детство Шелдона</a>";
+            case "film2":
+                return "<a href=\"https://www.kinopoisk.ru/film/306084/\">Теория большого взрыва</a>";
+
+            case "film3":
+                return "<a href=\"https://www.kinopoisk.ru/film/33821/\">Кролик Багз или Дорожный Бегун</a>";
+            default:
+                return "<a href=\"\"https://www.kinopoisk.ru/error\"\">Где наши чемоданы?</a>";
+        }
     }
 
     private ImageView GetPicView(@org.jetbrains.annotations.NotNull String ID, Context parent)
