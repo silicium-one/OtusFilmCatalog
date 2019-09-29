@@ -7,4 +7,7 @@
     <string name="error_noFilmByID">ID фильма не найден в базе</string>
     <string name="info_shareFilmTitle">Выберите, как пригласить на просмотр</string>
     <string name="info_shareFilmMsg">Предлагаю посмотреть вместе </string>
+    <string name="isLikedCheckBoxText">Нравится</string>
+    <string name="filmCommentHint">Поделитесь впечатлениями о фильме</string>
+    <string name="backPressedText">Нажмите ещё раз для возврата в главное меню</string>
 </resources>
