@@ -77,29 +77,6 @@ public class FilmDescriptionStorage {
         ret.setTag(ID);
         ret.addView(GetPicView(ID, parent)); // TODO: сделать отдельные большие картинки
         ret.addView(GetDescView(ID, parent));
-
-        Button btn = new Button(parent);
-        btn.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 100));
-        btn.setText(R.string.shareTextBtn);
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String textMessage = parent.getString(R.string.info_shareFilmMsg) + GetFilmUrl(ID);
-                Intent sendIntent = new Intent();
-                sendIntent.setAction(Intent.ACTION_SEND);
-                sendIntent.putExtra(Intent.EXTRA_TEXT, textMessage);
-                sendIntent.setType("text/html");
-
-                String title = parent.getResources().getString(R.string.info_shareFilmTitle);
-                Intent chooser = Intent.createChooser(sendIntent, title);
-
-                if (sendIntent.resolveActivity(parent.getPackageManager()) != null) {
-                    parent.startActivity(chooser);
-                }
-            }
-        });
-
-        ret.addView(btn);
         return ret;
     }
 
