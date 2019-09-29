@@ -13,7 +13,7 @@ import com.silicium.otusfilmcatalog.R;
 
 public class MainActivity extends AppCompatActivity {
 
-    String selectedFilmTag = ""; // TODO: оптимизировать на доступ по индексу
+    private String selectedFilmTag = ""; // TODO: оптимизировать на доступ по индексу
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,15 +28,33 @@ public class MainActivity extends AppCompatActivity {
                 @SuppressLint("ResourceAsColor")
                 @Override
                 public void onClick(View v) {
-                    View prev = root.findViewWithTag(selectedFilmTag);
-                    if (prev != null)
-                        prev.setBackgroundColor(root.getDrawingCacheBackgroundColor());
-
-                    selectedFilmTag = v.getTag().toString();
-                    v.setBackgroundColor(getResources().getColor(R.color.colorSelectedFilm)); // todo: передалать на вариант у учётом темы
+                    setSelectedFilmTag(v.getTag().toString());
                 }
             });
             root.addView(v);
         }
+
+        if (savedInstanceState != null)
+            setSelectedFilmTag(savedInstanceState.getString("selectedFilmTag"));
+    }
+
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("selectedFilmTag",selectedFilmTag);
+    }
+
+    String getSelectedFilmTag() {
+        return selectedFilmTag;
+    }
+
+    void setSelectedFilmTag(String selectedFilmTag) {
+        final LinearLayout root = findViewById(R.id.film_root_layout);
+        View prev = root.findViewWithTag(getSelectedFilmTag());
+        if (prev != null)
+            prev.setBackgroundColor(root.getDrawingCacheBackgroundColor());
+        this.selectedFilmTag = selectedFilmTag;
+        View v = root.findViewWithTag(getSelectedFilmTag());
+        if (v != null)
+            v.setBackgroundColor(getResources().getColor(R.color.colorSelectedFilm)); // todo: передалать на вариант у учётом темы
     }
 }
