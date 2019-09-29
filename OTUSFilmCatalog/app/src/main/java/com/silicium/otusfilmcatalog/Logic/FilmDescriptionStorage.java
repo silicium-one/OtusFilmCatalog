@@ -14,6 +14,8 @@ import java.util.List;
 import static java.util.Collections.emptyList;
 
 public class FilmDescriptionStorage {
+    private String[] FilmIDs;
+
     private static volatile FilmDescriptionStorage instance = null;
     public static FilmDescriptionStorage getInstance()
     {
@@ -26,20 +28,16 @@ public class FilmDescriptionStorage {
     }
     private FilmDescriptionStorage() {
         super();
+        FilmIDs = new String[]{"film1", "film2", "film3"};
     }
 
     /**
      * Список ID фильмов
      * @return список ключей доступных в базе фильмов
      */
-    public List<String> GetIDs()
+    public String[] getFilmIDs()
     {
-        List<String> keys = new ArrayList<String>();
-        keys.add("film1");
-        keys.add("film2");
-        keys.add("film3");
-
-        return keys;
+        return FilmIDs;
     }
 
     /**
@@ -54,6 +52,7 @@ public class FilmDescriptionStorage {
         ret.setOrientation(LinearLayout.HORIZONTAL);
         ret.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
 
+        ret.setTag(ID);
         ret.addView(GetPicView(ID, parent));
         ret.addView(GetDescView(ID, parent));
 
@@ -64,7 +63,7 @@ public class FilmDescriptionStorage {
     public List<View> GetFilmViews(Context parent)
     {
         List<View> views = new ArrayList<View>();
-        for (String ID: GetIDs()){
+        for (String ID: getFilmIDs()){
             views.add(GetFilmView(ID, parent));
         }
         return views;
