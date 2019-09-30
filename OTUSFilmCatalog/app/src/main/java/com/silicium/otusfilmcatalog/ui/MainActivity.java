@@ -1,4 +1,4 @@
-package com.silicium.otusfilmcatalog.UI;
+package com.silicium.otusfilmcatalog.ui;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,7 +10,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.silicium.otusfilmcatalog.Logic.FilmDescriptionStorage;
+import com.silicium.otusfilmcatalog.logic.FilmDescriptionStorage;
 import com.silicium.otusfilmcatalog.R;
 
 

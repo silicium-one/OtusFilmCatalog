@@ -1,4 +1,4 @@
-package com.silicium.otusfilmcatalog.UI;
+package com.silicium.otusfilmcatalog.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -11,7 +11,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.silicium.otusfilmcatalog.Logic.FilmDescriptionStorage;
+import com.silicium.otusfilmcatalog.logic.FilmDescriptionStorage;
 import com.silicium.otusfilmcatalog.R;
 
 public class DetailActivity extends AppCompatActivity {
