@@ -34,13 +34,13 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     public void onShareBtnClick(View v) {
-        String textMessage = getString(R.string.info_shareFilmMsg) + FilmDescriptionStorage.getInstance().GetFilmUrl(filmID);
+        String textMessage = getString(R.string.shareFilmMsg) + FilmDescriptionStorage.getInstance().GetFilmUrl(filmID);
         Intent sendIntent = new Intent();
         sendIntent.setAction(Intent.ACTION_SEND);
         sendIntent.putExtra(Intent.EXTRA_TEXT, textMessage);
         sendIntent.setType("text/html");
 
-        String title = getResources().getString(R.string.info_shareFilmTitle);
+        String title = getResources().getString(R.string.shareFilmDlgTitle);
         Intent chooser = Intent.createChooser(sendIntent, title);
 
         if (sendIntent.resolveActivity(getPackageManager()) != null) {
@@ -59,7 +59,7 @@ public class DetailActivity extends AppCompatActivity {
             finish();
         } else {
             this.doubleBackToExitPressedOnce = true;
-            Toast.makeText(this, R.string.backPressedText, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.backPressedToastText, Toast.LENGTH_SHORT).show();
 
             new Handler().postDelayed(new Runnable() {
 

@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
             startActivityForResult(intent, DETAIL_ACTIVITY_CODE);
         }
         else
-            Toast.makeText(this, R.string.error_noFilmByID, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.noFilmByIDErr, Toast.LENGTH_LONG).show();
     }
 
     public void onSaveInstanceState(Bundle outState) {

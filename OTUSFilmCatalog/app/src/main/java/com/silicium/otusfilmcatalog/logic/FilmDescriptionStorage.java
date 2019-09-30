@@ -62,7 +62,7 @@ public class FilmDescriptionStorage {
         Button btnDetail = new Button(parent);
         btnDetail.setTag(ID);
         btnDetail.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT, 0.1F));
-        btnDetail.setText(R.string.filmBtnDetailTitle);
+        btnDetail.setText(R.string.filmDetailBtnText);
         btnDetail.setRotation(-90F);
         btnDetail.setOnClickListener(detailClickListener);
         ret.addView(btnDetail);
