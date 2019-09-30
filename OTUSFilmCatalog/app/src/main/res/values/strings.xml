@@ -10,4 +10,5 @@
     <string name="isLikedCheckBoxText">Нравится</string>
     <string name="filmCommentHint">Поделитесь впечатлениями о фильме</string>
     <string name="backPressedText">Нажмите ещё раз для возврата в главное меню</string>
+    <string name="filmBtnDetailTitle">Детали</string>
 </resources>

@@ -2,6 +2,7 @@ package com.silicium.otusfilmcatalog.logic;
 
 import android.content.Context;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -45,9 +46,10 @@ public class FilmDescriptionStorage {
      * Получение представления с описанием фильма для списка
      * @param ID идентификатор фильма
      * @param parent родитель
+     * @param detailClickListener действие по нажатии кнопки "детали"
      * @return представление с картинкой и описанием
      */
-    public View GetFilmView(String ID, Context parent)
+    public View GetFilmView(String ID, Context parent, View.OnClickListener detailClickListener)
     {
         LinearLayout ret = new LinearLayout(parent);
         ret.setOrientation(LinearLayout.HORIZONTAL);
@@ -57,6 +59,13 @@ public class FilmDescriptionStorage {
         ret.addView(GetPicView(ID, parent));
         ret.addView(GetDescView(ID, parent));
 
+        Button btnDetail = new Button(parent);
+        btnDetail.setTag(ID);
+        btnDetail.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT, 0.1F));
+        btnDetail.setText(R.string.filmBtnDetailTitle);
+        btnDetail.setRotation(-90F);
+        btnDetail.setOnClickListener(detailClickListener);
+        ret.addView(btnDetail);
         return ret;
     }
 
@@ -83,11 +92,11 @@ public class FilmDescriptionStorage {
      * @param parent родительский элемент
      * @return Список View
      */
-    public List<View> GetFilmViews(Context parent)
+    public List<View> GetFilmViews(Context parent, View.OnClickListener detailClickListener)
     {
         List<View> views = new ArrayList<>();
         for (String ID: getFilmIDs()){
-            views.add(GetFilmView(ID, parent));
+            views.add(GetFilmView(ID, parent, detailClickListener));
         }
         return views;
     }

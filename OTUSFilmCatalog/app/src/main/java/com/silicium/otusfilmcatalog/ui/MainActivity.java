@@ -28,16 +28,13 @@ public class MainActivity extends AppCompatActivity {
 
         FilmDescriptionStorage instance = FilmDescriptionStorage.getInstance();
 
-        for(View v : instance.GetFilmViews(this)) {
-            v.setOnClickListener(new View.OnClickListener() {
+        for(View v : instance.GetFilmViews(this, new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     setSelectedFilmTag(v.getTag().toString());
                     gotoDetailActivity();
-                }
-            });
+                }}))
             root.addView(v);
-        }
 
         if (savedInstanceState != null)
             setSelectedFilmTag(savedInstanceState.getString("selectedFilmTag"));
