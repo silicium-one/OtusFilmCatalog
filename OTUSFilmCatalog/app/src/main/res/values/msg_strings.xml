@@ -1,0 +1,4 @@
+<resources>
+    <string name="shareFilmMsg">Предлагаю посмотреть вместе </string>
+    <string name="backPressedToastText">Нажмите ещё раз для возврата в главное меню</string>
+</resources>
