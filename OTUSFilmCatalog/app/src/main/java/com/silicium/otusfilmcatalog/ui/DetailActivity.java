@@ -1,18 +1,20 @@
 package com.silicium.otusfilmcatalog.ui;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.View;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.silicium.otusfilmcatalog.logic.FilmDescriptionStorage;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.silicium.otusfilmcatalog.R;
+import com.silicium.otusfilmcatalog.logic.FilmDescriptionStorage;
 
 public class DetailActivity extends AppCompatActivity {
 
@@ -33,7 +35,7 @@ public class DetailActivity extends AppCompatActivity {
         root.addView(FilmDescriptionStorage.getInstance().GetFilmViewDetails(filmID, this));
     }
 
-    public void onShareBtnClick(View v) {
+    public void onShareBtnClick() {
         String textMessage = getString(R.string.shareFilmMsg) + FilmDescriptionStorage.getInstance().GetFilmUrl(filmID);
         Intent sendIntent = new Intent();
         sendIntent.setAction(Intent.ACTION_SEND);
@@ -69,5 +71,21 @@ public class DetailActivity extends AppCompatActivity {
                 }
             }, 2000);
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.activity_detail_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.detail_share)
+        {
+            onShareBtnClick();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

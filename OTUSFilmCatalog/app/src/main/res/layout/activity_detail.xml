@@ -31,12 +31,5 @@
         android:inputType="text"
         android:hint="@string/filmCommentEditTextHint" />
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="25dp"
-        android:layout_weight="1"
-        android:text="@string/shareTextBtnText"
-        android:onClick="onShareBtnClick"/>
-
 </LinearLayout>
 
