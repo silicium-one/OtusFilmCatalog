@@ -71,6 +71,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 gotoDetailActivity();
             }}))
             root.addView(v);
+
+        setSelectedFilmTag(selectedFilmTag);
     }
 
     private void aboutMode() {
