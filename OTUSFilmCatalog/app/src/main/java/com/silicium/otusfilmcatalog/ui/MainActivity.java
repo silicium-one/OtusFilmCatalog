@@ -4,22 +4,27 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.google.android.material.navigation.NavigationView;
 import com.silicium.otusfilmcatalog.logic.FilmDescriptionStorage;
 import com.silicium.otusfilmcatalog.R;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private String selectedFilmTag = ""; // TODO: оптимизировать на доступ по индексу
+    private boolean isAboutMode = false;
     private final int DETAIL_ACTIVITY_CODE = 1;
     private final String LOG_TAG = this.getClass().getSimpleName();
 
@@ -38,20 +43,46 @@ public class MainActivity extends AppCompatActivity {
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
+        if (savedInstanceState != null) {
+            setSelectedFilmTag(savedInstanceState.getString("selectedFilmTag"));
+            isAboutMode = savedInstanceState.getBoolean("isAboutMode", false);
+        }
+
+        if (isAboutMode)
+            aboutMode();
+        else
+            filmSelectMode();
+    }
+
+    private void filmSelectMode() {
+        isAboutMode = false;
         final LinearLayout root = findViewById(R.id.film_root_layout);
+        root.removeAllViews();
 
         FilmDescriptionStorage instance = FilmDescriptionStorage.getInstance();
 
         for(View v : instance.GetFilmViews(this, new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    setSelectedFilmTag(v.getTag().toString());
-                    gotoDetailActivity();
-                }}))
+            @Override
+            public void onClick(View v) {
+                setSelectedFilmTag(v.getTag().toString());
+                gotoDetailActivity();
+            }}))
             root.addView(v);
+    }
 
-        if (savedInstanceState != null)
-            setSelectedFilmTag(savedInstanceState.getString("selectedFilmTag"));
+    private void aboutMode() {
+        isAboutMode = true;
+        final LinearLayout root = findViewById(R.id.film_root_layout);
+        root.removeAllViews();
+
+        ImageView pic = new ImageView(this);
+        pic.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
+        pic.setPadding(10,10,10,10);
+        pic.setImageResource(R.drawable.otus);
+        root.addView(pic);
     }
 
     private void gotoDetailActivity() {
@@ -67,6 +98,7 @@ public class MainActivity extends AppCompatActivity {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putString("selectedFilmTag",selectedFilmTag);
+        outState.putBoolean("isAboutMode",isAboutMode);
     }
 
     String getSelectedFilmTag() {
@@ -94,5 +126,19 @@ public class MainActivity extends AppCompatActivity {
             Log.d(LOG_TAG, String.format("isLiked={%s}, comment={%s}", Boolean.toString(isLiked), comment));
         }
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.item_home)
+            filmSelectMode();
+        else if (id == R.id.item_about)
+            aboutMode();
+
+        DrawerLayout drawer = findViewById(R.id.drawer_main_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
     }
 }

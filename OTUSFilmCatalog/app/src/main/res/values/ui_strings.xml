@@ -4,4 +4,7 @@
     <string name="isLikedCheckBoxText">Нравится</string>
     <string name="filmCommentEditTextHint">Поделитесь впечатлениями о фильме</string>
     <string name="filmDetailBtnText">Детали</string>
+
+    <string name="homeMenuItem">Главный экран</string>
+    <string name="aboutMenuItem">О программе</string>
 </resources>
