@@ -51,7 +51,7 @@ public class FilmDescriptionStorage {
      * @param detailClickListener действие по нажатии кнопки "детали"
      * @return представление с картинкой и описанием
      */
-    public View GetFilmView(String ID, Context parent, View.OnClickListener detailClickListener)
+    private View GetFilmView(String ID, Context parent, View.OnClickListener detailClickListener)
     {
         LinearLayout ret = new LinearLayout(parent);
         ret.setOrientation(LinearLayout.HORIZONTAL);
