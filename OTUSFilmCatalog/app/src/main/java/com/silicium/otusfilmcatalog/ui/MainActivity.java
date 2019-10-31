@@ -7,6 +7,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.silicium.otusfilmcatalog.logic.FilmDescriptionStorage;
 import com.silicium.otusfilmcatalog.R;
@@ -51,12 +53,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             isAboutMode = savedInstanceState.getBoolean("isAboutMode", false);
         }
 
+        FloatingActionButton fab = findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(view.getContext(), "Add film dialog under construction", Toast.LENGTH_SHORT).show();
+            }});
+
         if (isAboutMode)
             aboutMode();
         else
             filmSelectMode();
     }
 
+    @SuppressLint("RestrictedApi")
     private void filmSelectMode() {
         isAboutMode = false;
         final LinearLayout root = findViewById(R.id.film_root_layout);
@@ -73,8 +83,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             root.addView(v);
 
         setSelectedFilmTag(selectedFilmTag);
+
+        FloatingActionButton fab = findViewById(R.id.fab);
+        fab.setVisibility(View.VISIBLE);
     }
 
+    @SuppressLint("RestrictedApi")
     private void aboutMode() {
         isAboutMode = true;
         final LinearLayout root = findViewById(R.id.film_root_layout);
@@ -85,6 +99,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         pic.setPadding(10,10,10,10);
         pic.setImageResource(R.drawable.otus);
         root.addView(pic);
+
+        FloatingActionButton fab = findViewById(R.id.fab);
+        fab.setVisibility(View.GONE);
     }
 
     private void gotoDetailActivity() {
