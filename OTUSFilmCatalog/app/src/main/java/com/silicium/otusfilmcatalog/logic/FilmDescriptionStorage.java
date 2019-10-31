@@ -1,5 +1,7 @@
 package com.silicium.otusfilmcatalog.logic;
 
+import android.animation.Animator;
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.view.View;
 import android.widget.Button;
@@ -56,15 +58,44 @@ public class FilmDescriptionStorage {
         ret.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
 
         ret.setTag(ID);
-        ret.addView(GetPicView(ID, parent));
-        ret.addView(GetDescView(ID, parent));
 
-        Button btnDetail = new Button(parent);
+        final Button btnDetail = new Button(parent);
         btnDetail.setTag(ID);
         btnDetail.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT, 0.1F));
         btnDetail.setText(R.string.filmDetailBtnText);
         btnDetail.setRotation(-90F);
         btnDetail.setOnClickListener(detailClickListener);
+
+        View pic = GetPicView(ID, parent);
+        pic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+               ObjectAnimator fadeOut = ObjectAnimator.ofFloat(v, View.ALPHA,1, 0);
+               fadeOut.setDuration(2000);
+               fadeOut.addListener(new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(Animator animator) {
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animator) {
+                        btnDetail.performClick();
+                        ObjectAnimator.ofFloat(v, View.ALPHA,0,1).start();
+                    }
+
+                    @Override
+                    public void onAnimationCancel(Animator animator) {
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animator animator) {
+                    }
+                });
+               fadeOut.start();
+            }});
+
+        ret.addView(pic);
+        ret.addView(GetDescView(ID, parent));
         ret.addView(btnDetail);
         return ret;
     }
