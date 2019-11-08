@@ -57,7 +57,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(view.getContext(), "Add film dialog under construction", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getApplicationContext(), AddActivity.class);
+                startActivity(intent);
             }});
 
         if (isAboutMode)
@@ -157,5 +158,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         DrawerLayout drawer = findViewById(R.id.drawer_main_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+
+        if (isAboutMode)
+            aboutMode();
+        else
+            filmSelectMode();
     }
 }
