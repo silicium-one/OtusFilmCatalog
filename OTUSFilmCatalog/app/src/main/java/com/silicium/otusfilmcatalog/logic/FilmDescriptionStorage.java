@@ -153,8 +153,7 @@ public class FilmDescriptionStorage {
         ImageView pic = new ImageView(parent);
         pic.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, 200, 1.0F));
         pic.setPadding(10,10,10,10);
-        switch (ID)
-        {
+        switch (ID) {
             case "film1":
                 pic.setImageResource(R.drawable.film1);
                 break;
@@ -164,6 +163,8 @@ public class FilmDescriptionStorage {
             case "film3":
                 pic.setImageResource(R.drawable.film3);
                 break;
+            default:
+                pic.setImageResource(R.drawable.film_no_image);
         }
 
         return pic;
