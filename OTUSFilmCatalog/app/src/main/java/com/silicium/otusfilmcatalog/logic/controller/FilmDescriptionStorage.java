@@ -74,5 +74,9 @@ public class FilmDescriptionStorage {
             return FilmDescriptionFactory.GetStubFilmDescription();
         }
     }
+
+    public void addFilm(FilmDescription film) {
+        Films.put(film.ID, film);
+    }
 }
 
