@@ -19,7 +19,7 @@ import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
-import com.silicium.otusfilmcatalog.logic.FilmDescriptionStorage;
+import com.silicium.otusfilmcatalog.logic.view.FilmViewWrapper;
 import com.silicium.otusfilmcatalog.R;
 
 
@@ -72,9 +72,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         final LinearLayout root = findViewById(R.id.film_root_layout);
         root.removeAllViews();
 
-        FilmDescriptionStorage instance = FilmDescriptionStorage.getInstance();
-
-        for(View v : instance.GetFilmViews(this, new View.OnClickListener() {
+        for(View v : FilmViewWrapper.getInstance().GetFilmViews(this, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 setSelectedFilmTag(v.getTag().toString());
@@ -105,7 +103,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void gotoDetailActivity() {
-        if (FilmDescriptionStorage.getInstance().getFilmIDs().contains(getSelectedFilmTag())) {
+        if (FilmViewWrapper.getInstance().containsID(getSelectedFilmTag())) {
             Intent intent = new Intent(this, DetailActivity.class);
             intent.putExtra("selectedFilmTag", getSelectedFilmTag());
             startActivityForResult(intent, DETAIL_ACTIVITY_CODE);
