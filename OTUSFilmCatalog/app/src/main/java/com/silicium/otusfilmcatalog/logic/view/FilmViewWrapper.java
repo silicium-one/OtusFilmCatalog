@@ -87,17 +87,6 @@ public class FilmViewWrapper {
     public String GetFilmUrl(FilmDescription film)
     {
         return String.format("<a href=\"%s\">%s</a>",film.Url, film.Name);
-//        switch (ID)
-//        {
-//            case "film1":
-//                return "<a href=\"https://www.kinopoisk.ru/film/1040419/\">Детство Шелдона</a>";
-//            case "film2":
-//                return "<a href=\"https://www.kinopoisk.ru/film/306084/\">Теория большого взрыва</a>";
-//            case "film3":
-//                return "<a href=\"https://www.kinopoisk.ru/film/33821/\">Кролик Багз или Дорожный Бегун</a>";
-//            default:
-//                return "<a href=\"\"https://www.kinopoisk.ru/error\"\">Где наши чемоданы?</a>";
-//        }
     }
 
     /**
@@ -164,19 +153,6 @@ public class FilmViewWrapper {
         pic.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, 200, 1.0F));
         pic.setPadding(10,10,10,10);
         pic.setImageBitmap(film.Cover);
-//        switch (ID) {
-//            case "film1":
-//                pic.setImageResource(R.drawable.film1);
-//                break;
-//            case "film2":
-//                pic.setImageResource(R.drawable.film2);
-//                break;
-//            case "film3":
-//                pic.setImageResource(R.drawable.film3);
-//                break;
-//            default:
-//                pic.setImageResource(R.drawable.film_no_image);
-//        }
 
         return pic;
     }
@@ -187,18 +163,7 @@ public class FilmViewWrapper {
         description.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, 200, 3.0F));
         description.setPadding(10,10,10,10);
         description.setText(film.Description);
-//        switch (ID)
-//        {
-//            case "film1":
-//                description.setText(R.string.film1);
-//                break;
-//            case "film2":
-//                description.setText(R.string.film2);
-//                break;
-//            case "film3":
-//                description.setText(R.string.film3);
-//                break;
-//        }
+
         return description;
     }
     //endregion
