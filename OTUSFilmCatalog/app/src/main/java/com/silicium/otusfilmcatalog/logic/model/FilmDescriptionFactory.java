@@ -43,4 +43,19 @@ public class FilmDescriptionFactory {
 
         return ret;
     }
+
+    //todo: добавить работу с разными локалями
+    public static String GetReadableGenre(FilmDescription.FilmGenre genre)
+    {
+        switch (genre) {
+            case comedy:
+                return "Комедия";
+            case series:
+                return "Сериал";
+            case cartoon:
+                return "Мультфильм";
+            default:
+                throw new UnsupportedOperationException("Неизвестный жанр");
+        }
+    }
 }
