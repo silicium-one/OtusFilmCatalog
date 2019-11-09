@@ -143,7 +143,7 @@ public class FilmViewWrapper {
                 fadeOut.start();
             }});
 
-        ret.addView(pic);
+        ret.addView(pic); //TODO: Принимать картинки разного размера и приводить к одному
         ret.addView(GetDescView(film, parent));
         ret.addView(btnDetail);
         return ret;
