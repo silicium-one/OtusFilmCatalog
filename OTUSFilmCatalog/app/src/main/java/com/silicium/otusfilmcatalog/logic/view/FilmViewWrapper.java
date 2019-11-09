@@ -152,7 +152,7 @@ public class FilmViewWrapper {
 
     //region wrappers
     private View GetGenreChips(FilmDescription film, Context parent) {
-        ChipGroup ret = new ChipGroup(parent);
+        ChipGroup ret = new ChipGroup(parent); // TODO: добавиить отступы
         ret.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
         for (FilmDescription.FilmGenre filmGenre: film.Genre) {
             Chip genre = new Chip(parent);
