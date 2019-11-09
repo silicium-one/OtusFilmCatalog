@@ -3,6 +3,7 @@
     <string name="shareFilmDlgTitle">Выберите, как пригласить на просмотр</string>
     <string name="isLikedCheckBoxText">Нравится</string>
     <string name="filmCommentEditTextHint">Поделитесь впечатлениями о фильме</string>
+    <string name="filmCommentExpandTextHint">Ещё</string>
     <string name="filmDetailBtnText">Детали</string>
 
     <string name="homeMenuItem">Главный экран</string>
