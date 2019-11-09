@@ -9,9 +9,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
 import com.silicium.otusfilmcatalog.R;
 import com.silicium.otusfilmcatalog.logic.controller.FilmDescriptionStorage;
 import com.silicium.otusfilmcatalog.logic.model.FilmDescription;
+import com.silicium.otusfilmcatalog.logic.model.FilmDescriptionFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,6 +68,7 @@ public class FilmViewWrapper {
         ret.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
 
         ret.setTag(film.ID);
+        ret.addView(GetGenreChips(film, parent));
         ret.addView(GetPicView(film, parent)); // TODO: сделать отдельные большие картинки
         ret.addView(GetDescView(film, parent));
         return ret;
@@ -147,6 +151,17 @@ public class FilmViewWrapper {
     //endregion
 
     //region wrappers
+    private View GetGenreChips(FilmDescription film, Context parent) {
+        ChipGroup ret = new ChipGroup(parent);
+        ret.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        for (FilmDescription.FilmGenre filmGenre: film.Genre) {
+            Chip genre = new Chip(parent);
+            genre.setText(FilmDescriptionFactory.GetReadableGenre(filmGenre));
+            ret.addView(genre);
+        }
+        return ret;
+    }
+
     private ImageView GetPicView(@org.jetbrains.annotations.NotNull FilmDescription film, Context parent)
     {
         ImageView pic = new ImageView(parent);
