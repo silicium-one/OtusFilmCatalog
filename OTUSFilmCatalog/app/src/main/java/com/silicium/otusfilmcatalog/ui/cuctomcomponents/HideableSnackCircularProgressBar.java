@@ -27,6 +27,8 @@ public class HideableSnackCircularProgressBar {
                 .setProgressBarColor(R.color.colorAccent) //TODO: связь со стилем/темой
                 // (optional) change background color, default = BACKGROUND_COLOR_DEFAULT (#FF323232)
                 .setBackgroundColor(SnackProgressBarManager.BACKGROUND_COLOR_DEFAULT)
+                // чтобы не затемнялась (забелялась точнее) активность под высплывающей подсказкой - ставим нулевую прозрачность
+                .setOverlayLayoutAlpha(0)
                 .setOnDisplayListener(callback);
 
          circularProgressBar = new SnackProgressBar(
