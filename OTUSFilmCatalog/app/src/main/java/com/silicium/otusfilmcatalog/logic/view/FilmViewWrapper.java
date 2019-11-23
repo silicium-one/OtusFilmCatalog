@@ -162,7 +162,7 @@ public class FilmViewWrapper {
         return ret;
     }
 
-    private ImageView GetPicView(@org.jetbrains.annotations.NotNull FilmDescription film, Context parent)
+    private ImageView GetPicView(FilmDescription film, Context parent)
     {
         ImageView pic = new ImageView(parent);
         pic.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, 200, 1.0F));
@@ -172,7 +172,7 @@ public class FilmViewWrapper {
         return pic;
     }
 
-    private TextView GetDescView(@org.jetbrains.annotations.NotNull FilmDescription film, Context parent)
+    private TextView GetDescView(FilmDescription film, Context parent)
     {
         TextView description = new TextView(parent);
         description.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, 200, 3.0F));

@@ -1,2 +1,2 @@
-include ':app'
+include ':app', ':snackprogressbar-lib'
 rootProject.name='OTUS film catalog'
