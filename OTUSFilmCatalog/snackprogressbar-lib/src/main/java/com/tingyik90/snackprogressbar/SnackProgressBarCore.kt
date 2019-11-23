@@ -198,6 +198,27 @@ internal class SnackProgressBarCore private constructor(
     }
 
     /**
+     * Sets the progress for SnackProgressBar.
+     *
+     * @param progress Progress of the ProgressBar.
+     * @param text readable text about progress
+     * */
+    internal fun setProgress(@IntRange(from = 0) progress: Int, text:String): SnackProgressBarCore {
+        val progressBar =
+                when (snackProgressBar.getType()) {
+                    TYPE_HORIZONTAL -> snackProgressBarLayout.horizontalProgressBar
+                    TYPE_CIRCULAR -> snackProgressBarLayout.circularDeterminateProgressBar
+                    else -> null
+                }
+        if (progressBar != null) {
+            progressBar.progress = progress
+            snackProgressBarLayout.progressTextCircular.text = text
+            snackProgressBarLayout.progressText.text = text
+        }
+        return this
+    }
+
+    /**
      * Show the SnackProgressBar
      */
     override fun show() {

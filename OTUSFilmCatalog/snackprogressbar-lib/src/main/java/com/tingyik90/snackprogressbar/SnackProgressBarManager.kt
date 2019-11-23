@@ -487,6 +487,17 @@ class SnackProgressBarManager(providedView: View, lifecycleOwner: LifecycleOwner
     }
 
     /**
+     * Sets the progress for SnackProgressBar that is currently showing.
+     *
+     * @param progress Progress of the ProgressBar.
+     * @param text readable text about progress
+     */
+    fun setProgress(@IntRange(from = 0) progress: Int, text: String): SnackProgressBarManager {
+        currentCore?.setProgress(progress, text)
+        return this
+    }
+
+    /**
      * Adds the SnackProgressBar to queue.
      *
      * @param snackProgressBar SnackProgressBar to be added to queue.
