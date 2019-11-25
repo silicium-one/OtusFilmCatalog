@@ -5,6 +5,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
+import androidx.core.widget.NestedScrollView;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.annotation.SuppressLint;
@@ -31,11 +32,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private boolean isAboutMode = false;
     private final int DETAIL_ACTIVITY_CODE = 1;
     private final String LOG_TAG = this.getClass().getSimpleName();
+    private LinearLayout film_root_layout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        film_root_layout = findViewById(R.id.film_root_layout);
 
         Toolbar toolbar = findViewById(R.id.main_activity_toolbar);
         setSupportActionBar(toolbar);
@@ -72,8 +75,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @SuppressLint("RestrictedApi")
     private void filmSelectMode() {
         isAboutMode = false;
-        final LinearLayout root = findViewById(R.id.film_root_layout);
-        root.removeAllViews();
+        film_root_layout.removeAllViews();
 
         for(View v : FilmViewWrapper.getInstance().GetFilmViews(this, new View.OnClickListener() {
             @Override
@@ -81,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 setSelectedFilmTag(v.getTag().toString());
                 gotoDetailActivity();
             }}))
-            root.addView(v);
+            film_root_layout.addView(v);
 
         setSelectedFilmTag(selectedFilmTag);
 
@@ -92,14 +94,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @SuppressLint("RestrictedApi")
     private void aboutMode() {
         isAboutMode = true;
-        final LinearLayout root = findViewById(R.id.film_root_layout);
-        root.removeAllViews();
+        film_root_layout.removeAllViews();
 
         ImageView pic = new ImageView(this);
         pic.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
         pic.setPadding(10,10,10,10);
         pic.setImageResource(R.drawable.otus);
-        root.addView(pic);
+        film_root_layout.addView(pic);
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setVisibility(View.GONE);
@@ -126,12 +127,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     void setSelectedFilmTag(String selectedFilmTag) {
-        final LinearLayout root = findViewById(R.id.film_root_layout);
-        View prev = root.findViewWithTag(getSelectedFilmTag());
+        View prev = film_root_layout.findViewWithTag(getSelectedFilmTag());
         if (prev != null)
-            prev.setBackgroundColor(root.getDrawingCacheBackgroundColor());
+            prev.setBackgroundColor(film_root_layout.getDrawingCacheBackgroundColor());
         this.selectedFilmTag = selectedFilmTag;
-        View v = root.findViewWithTag(getSelectedFilmTag());
+        View v = film_root_layout.findViewWithTag(getSelectedFilmTag());
         if (v != null) {
             TypedValue typedValue = new TypedValue();
             Resources.Theme theme = v.getContext().getTheme();
