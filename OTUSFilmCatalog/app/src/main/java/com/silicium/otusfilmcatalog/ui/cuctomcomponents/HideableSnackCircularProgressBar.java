@@ -24,7 +24,7 @@ public class HideableSnackCircularProgressBar {
 
         snackProgressBarManager
                 // (optional) change progressBar color, default = R.color.colorAccent
-                .setProgressBarColor(R.color.colorAccent) //TODO: связь со стилем/темой
+                .setProgressBarColor(R.color.colorAccent) //TODO: связь со стилем/темой //fixme: вот, что бывает, когда используешь стороннюю библиотеку! Ей нужен ColorRes вместо ColorInt и плевать она хотела на AppTheme
                 // (optional) change background color, default = BACKGROUND_COLOR_DEFAULT (#FF323232)
                 .setBackgroundColor(SnackProgressBarManager.BACKGROUND_COLOR_DEFAULT)
                 // чтобы не затемнялась (забелялась точнее) активность под высплывающей подсказкой - ставим нулевую прозрачность

@@ -9,8 +9,10 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -130,8 +132,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             prev.setBackgroundColor(root.getDrawingCacheBackgroundColor());
         this.selectedFilmTag = selectedFilmTag;
         View v = root.findViewWithTag(getSelectedFilmTag());
-        if (v != null)
-            v.setBackgroundColor(getResources().getColor(R.color.colorSelectedFilm)); // todo: передалать на вариант c учётом темы
+        if (v != null) {
+            TypedValue typedValue = new TypedValue();
+            Resources.Theme theme = v.getContext().getTheme();
+            theme.resolveAttribute(R.attr.selectableItemBackground, typedValue, true);
+            int color = typedValue.data;
+            v.setBackgroundColor(color);
+        }
     }
 
     @Override
