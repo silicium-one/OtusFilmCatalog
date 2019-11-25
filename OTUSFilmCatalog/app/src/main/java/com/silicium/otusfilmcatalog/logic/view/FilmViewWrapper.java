@@ -165,7 +165,7 @@ public class FilmViewWrapper {
     private ImageView GetPicView(FilmDescription film, Context parent)
     {
         ImageView pic = new ImageView(parent);
-        pic.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, 200, 1.0F));
+        pic.setLayoutParams(new LinearLayout.LayoutParams(200, 200));
         pic.setPadding(10,10,10,10);
         pic.setImageBitmap(film.Cover);
 
