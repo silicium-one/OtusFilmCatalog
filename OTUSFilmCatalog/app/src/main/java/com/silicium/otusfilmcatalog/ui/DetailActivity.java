@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.silicium.otusfilmcatalog.R;
@@ -43,11 +44,12 @@ public class DetailActivity extends AppCompatActivity {
         film = instance.GetFilmByID(filmID);
         root.addView(instance.GetFilmViewDetails(film, this));
 
-        final int oldHeight = findViewById(R.id.more_text_view).getLayoutParams().height;
-        final View more_layout = findViewById(R.id.more_layout);
+        final View more_header = findViewById(R.id.more_text_view);
+        final int oldHeight = more_header.getLayoutParams().height;
+
 
         // get the bottom sheet view
-        LinearLayout bottomSheet = findViewById(R.id.detail_bottom_sheet);
+        ConstraintLayout bottomSheet = findViewById(R.id.detail_bottom_sheet);
         // init the bottom sheet behavior
         final BottomSheetBehavior bShBehavior = BottomSheetBehavior.from(bottomSheet);
 
@@ -64,9 +66,9 @@ public class DetailActivity extends AppCompatActivity {
                             }, 3000);
                         } else if (newState == BottomSheetBehavior.STATE_EXPANDED) {
                             float scaleFactor = 0.1F;
-                            more_layout.animate().y(-(oldHeight * (1 - scaleFactor) / 2F)).scaleY(scaleFactor).start();
+                            more_header.animate().y(-(oldHeight * (1 - scaleFactor) / 2F)).scaleY(scaleFactor).start();
                         } else if (newState == BottomSheetBehavior.STATE_COLLAPSED) {
-                            more_layout.animate().y(0).scaleY(1F).start();
+                            more_header.animate().y(0).scaleY(1F).start();
                         }
                     }
 
