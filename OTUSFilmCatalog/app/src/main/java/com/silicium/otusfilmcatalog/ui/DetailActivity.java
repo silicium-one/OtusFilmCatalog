@@ -63,12 +63,12 @@ public class DetailActivity extends AppCompatActivity {
                                 public void run() {
                                     bShBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                                 }
-                            }, 3000);
+                            }, getResources().getInteger(R.integer.foolproof_time_ms));
                         } else if (newState == BottomSheetBehavior.STATE_EXPANDED) {
                             float scaleFactor = 0.1F;
                             more_header.animate().y(-(oldHeight * (1 - scaleFactor) / 2F)).scaleY(scaleFactor).start();
                         } else if (newState == BottomSheetBehavior.STATE_COLLAPSED) {
-                            more_header.animate().y(0).scaleY(1F).start();
+                            more_header.animate().setDuration(getResources().getInteger(R.integer.smooth_transistion_time_ms)).y(0).scaleY(1F).start();
                         }
                     }
 
@@ -79,7 +79,7 @@ public class DetailActivity extends AppCompatActivity {
         );
 
         snackProgressBar = new HideableSnackCircularProgressBar(findViewById(R.id.activity_detail), this,
-                getString(R.string.backPressedToastText), 2000,
+                getString(R.string.backPressedToastText),
                 new SnackProgressBarManager.OnDisplayListener()
         {
             @Override

@@ -32,7 +32,7 @@ public class AddActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add);
 
         snackProgressBar = new HideableSnackCircularProgressBar(findViewById(R.id.activity_add), this,
-                getString(R.string.backPressedToastText), 2000,
+                getString(R.string.backPressedToastText),
                 new SnackProgressBarManager.OnDisplayListener()
                 {
                     @Override

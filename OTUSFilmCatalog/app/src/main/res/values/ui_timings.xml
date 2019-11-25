@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="back_pressed_twice_await_time_ms">2000</integer>
+    <integer name="foolproof_time_ms">3000</integer>
+    <integer name="smooth_transistion_time_ms">1000</integer>
+</resources>

@@ -100,7 +100,7 @@ public class FilmViewWrapper {
      * @param detailClickListener действие по нажатии кнопки "детали"
      * @return представление с картинкой и описанием
      */
-    private View GetFilmView(FilmDescription film, Context parent, View.OnClickListener detailClickListener)
+    private View GetFilmView(FilmDescription film, final Context parent, View.OnClickListener detailClickListener)
     {
         LinearLayout ret = new LinearLayout(parent);
         ret.setOrientation(LinearLayout.HORIZONTAL);
@@ -120,7 +120,7 @@ public class FilmViewWrapper {
             @Override
             public void onClick(final View v) {
                 ObjectAnimator fadeOut = ObjectAnimator.ofFloat(v, View.ALPHA,1, 0);
-                fadeOut.setDuration(2000);
+                fadeOut.setDuration(parent.getResources().getInteger(R.integer.smooth_transistion_time_ms));
                 fadeOut.addListener(new Animator.AnimatorListener() {
                     @Override
                     public void onAnimationStart(Animator animator) {

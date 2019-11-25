@@ -16,9 +16,9 @@ public class HideableSnackCircularProgressBar {
     private final Integer duration;
     private final CountDownTimer hideTimer;
 
-    public HideableSnackCircularProgressBar(View providedView, LifecycleOwner lifecycleOwner, String messageText, Integer duration, SnackProgressBarManager.OnDisplayListener callback)
+    public HideableSnackCircularProgressBar(View providedView, LifecycleOwner lifecycleOwner, String messageText, SnackProgressBarManager.OnDisplayListener callback)
     {
-        this.duration = duration;
+        this.duration = providedView.getResources().getInteger(R.integer.back_pressed_twice_await_time_ms);
 
         snackProgressBarManager = new SnackProgressBarManager(providedView, lifecycleOwner);
 
