@@ -8,8 +8,14 @@
 
     <string name="homeMenuItem">Главный экран</string>
     <string name="aboutMenuItem">О программе</string>
+    <string name="exitMenuItem">Выход</string>
 
     <string name="filmNameAddHint">Название фильма</string>
     <string name="filmDescriptionAddHint">Краткое содержание</string>
     <string name="filmSaveBtnText">Сохранить</string>
+
+    <string name="exitDialogTitle">Выход</string>
+    <string name="exitDialogMessage">Покинуть программу?</string>
+    <string name="exitDialogNegativeAnswer">Нет</string>
+    <string name="exitDialogPositiveAnswer">Да</string>
 </resources>

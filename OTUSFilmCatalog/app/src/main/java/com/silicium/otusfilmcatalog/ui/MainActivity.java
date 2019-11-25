@@ -1,14 +1,7 @@
 package com.silicium.otusfilmcatalog.ui;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.GravityCompat;
-import androidx.core.widget.NestedScrollView;
-import androidx.drawerlayout.widget.DrawerLayout;
-
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -20,10 +13,18 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
-import com.silicium.otusfilmcatalog.logic.view.FilmViewWrapper;
 import com.silicium.otusfilmcatalog.R;
+import com.silicium.otusfilmcatalog.logic.view.FilmViewWrapper;
 
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -161,6 +162,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             filmSelectMode();
         else if (id == R.id.item_about)
             aboutMode();
+        else if (id == R.id.item_exit) {
+            AlertDialog.Builder bld = new AlertDialog.Builder(this);
+            DialogInterface.OnClickListener exitDo =
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            finish();
+                        }
+                    };
+
+            bld.setMessage(R.string.exitDialogMessage);
+            bld.setTitle(R.string.exitDialogTitle);
+            bld.setNegativeButton(R.string.exitDialogNegativeAnswer, null);
+            bld.setPositiveButton(R.string.exitDialogPositiveAnswer, exitDo);
+            bld.setCancelable(false);
+            AlertDialog dialog = bld.create();
+            dialog.show();
+        }
 
         DrawerLayout drawer = findViewById(R.id.drawer_main_layout);
         drawer.closeDrawer(GravityCompat.START);
