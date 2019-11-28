@@ -136,7 +136,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (v != null) {
             TypedValue typedValue = new TypedValue();
             Resources.Theme theme = v.getContext().getTheme();
-            theme.resolveAttribute(R.attr.selectableItemBackground, typedValue, true);
+            theme.resolveAttribute(R.attr.selectableItemBackgroundBorderless, typedValue, true);
             int color = typedValue.data;
             v.setBackgroundColor(color);
         }
