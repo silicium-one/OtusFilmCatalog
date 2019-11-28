@@ -2,36 +2,38 @@ package com.silicium.otusfilmcatalog.ui;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.silicium.otusfilmcatalog.R;
 import com.silicium.otusfilmcatalog.logic.controller.FilmDescriptionStorage;
 import com.silicium.otusfilmcatalog.logic.model.FilmDescription;
 import com.silicium.otusfilmcatalog.logic.model.FilmDescriptionFactory;
+import com.silicium.otusfilmcatalog.ui.cuctomcomponents.AddMoreDialogFragment;
 import com.silicium.otusfilmcatalog.ui.cuctomcomponents.HideableSnackCircularProgressBar;
 import com.tingyik90.snackprogressbar.SnackProgressBar;
 import com.tingyik90.snackprogressbar.SnackProgressBarLayout;
 import com.tingyik90.snackprogressbar.SnackProgressBarManager;
 
-import java.util.UUID;
-
 public class AddActivity extends AppCompatActivity {
 
     private HideableSnackCircularProgressBar snackProgressBar;
+    private ConstraintLayout rootLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add);
+        rootLayout = findViewById(R.id.activity_add);
 
-        snackProgressBar = new HideableSnackCircularProgressBar(findViewById(R.id.activity_add), this,
+        snackProgressBar = new HideableSnackCircularProgressBar(rootLayout, this,
                 getString(R.string.backPressedToastText),
                 new SnackProgressBarManager.OnDisplayListener()
                 {
@@ -46,6 +48,16 @@ public class AddActivity extends AppCompatActivity {
                     @Override
                     public void onLayoutInflated(@NonNull SnackProgressBarLayout snackProgressBarLayout, @NonNull FrameLayout overlayLayout, @NonNull SnackProgressBar snackProgressBar, int onDisplayId) {}
                 });
+
+        Button btn = findViewById(R.id.button);
+        btn.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                AddMoreDialogFragment addPhotoBottomDialogFragment = new AddMoreDialogFragment();
+                addPhotoBottomDialogFragment.show(getSupportFragmentManager(), "add_more_dialog_fragment");
+                return false;
+            }
+        });
     }
 
     boolean doubleBackToExitPressedOnce = false;
@@ -70,4 +82,17 @@ public class AddActivity extends AppCompatActivity {
         FilmDescriptionStorage.getInstance().addFilm(film);
         finish();
     }
+
+    public void onItemClick(View view) {
+        Toast.makeText(view.getContext(),R.string.under_construction__hint_string,Toast.LENGTH_SHORT).show();
+        Snackbar.make(rootLayout, R.string.under_construction_string, Snackbar.LENGTH_LONG)
+                .setAction(rootLayout.getResources().getString(R.string.under_construction_action_string), new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Toast.makeText(view.getContext(),R.string.under_construction_answer_string,Toast.LENGTH_LONG).show();
+                    }
+                }).show();
+
+    }
+
 }
