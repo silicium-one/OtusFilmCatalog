@@ -9,22 +9,25 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.silicium.otusfilmcatalog.R;
 import com.silicium.otusfilmcatalog.logic.view.FilmViewWrapper;
+import com.silicium.otusfilmcatalog.ui.cuctomcomponents.UiComponets;
 
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -34,7 +37,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private final int DETAIL_ACTIVITY_CODE = 1;
     private final String LOG_TAG = this.getClass().getSimpleName();
     private LinearLayout film_root_layout;
-    private LinearLayout film_about_layout;
+    private ConstraintLayout film_about_layout;
     private FloatingActionButton fab;
 
     @Override
@@ -57,6 +60,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         Toolbar toolbar = findViewById(R.id.main_activity_toolbar);
         setSupportActionBar(toolbar);
+
+        final BottomNavigationView bnv = findViewById(R.id.bottom_about_navigation);
+        bnv.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                UiComponets.showUnderConstructionSnackBar(bnv);
+                return false;
+            }
+        });
 
         DrawerLayout drawer = findViewById(R.id.drawer_main_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(

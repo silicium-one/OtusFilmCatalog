@@ -28,4 +28,9 @@
     <string name="under_construction_string">Feature under construction</string>
     <string name="under_construction_action_string">Do it now!</string>
     <string name="under_construction_answer_string">Seriously?</string>
+
+    <string name="about_help_string">Помощь</string>
+    <string name="about_legal_string">О правах</string>
+    <string name="about_tech_details_string">Версия</string>
+
 </resources>
