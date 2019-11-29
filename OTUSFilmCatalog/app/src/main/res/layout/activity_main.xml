@@ -33,6 +33,21 @@
 
             </androidx.core.widget.NestedScrollView>
 
+            <LinearLayout
+                android:id="@+id/film_about_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="10dp"
+                    android:src="@drawable/otus"
+                    tools:ignore="ContentDescription" />
+
+            </LinearLayout>
+
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/fab"
                 android:layout_width="wrap_content"

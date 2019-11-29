@@ -34,12 +34,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private final int DETAIL_ACTIVITY_CODE = 1;
     private final String LOG_TAG = this.getClass().getSimpleName();
     private LinearLayout film_root_layout;
+    private LinearLayout film_about_layout;
+    private FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         film_root_layout = findViewById(R.id.film_root_layout);
+        film_about_layout = findViewById(R.id.film_about_layout);
+        fab = findViewById(R.id.fab);
+
+        film_root_layout.removeAllViews();
+        for(View v : FilmViewWrapper.getInstance().GetFilmViews(this, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setSelectedFilmTag(v.getTag().toString());
+                gotoDetailActivity();
+            }}))
+            film_root_layout.addView(v);
+        setSelectedFilmTag(selectedFilmTag);
 
         Toolbar toolbar = findViewById(R.id.main_activity_toolbar);
         setSupportActionBar(toolbar);
@@ -76,34 +90,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @SuppressLint("RestrictedApi")
     private void filmSelectMode() {
         isAboutMode = false;
-        film_root_layout.removeAllViews();
-
-        for(View v : FilmViewWrapper.getInstance().GetFilmViews(this, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setSelectedFilmTag(v.getTag().toString());
-                gotoDetailActivity();
-            }}))
-            film_root_layout.addView(v);
-
-        setSelectedFilmTag(selectedFilmTag);
-
-        FloatingActionButton fab = findViewById(R.id.fab);
+        film_about_layout.setVisibility(View.GONE);
+        film_root_layout.setVisibility(View.VISIBLE);
         fab.setVisibility(View.VISIBLE);
     }
 
     @SuppressLint("RestrictedApi")
     private void aboutMode() {
         isAboutMode = true;
-        film_root_layout.removeAllViews();
-
-        ImageView pic = new ImageView(this);
-        pic.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
-        pic.setPadding(10,10,10,10);
-        pic.setImageResource(R.drawable.otus);
-        film_root_layout.addView(pic);
-
-        FloatingActionButton fab = findViewById(R.id.fab);
+        film_about_layout.setVisibility(View.VISIBLE);
+        film_root_layout.setVisibility(View.GONE);
         fab.setVisibility(View.GONE);
     }
 
