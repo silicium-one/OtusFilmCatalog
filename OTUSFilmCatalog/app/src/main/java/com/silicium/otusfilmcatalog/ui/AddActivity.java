@@ -18,6 +18,7 @@ import com.silicium.otusfilmcatalog.logic.model.FilmDescription;
 import com.silicium.otusfilmcatalog.logic.model.FilmDescriptionFactory;
 import com.silicium.otusfilmcatalog.ui.cuctomcomponents.AddMoreDialogFragment;
 import com.silicium.otusfilmcatalog.ui.cuctomcomponents.HideableSnackCircularProgressBar;
+import com.silicium.otusfilmcatalog.ui.cuctomcomponents.UiComponets;
 import com.tingyik90.snackprogressbar.SnackProgressBar;
 import com.tingyik90.snackprogressbar.SnackProgressBarLayout;
 import com.tingyik90.snackprogressbar.SnackProgressBarManager;
@@ -85,14 +86,7 @@ public class AddActivity extends AppCompatActivity {
 
     public void onItemClick(View view) {
         Toast.makeText(view.getContext(),R.string.under_construction__hint_string,Toast.LENGTH_SHORT).show();
-        Snackbar.make(rootLayout, R.string.under_construction_string, Snackbar.LENGTH_LONG)
-                .setAction(rootLayout.getResources().getString(R.string.under_construction_action_string), new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Toast.makeText(view.getContext(),R.string.under_construction_answer_string,Toast.LENGTH_LONG).show();
-                    }
-                }).show();
-
+        UiComponets.showUnderConstructionSnackBar(rootLayout);
     }
 
 }
