@@ -14,5 +14,8 @@
 
     </LinearLayout>
 
+    <!-- include bottom sheet -->
+    <include layout="@layout/activity_detail_bottom_sheet" />
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
