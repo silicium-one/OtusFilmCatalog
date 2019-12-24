@@ -1,26 +1,33 @@
 package com.silicium.otusfilmcatalog.ui;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
-import com.silicium.otusfilmcatalog.logic.view.FilmViewWrapper;
 import com.silicium.otusfilmcatalog.R;
+import com.silicium.otusfilmcatalog.logic.view.FilmViewWrapper;
+import com.silicium.otusfilmcatalog.ui.cuctomcomponents.UiComponets;
 
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -29,14 +36,39 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private boolean isAboutMode = false;
     private final int DETAIL_ACTIVITY_CODE = 1;
     private final String LOG_TAG = this.getClass().getSimpleName();
+    private LinearLayout film_root_layout;
+    private ConstraintLayout film_about_layout;
+    private FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        film_root_layout = findViewById(R.id.film_root_layout);
+        film_about_layout = findViewById(R.id.film_about_layout);
+        fab = findViewById(R.id.fab);
+
+        film_root_layout.removeAllViews();
+        for(View v : FilmViewWrapper.getInstance().GetFilmViews(this, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setSelectedFilmTag(v.getTag().toString());
+                gotoDetailActivity();
+            }}))
+            film_root_layout.addView(v);
+        setSelectedFilmTag(selectedFilmTag);
 
         Toolbar toolbar = findViewById(R.id.main_activity_toolbar);
         setSupportActionBar(toolbar);
+
+        final BottomNavigationView bnv = findViewById(R.id.bottom_about_navigation);
+        bnv.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                UiComponets.showUnderConstructionSnackBar(bnv);
+                return false;
+            }
+        });
 
         DrawerLayout drawer = findViewById(R.id.drawer_main_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -70,36 +102,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @SuppressLint("RestrictedApi")
     private void filmSelectMode() {
         isAboutMode = false;
-        final LinearLayout root = findViewById(R.id.film_root_layout);
-        root.removeAllViews();
-
-        for(View v : FilmViewWrapper.getInstance().GetFilmViews(this, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setSelectedFilmTag(v.getTag().toString());
-                gotoDetailActivity();
-            }}))
-            root.addView(v);
-
-        setSelectedFilmTag(selectedFilmTag);
-
-        FloatingActionButton fab = findViewById(R.id.fab);
+        film_about_layout.setVisibility(View.GONE);
+        film_root_layout.setVisibility(View.VISIBLE);
         fab.setVisibility(View.VISIBLE);
     }
 
     @SuppressLint("RestrictedApi")
     private void aboutMode() {
         isAboutMode = true;
-        final LinearLayout root = findViewById(R.id.film_root_layout);
-        root.removeAllViews();
-
-        ImageView pic = new ImageView(this);
-        pic.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
-        pic.setPadding(10,10,10,10);
-        pic.setImageResource(R.drawable.otus);
-        root.addView(pic);
-
-        FloatingActionButton fab = findViewById(R.id.fab);
+        film_about_layout.setVisibility(View.VISIBLE);
+        film_root_layout.setVisibility(View.GONE);
         fab.setVisibility(View.GONE);
     }
 
@@ -124,14 +136,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     void setSelectedFilmTag(String selectedFilmTag) {
-        final LinearLayout root = findViewById(R.id.film_root_layout);
-        View prev = root.findViewWithTag(getSelectedFilmTag());
+        View prev = film_root_layout.findViewWithTag(getSelectedFilmTag());
         if (prev != null)
-            prev.setBackgroundColor(root.getDrawingCacheBackgroundColor());
+            prev.setBackgroundColor(film_root_layout.getDrawingCacheBackgroundColor());
         this.selectedFilmTag = selectedFilmTag;
-        View v = root.findViewWithTag(getSelectedFilmTag());
-        if (v != null)
-            v.setBackgroundColor(getResources().getColor(R.color.colorSelectedFilm)); // todo: передалать на вариант c учётом темы
+        View v = film_root_layout.findViewWithTag(getSelectedFilmTag());
+        if (v != null) {
+            TypedValue typedValue = new TypedValue();
+            Resources.Theme theme = v.getContext().getTheme();
+            theme.resolveAttribute(R.attr.selectableItemBackgroundBorderless, typedValue, true);
+            int color = typedValue.data;
+            v.setBackgroundColor(color);
+        }
     }
 
     @Override
@@ -154,6 +170,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             filmSelectMode();
         else if (id == R.id.item_about)
             aboutMode();
+        else if (id == R.id.item_exit) {
+            AlertDialog.Builder bld = new AlertDialog.Builder(this);
+            DialogInterface.OnClickListener exitDo =
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            finish();
+                        }
+                    };
+
+            bld.setMessage(R.string.exitDialogMessage);
+            bld.setTitle(R.string.exitDialogTitle);
+            bld.setNegativeButton(R.string.exitDialogNegativeAnswer, null);
+            bld.setPositiveButton(R.string.exitDialogPositiveAnswer, exitDo);
+            bld.setCancelable(false);
+            AlertDialog dialog = bld.create();
+            dialog.show();
+        }
 
         DrawerLayout drawer = findViewById(R.id.drawer_main_layout);
         drawer.closeDrawer(GravityCompat.START);

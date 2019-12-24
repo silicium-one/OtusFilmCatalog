@@ -2,28 +2,33 @@ package com.silicium.otusfilmcatalog.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.silicium.otusfilmcatalog.R;
 import com.silicium.otusfilmcatalog.logic.model.FilmDescription;
 import com.silicium.otusfilmcatalog.logic.view.FilmViewWrapper;
+import com.silicium.otusfilmcatalog.ui.cuctomcomponents.HideableSnackCircularProgressBar;
+import com.tingyik90.snackprogressbar.SnackProgressBar;
+import com.tingyik90.snackprogressbar.SnackProgressBarLayout;
+import com.tingyik90.snackprogressbar.SnackProgressBarManager;
 
 public class DetailActivity extends AppCompatActivity {
 
     FilmDescription film;
     CheckBox film_is_liked;
     EditText film_comment;
+    private HideableSnackCircularProgressBar snackProgressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,11 +44,12 @@ public class DetailActivity extends AppCompatActivity {
         film = instance.GetFilmByID(filmID);
         root.addView(instance.GetFilmViewDetails(film, this));
 
-        final int oldHeight = findViewById(R.id.more_text_view).getLayoutParams().height;
-        final View more_layout = findViewById(R.id.more_layout);
+        final View more_header = findViewById(R.id.more_text_view);
+        final int oldHeight = more_header.getLayoutParams().height;
+
 
         // get the bottom sheet view
-        LinearLayout bottomSheet = findViewById(R.id.detail_bottom_sheet);
+        ConstraintLayout bottomSheet = findViewById(R.id.detail_bottom_sheet);
         // init the bottom sheet behavior
         final BottomSheetBehavior bShBehavior = BottomSheetBehavior.from(bottomSheet);
 
@@ -57,12 +63,12 @@ public class DetailActivity extends AppCompatActivity {
                                 public void run() {
                                     bShBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                                 }
-                            }, 3000);
+                            }, getResources().getInteger(R.integer.foolproof_time_ms));
                         } else if (newState == BottomSheetBehavior.STATE_EXPANDED) {
                             float scaleFactor = 0.1F;
-                            more_layout.animate().y(-(oldHeight * (1 - scaleFactor) / 2F)).scaleY(scaleFactor).start();
+                            more_header.animate().y(-(oldHeight * (1 - scaleFactor) / 2F)).scaleY(scaleFactor).start();
                         } else if (newState == BottomSheetBehavior.STATE_COLLAPSED) {
-                            more_layout.animate().y(0).scaleY(1F).start();
+                            more_header.animate().setDuration(getResources().getInteger(R.integer.smooth_transistion_time_ms)).y(0).scaleY(1F).start();
                         }
                     }
 
@@ -71,6 +77,22 @@ public class DetailActivity extends AppCompatActivity {
                     }
                 }
         );
+
+        snackProgressBar = new HideableSnackCircularProgressBar(findViewById(R.id.activity_detail), this,
+                getString(R.string.backPressedToastText),
+                new SnackProgressBarManager.OnDisplayListener()
+        {
+            @Override
+            public void onDismissed(@NonNull SnackProgressBar snackProgressBar, int onDisplayId) {
+                doubleBackToExitPressedOnce = false;
+            }
+
+            @Override
+            public void onShown(@NonNull SnackProgressBar snackProgressBar, int onDisplayId) {}
+
+            @Override
+            public void onLayoutInflated(@NonNull SnackProgressBarLayout snackProgressBarLayout, @NonNull FrameLayout overlayLayout, @NonNull SnackProgressBar snackProgressBar, int onDisplayId) {}
+        });
     }
 
     public void onShareBtnClick() {
@@ -98,16 +120,8 @@ public class DetailActivity extends AppCompatActivity {
             setResult(RESULT_OK, intent);
             finish();
         } else {
+            snackProgressBar.Show();
             this.doubleBackToExitPressedOnce = true;
-            Toast.makeText(this, R.string.backPressedToastText, Toast.LENGTH_SHORT).show();
-
-            new Handler().postDelayed(new Runnable() {
-
-                @Override
-                public void run() {
-                    doubleBackToExitPressedOnce = false;
-                }
-            }, 2000);
         }
     }
 

@@ -8,8 +8,29 @@
 
     <string name="homeMenuItem">Главный экран</string>
     <string name="aboutMenuItem">О программе</string>
+    <string name="exitMenuItem">Выход</string>
 
     <string name="filmNameAddHint">Название фильма</string>
     <string name="filmDescriptionAddHint">Краткое содержание</string>
-    <string name="filmSaveBtnText">Сохранить</string>
+    <string name="filmSaveBtnText">Сохранить / Дополнительно</string>
+
+    <string name="exitDialogTitle">Выход</string>
+    <string name="exitDialogMessage">Покинуть программу?</string>
+    <string name="exitDialogNegativeAnswer">Нет</string>
+    <string name="exitDialogPositiveAnswer">Да</string>
+
+    <string name="bottom_sheet_option_heading">Дополнительно</string>
+    <string name="bottom_sheet_option_pic_photo">Выбрать обложку</string>
+    <string name="bottom_sheet_option_add_category">Указать категорию</string>
+    <string name="bottom_sheet_option_add_one_more">Добавить ещё один фильм</string>
+
+    <string name="under_construction__hint_string">See feature under BottomSheetDialogFragment</string>
+    <string name="under_construction_string">Feature under construction</string>
+    <string name="under_construction_action_string">Do it now!</string>
+    <string name="under_construction_answer_string">Seriously?</string>
+
+    <string name="about_help_string">Помощь</string>
+    <string name="about_legal_string">О правах</string>
+    <string name="about_tech_details_string">Версия</string>
+
 </resources>
