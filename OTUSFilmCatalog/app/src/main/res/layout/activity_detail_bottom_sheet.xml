@@ -4,17 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/detail_bottom_sheet"
     android:layout_width="match_parent"
-    android:layout_height="340dp"
+    android:layout_height="@dimen/bottomSheet_height"
     android:orientation="vertical"
     android:background="?colorBackgroundFloating"
     app:behavior_hideable="true"
-    app:behavior_peekHeight="40dp"
+    app:behavior_peekHeight="@dimen/bottomSheet_header"
     app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
     <TextView
         android:id="@+id/more_text_view"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="@dimen/bottomSheet_header"
         android:background="?colorAccent"
         android:gravity="center"
         android:text="@string/filmCommentExpandTextHint"
@@ -24,7 +24,7 @@
     <CheckBox
         android:id="@+id/film_is_liked"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="@dimen/bottomSheet_checkboxSize"
         android:layout_weight="1"
         android:text="@string/isLikedCheckBoxText"
         android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
@@ -39,7 +39,7 @@
         android:hint="@string/filmCommentEditTextHint"
         android:importantForAutofill="no"
         android:inputType="text"
-        android:paddingLeft="10dp"
+        android:paddingLeft="@dimen/paddingLeft"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/film_is_liked" />
 

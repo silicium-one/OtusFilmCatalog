@@ -1,68 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="8dp"
-    android:layout_marginTop="8dp"
+    android:layout_marginBottom="@dimen/marginBottom"
+    android:layout_marginTop="@dimen/marginTop"
     android:orientation="vertical">
 
     <TextView
         android:layout_width="wrap_content"
-        android:layout_height="56dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginStart="16dp"
+        android:layout_height="@dimen/chapterHeaderHeight"
+        android:layout_marginRight="@dimen/marginRight"
+        android:layout_marginLeft="@dimen/marginLeft"
         android:gravity="center"
         android:text="@string/bottom_sheet_option_heading"
-        android:textSize="16sp" />
+        android:textSize="@dimen/text_chapterHead"
+        tools:ignore="RtlHardcoded" />
 
     <TextView
         android:id="@+id/btn_add_photo"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginStart="16dp"
-        android:drawablePadding="32dp"
+        android:layout_height="@dimen/chapterItemHeight"
+        android:layout_marginRight="@dimen/marginRight"
+        android:layout_marginLeft="@dimen/marginLeft"
+        android:drawablePadding="@dimen/paddingLeft"
         android:drawableLeft="@drawable/ic_insert_photo"
         android:gravity="start|center_vertical"
         android:text="@string/bottom_sheet_option_pic_photo"
-        android:textSize="16sp"
+        android:textSize="@dimen/text_chapterItem"
         android:drawableStart="@drawable/ic_insert_photo"
-        android:onClick="onItemClick"/>
+        android:onClick="onItemClick"
+        tools:ignore="RtlHardcoded" />
 
     <TextView
         android:id="@+id/btn_pick_category"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginStart="16dp"
-        android:drawablePadding="32dp"
+        android:layout_height="@dimen/chapterItemHeight"
+        android:layout_marginRight="@dimen/marginRight"
+        android:layout_marginLeft="@dimen/marginLeft"
+        android:drawablePadding="@dimen/paddingLeft"
         android:drawableLeft="@drawable/ic_library_add"
         android:gravity="start|center_vertical"
         android:text="@string/bottom_sheet_option_add_category"
-        android:textSize="16sp"
+        android:textSize="@dimen/text_chapterItem"
         android:drawableStart="@drawable/ic_library_add"
-        android:onClick="onItemClick"/>
+        android:onClick="onItemClick"
+        tools:ignore="RtlHardcoded" />
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginBottom="8dp"
-
-        android:layout_marginTop="7dp"
+        android:layout_height="@dimen/chapterDivHeight"
+        android:layout_marginBottom="@dimen/marginBottom"
+        android:layout_marginTop="@dimen/marginTop"
         android:background="@color/background" />
 
     <TextView
         android:id="@+id/btn_add_one_more"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginStart="16dp"
-        android:drawablePadding="32dp"
+        android:layout_height="@dimen/chapterItemHeight"
+        android:layout_marginRight="@dimen/marginRight"
+        android:layout_marginLeft="@dimen/marginLeft"
+        android:drawablePadding="@dimen/paddingLeft"
         android:drawableLeft="@drawable/ic_add_one_more"
         android:gravity="start|center_vertical"
         android:text="@string/bottom_sheet_option_add_one_more"
-        android:textSize="16sp"
+        android:textSize="@dimen/text_chapterItem"
         android:drawableStart="@drawable/ic_add_one_more"
-        android:onClick="onItemClick"/>
+        android:onClick="onItemClick"
+        tools:ignore="RtlHardcoded" />
 
 </LinearLayout>

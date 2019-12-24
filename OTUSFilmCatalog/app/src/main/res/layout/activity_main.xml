@@ -42,7 +42,7 @@
                     android:id="@+id/imageView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="10dp"
+                    android:padding="@dimen/padding"
                     android:src="@drawable/otus"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -66,7 +66,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom|end"
-                android:layout_margin="16dp"
+                android:layout_margin="@dimen/margin"
                 app:srcCompat="@drawable/ic_film_add" />
 
         </LinearLayout>
