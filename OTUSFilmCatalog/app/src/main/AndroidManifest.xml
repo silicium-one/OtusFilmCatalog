@@ -13,9 +13,8 @@
         <activity android:name=".ui.AddActivity" />
         <activity android:name=".ui.DetailActivity" />
         <activity
-            android:name=".ui.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".RootActivity">
+            android:name=".RootActivity"
+            android:theme="@style/AppTheme.NoActionBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

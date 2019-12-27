@@ -7,8 +7,10 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -16,11 +18,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -29,27 +31,35 @@ import com.silicium.otusfilmcatalog.R;
 import com.silicium.otusfilmcatalog.logic.view.FilmViewWrapper;
 import com.silicium.otusfilmcatalog.ui.cuctomcomponents.UiComponets;
 
+import static android.app.Activity.RESULT_OK;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+
+public class MainFragment extends Fragment implements NavigationView.OnNavigationItemSelectedListener {
 
     private String selectedFilmTag = ""; // TODO: оптимизировать на доступ по индексу
     private boolean isAboutMode = false;
     private final int DETAIL_ACTIVITY_CODE = 1;
-    private final String LOG_TAG = this.getClass().getSimpleName();
+    public final static String LOG_TAG = "MainFragment";
     private LinearLayout film_root_layout;
     private ConstraintLayout film_about_layout;
     private FloatingActionButton fab;
 
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        film_root_layout = findViewById(R.id.film_root_layout);
-        film_about_layout = findViewById(R.id.film_about_layout);
-        fab = findViewById(R.id.fab);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_main, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        film_root_layout = view.findViewById(R.id.film_root_layout);
+        film_about_layout = view.findViewById(R.id.film_about_layout);
+        fab = view.findViewById(R.id.fab);
 
         film_root_layout.removeAllViews();
-        for(View v : FilmViewWrapper.getInstance().GetFilmViews(this, new View.OnClickListener() {
+        for(View v : FilmViewWrapper.getInstance().GetFilmViews(getContext(), new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 setSelectedFilmTag(v.getTag().toString());
@@ -58,10 +68,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             film_root_layout.addView(v);
         setSelectedFilmTag(selectedFilmTag);
 
-        Toolbar toolbar = findViewById(R.id.main_activity_toolbar);
-        setSupportActionBar(toolbar);
+        Toolbar toolbar = view.findViewById(R.id.main_activity_toolbar);
 
-        final BottomNavigationView bnv = findViewById(R.id.bottom_about_navigation);
+        final BottomNavigationView bnv = view.findViewById(R.id.bottom_about_navigation);
         bnv.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -70,14 +79,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
-        DrawerLayout drawer = findViewById(R.id.drawer_main_layout);
+        DrawerLayout drawer = view.findViewById(R.id.drawer_main_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar,
+                getActivity(), drawer, toolbar,
                 R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = findViewById(R.id.nav_view);
+        NavigationView navigationView = view.findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
         if (savedInstanceState != null) {
@@ -85,11 +94,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             isAboutMode = savedInstanceState.getBoolean("isAboutMode", false);
         }
 
-        FloatingActionButton fab = findViewById(R.id.fab);
+        FloatingActionButton fab = view.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), AddActivity.class);
+                Intent intent = new Intent(getContext(), AddActivity.class);
                 startActivity(intent);
             }});
 
@@ -117,25 +126,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void gotoDetailActivity() {
         if (FilmViewWrapper.getInstance().containsID(getSelectedFilmTag())) {
-            Intent intent = new Intent(this, DetailActivity.class);
+            Intent intent = new Intent(getActivity(), DetailActivity.class);
             intent.putExtra("selectedFilmTag", getSelectedFilmTag());
             startActivityForResult(intent, DETAIL_ACTIVITY_CODE);
         }
         else
-            Toast.makeText(this, R.string.noFilmByIDErr, Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), R.string.noFilmByIDErr, Toast.LENGTH_LONG).show();
     }
 
-    public void onSaveInstanceState(Bundle outState) {
+    public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putString("selectedFilmTag",selectedFilmTag);
         outState.putBoolean("isAboutMode",isAboutMode);
     }
 
-    String getSelectedFilmTag() {
+    private String getSelectedFilmTag() {
         return selectedFilmTag;
     }
 
-    void setSelectedFilmTag(String selectedFilmTag) {
+    private void setSelectedFilmTag(String selectedFilmTag) {
         View prev = film_root_layout.findViewWithTag(getSelectedFilmTag());
         if (prev != null)
             prev.setBackgroundColor(film_root_layout.getDrawingCacheBackgroundColor());
@@ -151,7 +160,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (requestCode == DETAIL_ACTIVITY_CODE && resultCode == RESULT_OK)
         {
             assert data != null;
@@ -171,12 +180,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         else if (id == R.id.item_about)
             aboutMode();
         else if (id == R.id.item_exit) {
-            AlertDialog.Builder bld = new AlertDialog.Builder(this);
+            AlertDialog.Builder bld = new AlertDialog.Builder(getActivity());
             DialogInterface.OnClickListener exitDo =
                     new DialogInterface.OnClickListener() {
                         @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            finish();
+                        public void onClick(DialogInterface dialog, int which) {getActivity().finish();
                         }
                     };
 
@@ -189,14 +197,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             dialog.show();
         }
 
-        DrawerLayout drawer = findViewById(R.id.drawer_main_layout);
+        DrawerLayout drawer = getActivity().findViewById(R.id.drawer_main_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
     @Override
-    protected void onRestart() {
-        super.onRestart();
+    public void onResume() {
+        super.onResume();
 
         if (isAboutMode)
             aboutMode();

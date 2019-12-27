@@ -27,7 +27,7 @@
     <dimen name="bottomSheet_checkboxSize">40dp</dimen>
     <dimen name="paddingLeft">10dp</dimen>
 
-    <!-- activity_main -->
+    <!-- fragment_main -->
     <dimen name="padding">10dp</dimen>
     <dimen name="margin">10dp</dimen>
 
