@@ -1,8 +1,8 @@
 package com.silicium.otusfilmcatalog;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.silicium.otusfilmcatalog.ui.MainFragment;
 
@@ -13,9 +13,11 @@ public class RootActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_root);
 
-        getSupportFragmentManager()
+        MainFragment fragment = (MainFragment) getSupportFragmentManager().findFragmentByTag(MainFragment.LOG_TAG);
+        if (fragment == null)
+            getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.root_fragment, new MainFragment(), MainFragment.LOG_TAG).commit();
-
+                .add(R.id.root_fragment, new MainFragment(), MainFragment.LOG_TAG)
+                .commit();
     }
 }

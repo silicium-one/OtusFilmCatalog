@@ -45,6 +45,11 @@ public class MainFragment extends Fragment implements NavigationView.OnNavigatio
     private FloatingActionButton fab;
     private View rootView;
 
+    public MainFragment()
+    {
+        setRetainInstance(true);
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -92,11 +97,6 @@ public class MainFragment extends Fragment implements NavigationView.OnNavigatio
         NavigationView navigationView = view.findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        if (savedInstanceState != null) {
-            setSelectedFilmTag(savedInstanceState.getString("selectedFilmTag"));
-            isAboutMode = savedInstanceState.getBoolean("isAboutMode", false);
-        }
-
         FloatingActionButton fab = view.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -135,12 +135,6 @@ public class MainFragment extends Fragment implements NavigationView.OnNavigatio
         }
         else
             Toast.makeText(getContext(), R.string.noFilmByIDErr, Toast.LENGTH_LONG).show();
-    }
-
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putString("selectedFilmTag",selectedFilmTag);
-        outState.putBoolean("isAboutMode",isAboutMode);
     }
 
     private String getSelectedFilmTag() {
