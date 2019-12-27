@@ -43,6 +43,7 @@ public class MainFragment extends Fragment implements NavigationView.OnNavigatio
     private LinearLayout film_root_layout;
     private ConstraintLayout film_about_layout;
     private FloatingActionButton fab;
+    private View rootView;
 
     @Nullable
     @Override
@@ -53,6 +54,8 @@ public class MainFragment extends Fragment implements NavigationView.OnNavigatio
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        rootView = view;
 
         film_root_layout = view.findViewById(R.id.film_root_layout);
         film_about_layout = view.findViewById(R.id.film_about_layout);
@@ -180,11 +183,13 @@ public class MainFragment extends Fragment implements NavigationView.OnNavigatio
         else if (id == R.id.item_about)
             aboutMode();
         else if (id == R.id.item_exit) {
-            AlertDialog.Builder bld = new AlertDialog.Builder(getActivity());
+            AlertDialog.Builder bld = new AlertDialog.Builder(rootView.getContext());
             DialogInterface.OnClickListener exitDo =
                     new DialogInterface.OnClickListener() {
                         @Override
-                        public void onClick(DialogInterface dialog, int which) {getActivity().finish();
+                        public void onClick(DialogInterface dialog, int which)
+                        {
+                            System.exit(0);
                         }
                     };
 
@@ -197,7 +202,7 @@ public class MainFragment extends Fragment implements NavigationView.OnNavigatio
             dialog.show();
         }
 
-        DrawerLayout drawer = getActivity().findViewById(R.id.drawer_main_layout);
+        DrawerLayout drawer = rootView.findViewById(R.id.drawer_main_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
