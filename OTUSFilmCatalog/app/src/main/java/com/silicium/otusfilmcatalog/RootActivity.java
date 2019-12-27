@@ -13,11 +13,11 @@ public class RootActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_root);
 
-        MainFragment fragment = (MainFragment) getSupportFragmentManager().findFragmentByTag(MainFragment.LOG_TAG);
+        MainFragment fragment = (MainFragment) getSupportFragmentManager().findFragmentByTag(MainFragment.FRAGMENT_TAG);
         if (fragment == null)
             getSupportFragmentManager()
                 .beginTransaction()
-                .add(R.id.root_fragment, new MainFragment(), MainFragment.LOG_TAG)
+                .add(R.id.root_fragment, new MainFragment(), MainFragment.FRAGMENT_TAG)
                 .commit();
     }
 }

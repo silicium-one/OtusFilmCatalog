@@ -39,7 +39,7 @@ public class MainFragment extends Fragment implements NavigationView.OnNavigatio
     private String selectedFilmTag = ""; // TODO: оптимизировать на доступ по индексу
     private boolean isAboutMode = false;
     private final int DETAIL_ACTIVITY_CODE = 1;
-    public final static String LOG_TAG = "MainFragment";
+    public final static String FRAGMENT_TAG = "MainFragment";
     private LinearLayout film_root_layout;
     private ConstraintLayout film_about_layout;
     private FloatingActionButton fab;
@@ -163,7 +163,7 @@ public class MainFragment extends Fragment implements NavigationView.OnNavigatio
             assert data != null;
             String comment = data.getStringExtra("film_comment");
             boolean isLiked = data.getBooleanExtra("film_is_liked", false);
-            Log.d(LOG_TAG, String.format("isLiked={%s}, comment={%s}", Boolean.toString(isLiked), comment));
+            Log.d(FRAGMENT_TAG, String.format("isLiked={%s}, comment={%s}", Boolean.toString(isLiked), comment));
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
