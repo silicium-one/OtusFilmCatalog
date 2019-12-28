@@ -20,13 +20,14 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.silicium.otusfilmcatalog.R;
 import com.silicium.otusfilmcatalog.logic.model.FilmDescription;
 import com.silicium.otusfilmcatalog.logic.model.FragmentWithCallback;
+import com.silicium.otusfilmcatalog.logic.model.IOnBackPressedListener;
 import com.silicium.otusfilmcatalog.logic.view.FilmViewWrapper;
 import com.silicium.otusfilmcatalog.ui.cuctomcomponents.HideableSnackCircularProgressBar;
 import com.tingyik90.snackprogressbar.SnackProgressBar;
 import com.tingyik90.snackprogressbar.SnackProgressBarLayout;
 import com.tingyik90.snackprogressbar.SnackProgressBarManager;
 
-public class DetailFragment extends FragmentWithCallback {
+public class DetailFragment extends FragmentWithCallback implements IOnBackPressedListener {
 
     private String filmID;
     private FilmDescription film;
@@ -142,17 +143,24 @@ public class DetailFragment extends FragmentWithCallback {
     }
 
     private boolean doubleBackToExitPressedOnce = false;
-//    @Override
-    public void onBackPressed() {
+    /**
+     * Если вернуть ИСТИНА, то нажатие кнопки "назад" обрабтано. Если вернуть ЛОЖЬ, то требуется обработка выше по стэку.
+     * @return ИСТИНА, если нажание кнопки back обработано и ЛОЖЬ в противном случае
+     */
+    @Override
+    public boolean onBackPressed() {
         if (doubleBackToExitPressedOnce) {
-            Intent intent = new Intent();
-            intent.putExtra("film_is_liked", film_is_liked.isChecked());
-            intent.putExtra("film_comment", film_comment.getText().toString());
+//            Intent intent = new Intent();
+//            intent.putExtra("film_is_liked", film_is_liked.isChecked());
+//            intent.putExtra("film_comment", film_comment.getText().toString());
 //            setResult(RESULT_OK, intent);
 //            finish();
+            // TODO: придумать, как обработать полученные даннве. Возможно, упокавать их в базу
+            return false;
         } else {
             snackProgressBar.Show();
             this.doubleBackToExitPressedOnce = true;
+            return true;
         }
     }
 
