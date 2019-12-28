@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -22,23 +21,20 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.Fragment;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.silicium.otusfilmcatalog.R;
+import com.silicium.otusfilmcatalog.logic.model.FragmentWithCallback;
 import com.silicium.otusfilmcatalog.logic.view.FilmViewWrapper;
 import com.silicium.otusfilmcatalog.ui.cuctomcomponents.UiComponets;
 
-import static android.app.Activity.RESULT_OK;
 
-
-public class MainFragment extends Fragment implements NavigationView.OnNavigationItemSelectedListener {
+public class MainFragment extends FragmentWithCallback implements NavigationView.OnNavigationItemSelectedListener {
 
     private String selectedFilmTag = ""; // TODO: оптимизировать на доступ по индексу
     private boolean isAboutMode = false;
-    private final int DETAIL_ACTIVITY_CODE = 1;
     public final static String FRAGMENT_TAG = "MainFragment";
     private LinearLayout film_root_layout;
     private ConstraintLayout film_about_layout;
@@ -129,9 +125,13 @@ public class MainFragment extends Fragment implements NavigationView.OnNavigatio
 
     private void gotoDetailActivity() {
         if (FilmViewWrapper.getInstance().containsID(getSelectedFilmTag())) {
-            Intent intent = new Intent(getActivity(), DetailActivity.class);
-            intent.putExtra("selectedFilmTag", getSelectedFilmTag());
-            startActivityForResult(intent, DETAIL_ACTIVITY_CODE);
+            try{
+                gotoFragmentCallback.GotoDetailFragment(getSelectedFilmTag());
+            }
+            catch (NullPointerException e)
+            {
+                e.printStackTrace();
+            }
         }
         else
             Toast.makeText(getContext(), R.string.noFilmByIDErr, Toast.LENGTH_LONG).show();
@@ -154,18 +154,6 @@ public class MainFragment extends Fragment implements NavigationView.OnNavigatio
             int color = typedValue.data;
             v.setBackgroundColor(color);
         }
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if (requestCode == DETAIL_ACTIVITY_CODE && resultCode == RESULT_OK)
-        {
-            assert data != null;
-            String comment = data.getStringExtra("film_comment");
-            boolean isLiked = data.getBooleanExtra("film_is_liked", false);
-            Log.d(FRAGMENT_TAG, String.format("isLiked={%s}, comment={%s}", Boolean.toString(isLiked), comment));
-        }
-        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
