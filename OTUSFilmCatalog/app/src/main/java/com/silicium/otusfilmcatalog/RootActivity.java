@@ -8,11 +8,11 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.silicium.otusfilmcatalog.logic.model.FragmentWithCallback;
-import com.silicium.otusfilmcatalog.logic.model.GotoFragmentCallbackInterface;
+import com.silicium.otusfilmcatalog.logic.model.IGotoFragmentCallback;
 import com.silicium.otusfilmcatalog.ui.DetailFragment;
 import com.silicium.otusfilmcatalog.ui.MainFragment;
 
-public class RootActivity extends AppCompatActivity implements GotoFragmentCallbackInterface {
+public class RootActivity extends AppCompatActivity implements IGotoFragmentCallback {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
