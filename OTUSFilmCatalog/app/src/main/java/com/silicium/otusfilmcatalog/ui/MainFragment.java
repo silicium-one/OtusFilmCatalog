@@ -2,7 +2,6 @@ package com.silicium.otusfilmcatalog.ui;
 
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.TypedValue;
@@ -97,8 +96,13 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getContext(), AddActivity.class);
-                startActivity(intent);
+                try{
+                    gotoFragmentCallback.GotoAddFragment();
+                }
+                catch (NullPointerException e)
+                {
+                    e.printStackTrace();
+                }
             }});
 
         if (isAboutMode)

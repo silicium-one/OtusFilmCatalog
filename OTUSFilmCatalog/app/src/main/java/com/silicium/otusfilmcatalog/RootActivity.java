@@ -11,6 +11,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.silicium.otusfilmcatalog.logic.model.FragmentWithCallback;
 import com.silicium.otusfilmcatalog.logic.model.IGotoFragmentCallback;
 import com.silicium.otusfilmcatalog.logic.model.IOnBackPressedListener;
+import com.silicium.otusfilmcatalog.ui.AddFragment;
 import com.silicium.otusfilmcatalog.ui.DetailFragment;
 import com.silicium.otusfilmcatalog.ui.MainFragment;
 
@@ -43,6 +44,16 @@ public class RootActivity extends AppCompatActivity implements IGotoFragmentCall
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.root_fragment, DetailFragment.newInstance(filmID), DetailFragment.FRAGMENT_TAG)
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                .addToBackStack(null)
+                .commit();
+    }
+
+    @Override
+    public void GotoAddFragment() {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.root_fragment, new AddFragment(), AddFragment.FRAGMENT_TAG)
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                 .addToBackStack(null)
                 .commit();

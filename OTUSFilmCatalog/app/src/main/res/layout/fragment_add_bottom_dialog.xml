@@ -29,7 +29,6 @@
         android:text="@string/bottom_sheet_option_pic_photo"
         android:textSize="@dimen/text_chapterItem"
         android:drawableStart="@drawable/ic_insert_photo"
-        android:onClick="onItemClick"
         tools:ignore="RtlHardcoded" />
 
     <TextView
@@ -44,7 +43,6 @@
         android:text="@string/bottom_sheet_option_add_category"
         android:textSize="@dimen/text_chapterItem"
         android:drawableStart="@drawable/ic_library_add"
-        android:onClick="onItemClick"
         tools:ignore="RtlHardcoded" />
 
     <View
@@ -66,7 +64,6 @@
         android:text="@string/bottom_sheet_option_add_one_more"
         android:textSize="@dimen/text_chapterItem"
         android:drawableStart="@drawable/ic_add_one_more"
-        android:onClick="onItemClick"
         tools:ignore="RtlHardcoded" />
 
 </LinearLayout>
