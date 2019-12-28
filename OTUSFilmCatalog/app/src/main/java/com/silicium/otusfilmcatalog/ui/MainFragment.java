@@ -67,12 +67,12 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
             @Override
             public void onClick(View v) {
                 setSelectedFilmTag(v.getTag().toString());
-                gotoDetailActivity();
+                gotoDetailFragment();
             }}))
             film_root_layout.addView(v);
         setSelectedFilmTag(selectedFilmTag);
 
-        Toolbar toolbar = view.findViewById(R.id.main_activity_toolbar);
+        Toolbar toolbar = view.findViewById(R.id.fragment_main_toolbar);
 
         final BottomNavigationView bnv = view.findViewById(R.id.bottom_about_navigation);
         bnv.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -123,7 +123,7 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
         fab.setVisibility(View.GONE);
     }
 
-    private void gotoDetailActivity() {
+    private void gotoDetailFragment() {
         if (FilmViewWrapper.getInstance().containsID(getSelectedFilmTag())) {
             try{
                 gotoFragmentCallback.GotoDetailFragment(getSelectedFilmTag());

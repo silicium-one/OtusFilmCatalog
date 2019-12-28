@@ -166,7 +166,7 @@ public class DetailFragment extends FragmentWithCallback implements IOnBackPress
 
 //    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getActivity().getMenuInflater().inflate(R.menu.activity_detail_menu, menu);
+        getActivity().getMenuInflater().inflate(R.menu.fragment_detail_menu, menu);
         return true;
     }
 
