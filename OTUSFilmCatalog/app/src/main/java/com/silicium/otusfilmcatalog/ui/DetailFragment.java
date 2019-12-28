@@ -3,7 +3,6 @@ package com.silicium.otusfilmcatalog.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +13,7 @@ import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
@@ -27,7 +27,7 @@ import com.tingyik90.snackprogressbar.SnackProgressBar;
 import com.tingyik90.snackprogressbar.SnackProgressBarLayout;
 import com.tingyik90.snackprogressbar.SnackProgressBarManager;
 
-public class DetailFragment extends FragmentWithCallback implements IOnBackPressedListener {
+public class DetailFragment extends FragmentWithCallback implements IOnBackPressedListener{
 
     private String filmID;
     private FilmDescription film;
@@ -60,6 +60,7 @@ public class DetailFragment extends FragmentWithCallback implements IOnBackPress
         Bundle bundle = getArguments();
         if (bundle != null)
             filmID = bundle.getString("filmID");
+        setHasOptionsMenu(true);
         return inflater.inflate(R.layout.fragment_detail, container, false);
     }
 
@@ -125,6 +126,20 @@ public class DetailFragment extends FragmentWithCallback implements IOnBackPress
             @Override
             public void onLayoutInflated(@NonNull SnackProgressBarLayout snackProgressBarLayout, @NonNull FrameLayout overlayLayout, @NonNull SnackProgressBar snackProgressBar, int onDisplayId) {}
         });
+
+        Toolbar toolbar = view.findViewById(R.id.fragment_detail_toolbar);
+        toolbar.inflateMenu(R.menu.fragment_detail_menu);
+        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                if (item.getItemId() == R.id.detail_share)
+                {
+                    onShareBtnClick();
+                    return true;
+                }
+                return false;
+            }
+        });
     }
 
     private void onShareBtnClick() {
@@ -162,21 +177,5 @@ public class DetailFragment extends FragmentWithCallback implements IOnBackPress
             this.doubleBackToExitPressedOnce = true;
             return true;
         }
-    }
-
-//    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getActivity().getMenuInflater().inflate(R.menu.fragment_detail_menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.detail_share)
-        {
-            onShareBtnClick();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 }
