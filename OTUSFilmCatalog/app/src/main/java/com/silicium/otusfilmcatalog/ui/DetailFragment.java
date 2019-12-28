@@ -2,54 +2,85 @@ package com.silicium.otusfilmcatalog.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.silicium.otusfilmcatalog.R;
 import com.silicium.otusfilmcatalog.logic.model.FilmDescription;
+import com.silicium.otusfilmcatalog.logic.model.FragmentWithCallback;
 import com.silicium.otusfilmcatalog.logic.view.FilmViewWrapper;
 import com.silicium.otusfilmcatalog.ui.cuctomcomponents.HideableSnackCircularProgressBar;
 import com.tingyik90.snackprogressbar.SnackProgressBar;
 import com.tingyik90.snackprogressbar.SnackProgressBarLayout;
 import com.tingyik90.snackprogressbar.SnackProgressBarManager;
 
-public class DetailActivity extends AppCompatActivity {
+public class DetailFragment extends FragmentWithCallback {
 
-    FilmDescription film;
-    CheckBox film_is_liked;
-    EditText film_comment;
+    private String filmID;
+    private FilmDescription film;
+    private CheckBox film_is_liked;
+    private EditText film_comment;
+    public final static String FRAGMENT_TAG = "DetailFragment";
+
+    private View rootView;
+
     private HideableSnackCircularProgressBar snackProgressBar;
 
+    public static DetailFragment newInstance(String text) {
+        DetailFragment fragment = new DetailFragment();
+
+        Bundle bundle = new Bundle();
+        bundle.putString("filmID", text);
+        fragment.setArguments(bundle);
+
+        return fragment;
+    }
+
+    public DetailFragment()
+    {
+        setRetainInstance(true);
+    }
+
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detail);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        Bundle bundle = getArguments();
+        if (bundle != null)
+            filmID = bundle.getString("filmID");
+        return inflater.inflate(R.layout.fragment_detail, container, false);
+    }
 
-        String filmID = getIntent().getStringExtra("selectedFilmTag");
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
-        final LinearLayout root = findViewById(R.id.film_root_layout);
-        film_is_liked = findViewById(R.id.film_is_liked);
-        film_comment = findViewById(R.id.film_comment);
+        rootView = view;
+
+        final LinearLayout root = rootView.findViewById(R.id.film_root_layout);
+        film_is_liked = rootView.findViewById(R.id.film_is_liked);
+        film_comment = rootView.findViewById(R.id.film_comment);
         FilmViewWrapper instance = FilmViewWrapper.getInstance();
         film = instance.GetFilmByID(filmID);
-        root.addView(instance.GetFilmViewDetails(film, this));
+        root.addView(instance.GetFilmViewDetails(film, getContext()));
 
-        final View more_header = findViewById(R.id.more_text_view);
+        final View more_header = rootView.findViewById(R.id.more_text_view);
         final int oldHeight = more_header.getLayoutParams().height;
 
 
         // get the bottom sheet view
-        ConstraintLayout bottomSheet = findViewById(R.id.detail_bottom_sheet);
+        ConstraintLayout bottomSheet = rootView.findViewById(R.id.detail_bottom_sheet);
         // init the bottom sheet behavior
         final BottomSheetBehavior bShBehavior = BottomSheetBehavior.from(bottomSheet);
 
@@ -78,7 +109,7 @@ public class DetailActivity extends AppCompatActivity {
                 }
         );
 
-        snackProgressBar = new HideableSnackCircularProgressBar(findViewById(R.id.activity_detail), this,
+        snackProgressBar = new HideableSnackCircularProgressBar(rootView.findViewById(R.id.fragment_detail), this,
                 getString(R.string.backPressedToastText),
                 new SnackProgressBarManager.OnDisplayListener()
         {
@@ -95,7 +126,7 @@ public class DetailActivity extends AppCompatActivity {
         });
     }
 
-    public void onShareBtnClick() {
+    private void onShareBtnClick() {
         String textMessage = getString(R.string.shareFilmMsg) + FilmViewWrapper.getInstance().GetFilmUrl(film);
         Intent sendIntent = new Intent();
         sendIntent.setAction(Intent.ACTION_SEND);
@@ -105,29 +136,29 @@ public class DetailActivity extends AppCompatActivity {
         String title = getResources().getString(R.string.shareFilmDlgTitle);
         Intent chooser = Intent.createChooser(sendIntent, title);
 
-        if (sendIntent.resolveActivity(getPackageManager()) != null) {
+        if (sendIntent.resolveActivity(rootView.getContext().getPackageManager()) != null) {
             startActivity(chooser);
         }
     }
 
-    boolean doubleBackToExitPressedOnce = false;
-    @Override
+    private boolean doubleBackToExitPressedOnce = false;
+//    @Override
     public void onBackPressed() {
         if (doubleBackToExitPressedOnce) {
             Intent intent = new Intent();
             intent.putExtra("film_is_liked", film_is_liked.isChecked());
             intent.putExtra("film_comment", film_comment.getText().toString());
-            setResult(RESULT_OK, intent);
-            finish();
+//            setResult(RESULT_OK, intent);
+//            finish();
         } else {
             snackProgressBar.Show();
             this.doubleBackToExitPressedOnce = true;
         }
     }
 
-    @Override
+//    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.activity_detail_menu, menu);
+        getActivity().getMenuInflater().inflate(R.menu.activity_detail_menu, menu);
         return true;
     }
 

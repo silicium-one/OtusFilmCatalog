@@ -1,17 +1,16 @@
 package com.silicium.otusfilmcatalog;
 
 import android.os.Bundle;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.silicium.otusfilmcatalog.logic.model.FragmentWithCallback;
 import com.silicium.otusfilmcatalog.logic.model.GotoFragmentCallbackInterface;
+import com.silicium.otusfilmcatalog.ui.DetailFragment;
 import com.silicium.otusfilmcatalog.ui.MainFragment;
-
-import static com.silicium.otusfilmcatalog.ui.MainFragment.FRAGMENT_TAG;
 
 public class RootActivity extends AppCompatActivity implements GotoFragmentCallbackInterface {
 
@@ -20,11 +19,11 @@ public class RootActivity extends AppCompatActivity implements GotoFragmentCallb
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_root);
 
-        MainFragment fragment = (MainFragment) getSupportFragmentManager().findFragmentByTag(FRAGMENT_TAG);
+        MainFragment fragment = (MainFragment) getSupportFragmentManager().findFragmentByTag(MainFragment.FRAGMENT_TAG);
         if (fragment == null)
             getSupportFragmentManager()
                 .beginTransaction()
-                .add(R.id.root_fragment, new MainFragment(), FRAGMENT_TAG)
+                .add(R.id.root_fragment, new MainFragment(), MainFragment.FRAGMENT_TAG)
                 .commit();
     }
 
@@ -39,6 +38,11 @@ public class RootActivity extends AppCompatActivity implements GotoFragmentCallb
 
     @Override
     public void GotoDetailFragment(String filmID) {
-        Toast.makeText(this, "GotoDetailFragment: " + filmID, Toast.LENGTH_LONG).show();
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.root_fragment, DetailFragment.newInstance(filmID), DetailFragment.FRAGMENT_TAG)
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                .addToBackStack(null)
+                .commit();
     }
 }

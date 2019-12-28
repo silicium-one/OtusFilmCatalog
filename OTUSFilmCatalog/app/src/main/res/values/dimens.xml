@@ -21,7 +21,7 @@
     <dimen name="text_chapterHead">20sp</dimen>
     <dimen name="text_chapterItem">16sp</dimen>
 
-    <!-- activity_detail -->
+    <!-- fragment_detail -->
     <dimen name="bottomSheet_height">340dp</dimen>
     <dimen name="bottomSheet_header">40dp</dimen>
     <dimen name="bottomSheet_checkboxSize">40dp</dimen>
