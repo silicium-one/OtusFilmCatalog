@@ -61,14 +61,19 @@ public class RootActivity extends AppCompatActivity implements IGotoFragmentCall
 
     @Override
     public void onBackPressed() {
+        Fragment fragment = getTopFragmentOrNull();
+
+        if (fragment instanceof IOnBackPressedListener && ((IOnBackPressedListener) fragment).onBackPressed())
+            return;
+        super.onBackPressed();
+    }
+
+    private Fragment getTopFragmentOrNull() {
         Fragment fragment = null;
         FragmentManager fragmentManager = getSupportFragmentManager();
         int count = fragmentManager.getBackStackEntryCount();
         if (count > 0)
             fragment = fragmentManager.getFragments().get(count-1);
-
-        if (fragment instanceof IOnBackPressedListener && ((IOnBackPressedListener) fragment).onBackPressed())
-            return;
-        super.onBackPressed();
+        return fragment;
     }
 }
