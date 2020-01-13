@@ -29,7 +29,6 @@ import com.silicium.otusfilmcatalog.logic.model.FragmentWithCallback;
 import com.silicium.otusfilmcatalog.logic.view.FilmViewWrapper;
 import com.silicium.otusfilmcatalog.ui.cuctomcomponents.UiComponets;
 
-
 public class MainFragment extends FragmentWithCallback implements NavigationView.OnNavigationItemSelectedListener {
 
     private String selectedFilmTag = ""; // TODO: оптимизировать на доступ по индексу
