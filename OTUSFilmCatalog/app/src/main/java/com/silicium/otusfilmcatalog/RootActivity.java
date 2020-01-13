@@ -71,7 +71,7 @@ public class RootActivity extends AppCompatActivity implements IGotoFragmentCall
     private Fragment getTopFragmentOrNull() {
         Fragment fragment = null;
         FragmentManager fragmentManager = getSupportFragmentManager();
-        int count = fragmentManager.getBackStackEntryCount();
+        int count = fragmentManager.getFragments().size();
         if (count > 0)
             fragment = fragmentManager.getFragments().get(count-1);
         return fragment;
