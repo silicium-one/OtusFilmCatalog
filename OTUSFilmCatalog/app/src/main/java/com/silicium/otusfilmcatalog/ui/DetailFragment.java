@@ -27,6 +27,8 @@ import com.tingyik90.snackprogressbar.SnackProgressBar;
 import com.tingyik90.snackprogressbar.SnackProgressBarLayout;
 import com.tingyik90.snackprogressbar.SnackProgressBarManager;
 
+import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
+
 public class DetailFragment extends FragmentWithCallback implements IOnBackPressedListener{
 
     private String filmID;
@@ -164,6 +166,9 @@ public class DetailFragment extends FragmentWithCallback implements IOnBackPress
      */
     @Override
     public boolean onBackPressed() {
+        if (isLandscape())
+            return false;
+
         if (doubleBackToExitPressedOnce) {
 //            Intent intent = new Intent();
 //            intent.putExtra("film_is_liked", film_is_liked.isChecked());
@@ -177,5 +182,9 @@ public class DetailFragment extends FragmentWithCallback implements IOnBackPress
             this.doubleBackToExitPressedOnce = true;
             return true;
         }
+    }
+
+    private boolean isLandscape() {
+        return getResources().getConfiguration().orientation == ORIENTATION_LANDSCAPE;
     }
 }
