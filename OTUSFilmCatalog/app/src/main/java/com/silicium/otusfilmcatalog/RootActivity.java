@@ -16,6 +16,8 @@ import com.silicium.otusfilmcatalog.ui.AddFragment;
 import com.silicium.otusfilmcatalog.ui.DetailFragment;
 import com.silicium.otusfilmcatalog.ui.MainFragment;
 
+import static android.content.res.Configuration.ORIENTATION_PORTRAIT;
+
 public class RootActivity extends AppCompatActivity implements IGotoFragmentCallback {
 
     @Override
@@ -42,12 +44,21 @@ public class RootActivity extends AppCompatActivity implements IGotoFragmentCall
 
     @Override
     public void GotoDetailFragment(String filmID) {
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.root_fragment, DetailFragment.newInstance(filmID), DetailFragment.FRAGMENT_TAG)
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                .addToBackStack(null)
-                .commit();
+        if (isPortrait()) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.root_fragment, DetailFragment.newInstance(filmID), DetailFragment.FRAGMENT_TAG)
+                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                    .addToBackStack(null)
+                    .commit();
+        } else {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.adds_fragment, DetailFragment.newInstance(filmID), DetailFragment.FRAGMENT_TAG)
+                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                    .addToBackStack(null)
+                    .commit();
+        }
     }
 
     @Override
@@ -100,5 +111,9 @@ public class RootActivity extends AppCompatActivity implements IGotoFragmentCall
         if (count > 0)
             fragment = fragmentManager.getFragments().get(count-1);
         return fragment;
+    }
+
+    private boolean isPortrait() {
+        return getResources().getConfiguration().orientation == ORIENTATION_PORTRAIT;
     }
 }
