@@ -1,6 +1,5 @@
 package com.silicium.otusfilmcatalog.ui;
 
-import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -17,25 +16,20 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.silicium.otusfilmcatalog.R;
 import com.silicium.otusfilmcatalog.logic.model.FragmentWithCallback;
 import com.silicium.otusfilmcatalog.logic.view.FilmViewWrapper;
-import com.silicium.otusfilmcatalog.ui.cuctomcomponents.UiComponets;
 
 public class MainFragment extends FragmentWithCallback implements NavigationView.OnNavigationItemSelectedListener {
 
     private String selectedFilmTag = ""; // TODO: оптимизировать на доступ по индексу
-    private boolean isAboutMode = false;
     public final static String FRAGMENT_TAG = "MainFragment";
     private LinearLayout film_root_layout;
-    private ConstraintLayout film_about_layout;
     private FloatingActionButton fab;
     private View rootView;
 
@@ -57,7 +51,6 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
         rootView = view;
 
         film_root_layout = view.findViewById(R.id.film_root_layout);
-        film_about_layout = view.findViewById(R.id.film_about_layout);
         fab = view.findViewById(R.id.fab);
 
         film_root_layout.removeAllViews();
@@ -71,15 +64,6 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
         setSelectedFilmTag(selectedFilmTag);
 
         Toolbar toolbar = view.findViewById(R.id.fragment_main_toolbar);
-
-        final BottomNavigationView bnv = view.findViewById(R.id.bottom_about_navigation);
-        bnv.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                UiComponets.showUnderConstructionSnackBar(bnv);
-                return false;
-            }
-        });
 
         DrawerLayout drawer = view.findViewById(R.id.drawer_main_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -103,27 +87,6 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
                     e.printStackTrace();
                 }
             }});
-
-        if (isAboutMode)
-            aboutMode();
-        else
-            filmSelectMode();
-    }
-
-    @SuppressLint("RestrictedApi")
-    private void filmSelectMode() {
-        isAboutMode = false;
-        film_about_layout.setVisibility(View.GONE);
-        film_root_layout.setVisibility(View.VISIBLE);
-        fab.setVisibility(View.VISIBLE);
-    }
-
-    @SuppressLint("RestrictedApi")
-    private void aboutMode() {
-        isAboutMode = true;
-        film_about_layout.setVisibility(View.VISIBLE);
-        film_root_layout.setVisibility(View.GONE);
-        fab.setVisibility(View.GONE);
     }
 
     private void gotoDetailFragment() {
@@ -163,10 +126,8 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
     public boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.item_home)
-            filmSelectMode();
-        else if (id == R.id.item_about)
-            aboutMode();
+        if (id == R.id.item_about)
+            gotoFragmentCallback.GotoAboutFragment();
         else if (id == R.id.item_exit) {
             AlertDialog.Builder bld = new AlertDialog.Builder(rootView.getContext());
             DialogInterface.OnClickListener exitDo =
@@ -190,15 +151,5 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
         DrawerLayout drawer = rootView.findViewById(R.id.drawer_main_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        if (isAboutMode)
-            aboutMode();
-        else
-            filmSelectMode();
     }
 }

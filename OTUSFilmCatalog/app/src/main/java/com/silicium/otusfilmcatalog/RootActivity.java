@@ -11,6 +11,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.silicium.otusfilmcatalog.logic.model.FragmentWithCallback;
 import com.silicium.otusfilmcatalog.logic.model.IGotoFragmentCallback;
 import com.silicium.otusfilmcatalog.logic.model.IOnBackPressedListener;
+import com.silicium.otusfilmcatalog.ui.AboutFragment;
 import com.silicium.otusfilmcatalog.ui.AddFragment;
 import com.silicium.otusfilmcatalog.ui.DetailFragment;
 import com.silicium.otusfilmcatalog.ui.MainFragment;
@@ -54,6 +55,30 @@ public class RootActivity extends AppCompatActivity implements IGotoFragmentCall
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.root_fragment, new AddFragment(), AddFragment.FRAGMENT_TAG)
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                .addToBackStack(null)
+                .commit();
+    }
+
+    public void GotoMainFragment() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+
+        // В случае перехода к главному фрагменту никаких скачков по кнопке "Назад" быть не должно
+        if (fragmentManager.getBackStackEntryCount() > 0) {
+            FragmentManager.BackStackEntry entry = fragmentManager.getBackStackEntryAt(0);
+            fragmentManager.popBackStack(entry.getId(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        }
+
+        fragmentManager.beginTransaction()
+                .replace(R.id.root_fragment, new MainFragment(), MainFragment.FRAGMENT_TAG)
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                .commit();
+    }
+
+    public void GotoAboutFragment() {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.root_fragment, new AboutFragment(), AboutFragment.FRAGMENT_TAG)
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                 .addToBackStack(null)
                 .commit();
