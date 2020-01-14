@@ -47,6 +47,23 @@ public class RootActivity extends AppCompatActivity implements IGotoFragmentCall
     }
 
     @Override
+    public void onBackStackChanged() {
+        // Манипуляции с подсветкой последнего выбранного фильма в горизонтальном режиме
+        String filmID = "";
+        Fragment topFragment = getTopFragmentOrNull();
+        if (topFragment instanceof DetailFragment) {
+            filmID = ((DetailFragment) topFragment).getFilmID();
+        }
+
+        MainFragment mainFragment = (MainFragment) getSupportFragmentManager().findFragmentByTag(MainFragment.FRAGMENT_TAG);
+        if (mainFragment != null && !isPortrait()) {
+            mainFragment.setSelectedFilmTag(filmID);
+        }
+
+        CheckContainerSizes();
+    }
+
+    @Override
     public void GotoDetailFragment(String filmID) {
         getSupportFragmentManager()
                 .beginTransaction()
@@ -66,6 +83,7 @@ public class RootActivity extends AppCompatActivity implements IGotoFragmentCall
                 .commit();
     }
 
+    @Override
     public void GotoMainFragment() {
         FragmentManager fragmentManager = getSupportFragmentManager();
 
@@ -81,6 +99,7 @@ public class RootActivity extends AppCompatActivity implements IGotoFragmentCall
                 .commit();
     }
 
+    @Override
     public void GotoAboutFragment() {
         getSupportFragmentManager()
                 .beginTransaction()
@@ -110,23 +129,6 @@ public class RootActivity extends AppCompatActivity implements IGotoFragmentCall
 
     private boolean isPortrait() {
         return getResources().getConfiguration().orientation == ORIENTATION_PORTRAIT;
-    }
-
-    @Override
-    public void onBackStackChanged() {
-        // Манипуляции с поджсветкой последнего выбранного фильма в горизонтальном режиме
-        String filmID = "";
-        Fragment topFragment = getTopFragmentOrNull();
-        if (topFragment instanceof DetailFragment) {
-            filmID = ((DetailFragment) topFragment).getFilmID();
-        }
-
-        MainFragment mainFragment = (MainFragment) getSupportFragmentManager().findFragmentByTag(MainFragment.FRAGMENT_TAG);
-        if (mainFragment != null && !isPortrait()) {
-            mainFragment.setSelectedFilmTag(filmID);
-        }
-
-        CheckContainerSizes();
     }
 
     private void CheckContainerSizes() {
