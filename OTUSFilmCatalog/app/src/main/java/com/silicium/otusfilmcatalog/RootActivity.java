@@ -1,9 +1,12 @@
 package com.silicium.otusfilmcatalog;
 
 import android.os.Bundle;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -25,12 +28,11 @@ public class RootActivity extends AppCompatActivity implements IGotoFragmentCall
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_root);
 
-        MainFragment fragment = (MainFragment) getSupportFragmentManager().findFragmentByTag(MainFragment.FRAGMENT_TAG);
-        if (fragment == null)
-            getSupportFragmentManager()
-                .beginTransaction()
-                .add(R.id.root_fragment, new MainFragment(), MainFragment.FRAGMENT_TAG)
-                .commit();
+        Fragment topFragment = getTopFragmentOrNull();
+        if (topFragment == null) // первый запуск
+            GotoMainFragment();
+        else
+            CheckContainerSizes();
 
         getSupportFragmentManager().addOnBackStackChangedListener(this);
     }
@@ -46,21 +48,12 @@ public class RootActivity extends AppCompatActivity implements IGotoFragmentCall
 
     @Override
     public void GotoDetailFragment(String filmID) {
-        if (isPortrait()) {
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.root_fragment, DetailFragment.newInstance(filmID), DetailFragment.FRAGMENT_TAG)
-                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                    .addToBackStack(null)
-                    .commit();
-        } else {
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.adds_fragment, DetailFragment.newInstance(filmID), DetailFragment.FRAGMENT_TAG)
-                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                    .addToBackStack(null)
-                    .commit();
-        }
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.adds_fragment, DetailFragment.newInstance(filmID), DetailFragment.FRAGMENT_TAG)
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                .addToBackStack(null)
+                .commit();
     }
 
     @Override
@@ -111,7 +104,7 @@ public class RootActivity extends AppCompatActivity implements IGotoFragmentCall
         FragmentManager fragmentManager = getSupportFragmentManager();
         int count = fragmentManager.getFragments().size();
         if (count > 0)
-            fragment = fragmentManager.getFragments().get(count-1);
+            fragment = fragmentManager.getFragments().get(count - 1);
         return fragment;
     }
 
@@ -123,14 +116,38 @@ public class RootActivity extends AppCompatActivity implements IGotoFragmentCall
     public void onBackStackChanged() {
         // Манипуляции с поджсветкой последнего выбранного фильма в горизонтальном режиме
         String filmID = "";
-        Fragment detailFragmentCandidate = getTopFragmentOrNull();
-        if (detailFragmentCandidate instanceof DetailFragment) {
-            filmID = ((DetailFragment)detailFragmentCandidate).getFilmID();
+        Fragment topFragment = getTopFragmentOrNull();
+        if (topFragment instanceof DetailFragment) {
+            filmID = ((DetailFragment) topFragment).getFilmID();
         }
 
         MainFragment mainFragment = (MainFragment) getSupportFragmentManager().findFragmentByTag(MainFragment.FRAGMENT_TAG);
         if (mainFragment != null && !isPortrait()) {
             mainFragment.setSelectedFilmTag(filmID);
+        }
+
+        CheckContainerSizes();
+    }
+
+    private void CheckContainerSizes() {
+        Fragment topFragment = getTopFragmentOrNull();
+        FrameLayout root_fragment = findViewById(R.id.root_fragment);
+        FrameLayout adds_fragment = findViewById(R.id.adds_fragment);
+
+        if (isPortrait()) { //Манипуляции с тем, какой из контейнеров показывать в вертикальном режиме
+            if (topFragment instanceof DetailFragment) {
+                root_fragment.setVisibility(FrameLayout.GONE);
+                adds_fragment.setVisibility(FrameLayout.VISIBLE);
+            } else {
+                root_fragment.setVisibility(FrameLayout.VISIBLE);
+                adds_fragment.setVisibility(FrameLayout.GONE);
+            }
+        } else { //Манипуляции с размерами контейнеров в горизонтальном режиме
+            if (topFragment instanceof MainFragment || topFragment instanceof DetailFragment) { // Меню слева, детали справа
+                root_fragment.setLayoutParams(new ConstraintLayout.LayoutParams((int) getResources().getDimension(R.dimen.chooserSize_landscapeMode), ViewGroup.LayoutParams.MATCH_PARENT));
+            } else { // Добавление и About - на весь экран
+                root_fragment.setLayoutParams(new ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+            }
         }
     }
 }
