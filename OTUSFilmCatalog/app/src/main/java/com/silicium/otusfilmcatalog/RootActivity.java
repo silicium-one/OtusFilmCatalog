@@ -18,7 +18,7 @@ import com.silicium.otusfilmcatalog.ui.MainFragment;
 
 import static android.content.res.Configuration.ORIENTATION_PORTRAIT;
 
-public class RootActivity extends AppCompatActivity implements IGotoFragmentCallback {
+public class RootActivity extends AppCompatActivity implements IGotoFragmentCallback, FragmentManager.OnBackStackChangedListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +31,8 @@ public class RootActivity extends AppCompatActivity implements IGotoFragmentCall
                 .beginTransaction()
                 .add(R.id.root_fragment, new MainFragment(), MainFragment.FRAGMENT_TAG)
                 .commit();
+
+        getSupportFragmentManager().addOnBackStackChangedListener(this);
     }
 
     @Override
@@ -115,5 +117,20 @@ public class RootActivity extends AppCompatActivity implements IGotoFragmentCall
 
     private boolean isPortrait() {
         return getResources().getConfiguration().orientation == ORIENTATION_PORTRAIT;
+    }
+
+    @Override
+    public void onBackStackChanged() {
+        // Манипуляции с поджсветкой последнего выбранного фильма в горизонтальном режиме
+        String filmID = "";
+        Fragment detailFragmentCandidate = getTopFragmentOrNull();
+        if (detailFragmentCandidate instanceof DetailFragment) {
+            filmID = ((DetailFragment)detailFragmentCandidate).getFilmID();
+        }
+
+        MainFragment mainFragment = (MainFragment) getSupportFragmentManager().findFragmentByTag(MainFragment.FRAGMENT_TAG);
+        if (mainFragment != null && !isPortrait()) {
+            mainFragment.setSelectedFilmTag(filmID);
+        }
     }
 }

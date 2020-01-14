@@ -107,7 +107,7 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
         return selectedFilmTag;
     }
 
-    private void setSelectedFilmTag(String selectedFilmTag) {
+    public void setSelectedFilmTag(String selectedFilmTag) {
         View prev = film_root_layout.findViewWithTag(getSelectedFilmTag());
         if (prev != null)
             prev.setBackgroundColor(film_root_layout.getDrawingCacheBackgroundColor());

@@ -32,6 +32,11 @@ import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
 public class DetailFragment extends FragmentWithCallback implements IOnBackPressedListener{
 
     private String filmID;
+
+    public String getFilmID() {
+        return filmID;
+    }
+
     private FilmDescription film;
     private CheckBox film_is_liked;
     private EditText film_comment;
