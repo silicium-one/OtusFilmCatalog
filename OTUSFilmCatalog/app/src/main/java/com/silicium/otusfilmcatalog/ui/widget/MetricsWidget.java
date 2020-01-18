@@ -20,14 +20,14 @@ public class MetricsWidget extends AppWidgetProvider {
     static void updateAppWidget(Context context, @NonNull AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
 
-        Boolean totalVisibility = MetricsWidgetConfigureActivity.loadBoolean(context, appWidgetId, "total.visibility");
-        Integer totalValue = MetricsWidgetConfigureActivity.loadInteger(context, appWidgetId, "total.value");
-        Boolean favoritesVisibility = MetricsWidgetConfigureActivity.loadBoolean(context, appWidgetId, "favorites.visibility");
-        Integer favoritesValue = MetricsWidgetConfigureActivity.loadInteger(context, appWidgetId, "favorites.value");
-        Boolean sharedVisibility = MetricsWidgetConfigureActivity.loadBoolean(context, appWidgetId, "shared.visibility");
-        Integer sharedValue = MetricsWidgetConfigureActivity.loadInteger(context, appWidgetId, "shared.value");
-        Boolean cartoonVisibility = MetricsWidgetConfigureActivity.loadBoolean(context, appWidgetId, "cartoon.visibility");
-        Integer cartoonValue = MetricsWidgetConfigureActivity.loadInteger(context, appWidgetId, "cartoon.value");
+        Boolean totalVisibility = MetricWidgetUtils.loadBoolean(context, appWidgetId, "total.visibility");
+        Integer totalValue = MetricWidgetUtils.loadInteger(context, appWidgetId, "total.value");
+        Boolean favoritesVisibility = MetricWidgetUtils.loadBoolean(context, appWidgetId, "favorites.visibility");
+        Integer favoritesValue = MetricWidgetUtils.loadInteger(context, appWidgetId, "favorites.value");
+        Boolean sharedVisibility = MetricWidgetUtils.loadBoolean(context, appWidgetId, "shared.visibility");
+        Integer sharedValue = MetricWidgetUtils.loadInteger(context, appWidgetId, "shared.value");
+        Boolean cartoonVisibility = MetricWidgetUtils.loadBoolean(context, appWidgetId, "cartoon.visibility");
+        Integer cartoonValue = MetricWidgetUtils.loadInteger(context, appWidgetId, "cartoon.value");
 
         // Construct the RemoteViews object
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.metrics_widget);
@@ -63,8 +63,8 @@ public class MetricsWidget extends AppWidgetProvider {
         // When the user deletes the widget, delete the preference associated with it.
         for (int appWidgetId : appWidgetIds) {
             for (String tag : instance.getTags()) {
-                MetricsWidgetConfigureActivity.deleteKey(context, appWidgetId, tag + ".visibility");
-                MetricsWidgetConfigureActivity.deleteKey(context, appWidgetId, tag + ".value");
+                MetricWidgetUtils.deleteKey(context, appWidgetId, tag + ".visibility");
+                MetricWidgetUtils.deleteKey(context, appWidgetId, tag + ".value");
             }
         }
     }

@@ -4,13 +4,10 @@ import android.app.Activity;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
-
-import androidx.annotation.NonNull;
 
 import com.silicium.otusfilmcatalog.R;
 import com.silicium.otusfilmcatalog.logic.controller.MetricsViewsStorage;
@@ -20,8 +17,6 @@ import com.silicium.otusfilmcatalog.logic.controller.MetricsViewsStorage;
  */
 public class MetricsWidgetConfigureActivity extends Activity {
 
-    private static final String PREFS_NAME = "com.silicium.otusfilmcatalog.ui.widget.MetricsWidget";
-    private static final String PREF_PREFIX_KEY = "appwidget_";
     int mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
     View.OnClickListener mOnClickListener = new View.OnClickListener() {
         public void onClick(View v) {
@@ -33,7 +28,7 @@ public class MetricsWidgetConfigureActivity extends Activity {
 
             for (String metricTag : metricsViewsStorage.getTags()) {
                 CheckBox checkBox = rootLayout.findViewWithTag(metricTag);
-                saveBoolean(MetricsWidgetConfigureActivity.this, mAppWidgetId, metricTag + ".visibility", checkBox.isChecked());
+                MetricWidgetUtils.saveBoolean(MetricsWidgetConfigureActivity.this, mAppWidgetId, metricTag + ".visibility", checkBox.isChecked());
             }
 
             // It is the responsibility of the configuration activity to update the app widget
@@ -51,40 +46,6 @@ public class MetricsWidgetConfigureActivity extends Activity {
     public MetricsWidgetConfigureActivity() {
         super();
     }
-
-    //region settings storage API
-
-    static void saveBoolean(@NonNull Context context, int appWidgetId, String key, Boolean value) {
-        SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, 0).edit();
-        prefs.putBoolean(PREF_PREFIX_KEY + appWidgetId + key, value);
-        prefs.apply();
-    }
-
-    @NonNull
-    static Boolean loadBoolean(@NonNull Context context, int appWidgetId, String key) {
-        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, 0);
-        return prefs.getBoolean(PREF_PREFIX_KEY + appWidgetId + key, false);
-    }
-
-    static void saveInteger(@NonNull Context context, int appWidgetId, String key, Integer value) {
-        SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, 0).edit();
-        prefs.putInt(PREF_PREFIX_KEY + appWidgetId + key, value);
-        prefs.apply();
-    }
-
-    @NonNull
-    static Integer loadInteger(@NonNull Context context, int appWidgetId, String key) {
-        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, 0);
-        return prefs.getInt(PREF_PREFIX_KEY + appWidgetId + key, -1);
-    }
-
-    static void deleteKey(@NonNull Context context, int appWidgetId, String key) {
-        SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, 0).edit();
-        prefs.remove(PREF_PREFIX_KEY + appWidgetId + key);
-        prefs.apply();
-    }
-
-    //endregion
 
     @Override
     public void onCreate(Bundle icicle) {
@@ -116,7 +77,7 @@ public class MetricsWidgetConfigureActivity extends Activity {
         for (String metricTag : metricsViewsStorage.getTags()) {
             CheckBox checkBox = rootLayout.findViewWithTag(metricTag);
             checkBox.setText(metricsViewsStorage.getNameByTag(metricTag));
-            Boolean isChecked = loadBoolean(this, mAppWidgetId, metricTag + ".visibility");
+            Boolean isChecked = MetricWidgetUtils.loadBoolean(this, mAppWidgetId, metricTag + ".visibility");
             checkBox.setChecked(isChecked);
         }
 

@@ -13,6 +13,7 @@ import java.util.Map;
 
 public class FilmDescriptionStorage {
     private Map<String, FilmDescription> Films;
+    private MetricsStorage metricsStorage;
 
     private static volatile FilmDescriptionStorage instance = null;
     public static FilmDescriptionStorage getInstance()
@@ -27,6 +28,7 @@ public class FilmDescriptionStorage {
     private FilmDescriptionStorage() {
         super();
         Films = new HashMap<>();
+        metricsStorage = new MetricsStorage();
 
         FilmDescription film1 = FilmDescriptionFactory.GetFilmDescription("film1");
         film1.Name = "Детство Шелдона";
@@ -35,6 +37,7 @@ public class FilmDescriptionStorage {
         film1.Cover = BitmapFactory.decodeResource(App.getAppResources(),R.drawable.film1);
         film1.Genre.add(FilmDescription.FilmGenre.comedy);
         film1.Genre.add(FilmDescription.FilmGenre.series);
+        addFilm(film1);
 
         FilmDescription film2 = FilmDescriptionFactory.GetFilmDescription("film2");
         film2.Name = "Теория большого взрыва";
@@ -43,6 +46,7 @@ public class FilmDescriptionStorage {
         film2.Cover = BitmapFactory.decodeResource(App.getAppResources(),R.drawable.film2);
         film2.Genre.add(FilmDescription.FilmGenre.comedy);
         film2.Genre.add(FilmDescription.FilmGenre.series);
+        addFilm(film2);
 
         FilmDescription film3 = FilmDescriptionFactory.GetFilmDescription("film3");
         film3.Name = "Кролик Багз или Дорожный Бегун";
@@ -52,10 +56,7 @@ public class FilmDescriptionStorage {
         film3.Genre.add(FilmDescription.FilmGenre.comedy);
         film3.Genre.add(FilmDescription.FilmGenre.series);
         film3.Genre.add(FilmDescription.FilmGenre.cartoon);
-
-        Films.put(film1.ID, film1);
-        Films.put(film2.ID, film2);
-        Films.put(film3.ID, film3);
+        addFilm(film3);
     }
 
     /**
@@ -84,6 +85,9 @@ public class FilmDescriptionStorage {
 
     public void addFilm(FilmDescription film) {
         Films.put(film.ID, film);
+        metricsStorage.Increment(MetricsStorage.TOTAL_TAG);
+        if (film.Genre.contains(FilmDescription.FilmGenre.cartoon))
+            metricsStorage.Increment(MetricsStorage.CARTOON_TAG);
     }
 }
 
