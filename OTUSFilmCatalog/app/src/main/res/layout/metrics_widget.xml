@@ -1,15 +1,128 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#09C"
-    android:padding="@dimen/widget_margin">
+    android:background="@color/background"
+    android:padding="@dimen/widget_padding">
+
+    <TextView
+        android:id="@+id/appwidget_header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_margin="@dimen/widget_text_margin"
+        android:text="@string/appwidget_header"
+        android:textColor="@color/colorPrimary"
+        android:textSize="@dimen/widget_text_header_size"
+        android:textStyle="bold|italic" />
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/appwidget_total_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_margin="@dimen/widget_text_margin"
+            android:text="@string/appwidget_total_header"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/widget_text_column_header_size"
+            android:textStyle="bold|italic"/>
+
+        <TextView
+            android:id="@+id/appwidget_favorites_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_margin="@dimen/widget_text_margin"
+            android:text="@string/appwidget_favorites_header"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/widget_text_column_header_size"
+            android:textStyle="bold|italic"/>
+
+        <TextView
+            android:id="@+id/appwidget_shared_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_margin="@dimen/widget_text_margin"
+            android:text="@string/appwidget_shared_header"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/widget_text_column_header_size"
+            android:textStyle="bold|italic"/>
+
+
+        <TextView
+            android:id="@+id/appwidget_cartoon_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_margin="@dimen/widget_text_margin"
+            android:text="@string/appwidget_cartoon_header"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/widget_text_column_header_size"
+            android:textStyle="bold|italic"/>
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/appwidget_total_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:layout_margin="@dimen/widget_text_margin"
+            android:text="@string/appwidget_default_value"
+            android:textColor="@color/colorAccent"
+            android:textSize="@dimen/widget_text_column_value_size"
+            android:textStyle="bold|italic"/>
+
+        <TextView
+            android:id="@+id/appwidget_favorites_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:layout_margin="@dimen/widget_text_margin"
+            android:text="@string/appwidget_default_value"
+            android:textColor="@color/colorAccent"
+            android:textSize="@dimen/widget_text_column_value_size"
+            android:textStyle="bold|italic"/>
+
+        <TextView
+            android:id="@+id/appwidget_shared_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:layout_margin="@dimen/widget_text_margin"
+            android:text="@string/appwidget_default_value"
+            android:textColor="@color/colorAccent"
+            android:textSize="@dimen/widget_text_column_value_size"
+            android:textStyle="bold|italic"/>
+
+
+        <TextView
+            android:id="@+id/appwidget_cartoon_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:layout_margin="@dimen/widget_text_margin"
+            android:text="@string/appwidget_default_value"
+            android:textColor="@color/colorAccent"
+            android:textSize="@dimen/widget_text_column_value_size"
+            android:textStyle="bold|italic"/>
+    </TableRow>
 
     <TextView
         android:id="@+id/appwidget_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
         android:layout_margin="8dp"
         android:background="#09C"
         android:contentDescription="@string/appwidget_text"
@@ -18,4 +131,4 @@
         android:textSize="24sp"
         android:textStyle="bold|italic" />
 
-</RelativeLayout>
+</TableLayout>
