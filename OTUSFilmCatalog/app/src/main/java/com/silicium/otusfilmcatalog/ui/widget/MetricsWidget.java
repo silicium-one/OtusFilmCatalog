@@ -1,14 +1,17 @@
 package com.silicium.otusfilmcatalog.ui.widget;
 
+import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
+import android.content.Intent;
 import android.view.View;
 import android.widget.RemoteViews;
 
 import androidx.annotation.NonNull;
 
 import com.silicium.otusfilmcatalog.R;
+import com.silicium.otusfilmcatalog.RootActivity;
 import com.silicium.otusfilmcatalog.logic.controller.MetricsViewsStorage;
 
 /**
@@ -16,6 +19,8 @@ import com.silicium.otusfilmcatalog.logic.controller.MetricsViewsStorage;
  * App Widget Configuration implemented in {@link MetricsWidgetConfigureActivity MetricsWidgetConfigureActivity}
  */
 public class MetricsWidget extends AppWidgetProvider {
+
+    final static String WIDGET_CLICK = "MetricsWidget.widget_click";
 
     static void updateAppWidget(Context context, @NonNull AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
@@ -44,6 +49,13 @@ public class MetricsWidget extends AppWidgetProvider {
         views.setTextViewText(R.id.appwidget_favorites_value, favoritesValue.toString());
         views.setTextViewText(R.id.appwidget_shared_value, sharedValue.toString());
         views.setTextViewText(R.id.appwidget_cartoon_value, cartoonValue.toString());
+
+
+        Intent intent = new Intent(context, MetricsWidget.class);
+        intent.setAction(WIDGET_CLICK);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context,
+                0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        views.setOnClickPendingIntent(R.id.metrics_widget, pendingIntent);
 
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, views);
@@ -77,6 +89,16 @@ public class MetricsWidget extends AppWidgetProvider {
     @Override
     public void onDisabled(Context context) {
         // Enter relevant functionality for when the last widget is disabled
+    }
+
+    @Override
+    public void onReceive(Context context, @NonNull Intent intent) {
+        if (WIDGET_CLICK.equals(intent.getAction())) {
+            Intent intentSending = new Intent(context, RootActivity.class);
+            intentSending.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(intentSending);
+        }
+        super.onReceive(context, intent);
     }
 }
 
