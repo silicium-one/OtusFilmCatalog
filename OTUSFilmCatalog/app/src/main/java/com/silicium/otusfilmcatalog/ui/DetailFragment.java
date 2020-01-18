@@ -22,7 +22,7 @@ import com.silicium.otusfilmcatalog.logic.model.FilmDescription;
 import com.silicium.otusfilmcatalog.logic.model.FragmentWithCallback;
 import com.silicium.otusfilmcatalog.logic.model.IOnBackPressedListener;
 import com.silicium.otusfilmcatalog.logic.view.FilmViewWrapper;
-import com.silicium.otusfilmcatalog.ui.cuctomcomponents.HideableSnackCircularProgressBar;
+import com.silicium.otusfilmcatalog.ui.cuctomcomponents.DisappearingSnackCircularProgressBar;
 import com.tingyik90.snackprogressbar.SnackProgressBar;
 import com.tingyik90.snackprogressbar.SnackProgressBarLayout;
 import com.tingyik90.snackprogressbar.SnackProgressBarManager;
@@ -44,7 +44,7 @@ public class DetailFragment extends FragmentWithCallback implements IOnBackPress
 
     private View rootView;
 
-    private HideableSnackCircularProgressBar snackProgressBar;
+    private DisappearingSnackCircularProgressBar snackProgressBar;
 
     public static DetailFragment newInstance(String text) {
         DetailFragment fragment = new DetailFragment();
@@ -118,7 +118,7 @@ public class DetailFragment extends FragmentWithCallback implements IOnBackPress
                 }
         );
 
-        snackProgressBar = new HideableSnackCircularProgressBar(rootView.findViewById(R.id.fragment_detail), this,
+        snackProgressBar = new DisappearingSnackCircularProgressBar(rootView.findViewById(R.id.fragment_detail), this,
                 getString(R.string.backPressedToastText),
                 new SnackProgressBarManager.OnDisplayListener()
         {

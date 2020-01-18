@@ -9,14 +9,14 @@ import com.silicium.otusfilmcatalog.R;
 import com.tingyik90.snackprogressbar.SnackProgressBar;
 import com.tingyik90.snackprogressbar.SnackProgressBarManager;
 
-public class HideableSnackCircularProgressBar {
+public class DisappearingSnackCircularProgressBar {
 
     private final SnackProgressBarManager snackProgressBarManager;
     private final SnackProgressBar circularProgressBar;
     private final Integer duration;
     private final CountDownTimer hideTimer;
 
-    public HideableSnackCircularProgressBar(View providedView, LifecycleOwner lifecycleOwner, String messageText, SnackProgressBarManager.OnDisplayListener callback)
+    public DisappearingSnackCircularProgressBar(View providedView, LifecycleOwner lifecycleOwner, String messageText, SnackProgressBarManager.OnDisplayListener callback)
     {
         this.duration = providedView.getResources().getInteger(R.integer.back_pressed_twice_await_time_ms);
 

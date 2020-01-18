@@ -20,7 +20,7 @@ import com.silicium.otusfilmcatalog.logic.model.FilmDescriptionFactory;
 import com.silicium.otusfilmcatalog.logic.model.FragmentWithCallback;
 import com.silicium.otusfilmcatalog.logic.model.IOnBackPressedListener;
 import com.silicium.otusfilmcatalog.ui.cuctomcomponents.AddMoreDialogFragment;
-import com.silicium.otusfilmcatalog.ui.cuctomcomponents.HideableSnackCircularProgressBar;
+import com.silicium.otusfilmcatalog.ui.cuctomcomponents.DisappearingSnackCircularProgressBar;
 import com.silicium.otusfilmcatalog.ui.cuctomcomponents.UiComponets;
 import com.tingyik90.snackprogressbar.SnackProgressBar;
 import com.tingyik90.snackprogressbar.SnackProgressBarLayout;
@@ -28,7 +28,7 @@ import com.tingyik90.snackprogressbar.SnackProgressBarManager;
 
 public class AddFragment extends FragmentWithCallback implements IOnBackPressedListener {
 
-    private HideableSnackCircularProgressBar snackProgressBar;
+    private DisappearingSnackCircularProgressBar snackProgressBar;
     private ConstraintLayout rootLayout;
     public final static String FRAGMENT_TAG = "AddFragment";
 
@@ -44,7 +44,7 @@ public class AddFragment extends FragmentWithCallback implements IOnBackPressedL
 
         rootLayout = view.findViewById(R.id.fragment_add);
 
-        snackProgressBar = new HideableSnackCircularProgressBar(rootLayout, this,
+        snackProgressBar = new DisappearingSnackCircularProgressBar(rootLayout, this,
                 getString(R.string.backPressedToastText),
                 new SnackProgressBarManager.OnDisplayListener()
                 {
