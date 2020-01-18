@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.silicium.otusfilmcatalog.logic.controller.FilmDescriptionStorage;
 import com.silicium.otusfilmcatalog.logic.model.FragmentWithCallback;
 import com.silicium.otusfilmcatalog.logic.model.IGotoFragmentCallback;
 import com.silicium.otusfilmcatalog.logic.model.IOnBackPressedListener;
@@ -35,6 +36,7 @@ public class RootActivity extends AppCompatActivity implements IGotoFragmentCall
             CheckContainerSizes();
 
         getSupportFragmentManager().addOnBackStackChangedListener(this);
+        FilmDescriptionStorage.getInstance().updateWidgetView();
     }
 
     @Override

@@ -89,5 +89,10 @@ public class FilmDescriptionStorage {
         if (film.Genre.contains(FilmDescription.FilmGenre.cartoon))
             metricsStorage.Increment(MetricsStorage.CARTOON_TAG);
     }
+
+    public void updateWidgetView()
+    {
+        metricsStorage.updateWidgetView();
+    }
 }
 
