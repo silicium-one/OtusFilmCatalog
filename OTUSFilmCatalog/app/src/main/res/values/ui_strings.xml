@@ -33,4 +33,7 @@
     <string name="about_legal_string">О правах</string>
     <string name="about_tech_details_string">Версия</string>
 
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="configure">Configure</string>
+    <string name="add_widget">Add widget</string>
 </resources>
