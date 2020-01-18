@@ -14,8 +14,6 @@ import com.silicium.otusfilmcatalog.R;
 import com.silicium.otusfilmcatalog.RootActivity;
 import com.silicium.otusfilmcatalog.logic.controller.MetricsViewsStorage;
 
-import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
-
 /**
  * Implementation of App Widget functionality.
  * App Widget Configuration implemented in {@link MetricsWidgetConfigureActivity MetricsWidgetConfigureActivity}
@@ -97,7 +95,7 @@ public class MetricsWidget extends AppWidgetProvider {
     public void onReceive(Context context, @NonNull Intent intent) {
         if (WIDGET_CLICK.equals(intent.getAction())) {
             Intent intentSending = new Intent(context, RootActivity.class);
-            intentSending.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | FLAG_ACTIVITY_CLEAR_TOP);
+            intentSending.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(intentSending);
         }
         super.onReceive(context, intent);

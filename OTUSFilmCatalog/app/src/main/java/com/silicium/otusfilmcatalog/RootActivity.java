@@ -154,4 +154,10 @@ public class RootActivity extends AppCompatActivity implements IGotoFragmentCall
             }
         }
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        finish();
+    }
 }
