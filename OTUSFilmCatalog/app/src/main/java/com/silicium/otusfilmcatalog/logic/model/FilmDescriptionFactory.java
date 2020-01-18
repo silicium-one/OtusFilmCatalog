@@ -2,6 +2,8 @@ package com.silicium.otusfilmcatalog.logic.model;
 
 import android.graphics.BitmapFactory;
 
+import androidx.annotation.NonNull;
+
 import com.silicium.otusfilmcatalog.App;
 import com.silicium.otusfilmcatalog.R;
 
@@ -45,7 +47,8 @@ public class FilmDescriptionFactory {
     }
 
     //todo: добавить работу с разными локалями
-    public static String GetReadableGenre(FilmDescription.FilmGenre genre)
+    @NonNull
+    public static String GetReadableGenre(@NonNull FilmDescription.FilmGenre genre)
     {
         switch (genre) {
             case comedy:
