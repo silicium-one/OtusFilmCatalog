@@ -28,7 +28,7 @@ import com.silicium.otusfilmcatalog.logic.view.FilmViewWrapper;
 public class MainFragment extends FragmentWithCallback implements NavigationView.OnNavigationItemSelectedListener {
 
     private String selectedFilmTag = ""; // TODO: оптимизировать на доступ по индексу
-    public final static String FRAGMENT_TAG = "MainFragment";
+    public final static String FRAGMENT_TAG = MainFragment.class.getSimpleName();
     private LinearLayout film_root_layout;
     private FloatingActionButton fab;
     private View rootView;

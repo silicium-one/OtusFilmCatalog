@@ -40,7 +40,7 @@ public class DetailFragment extends FragmentWithCallback implements IOnBackPress
     private FilmDescription film;
     private CheckBox film_is_liked;
     private EditText film_comment;
-    public final static String FRAGMENT_TAG = "DetailFragment";
+    public final static String FRAGMENT_TAG = DetailFragment.class.getSimpleName();
 
     private View rootView;
 

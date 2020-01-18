@@ -30,7 +30,7 @@ public class AddFragment extends FragmentWithCallback implements IOnBackPressedL
 
     private DisappearingSnackCircularProgressBar snackProgressBar;
     private ConstraintLayout rootLayout;
-    public final static String FRAGMENT_TAG = "AddFragment";
+    public final static String FRAGMENT_TAG = AddFragment.class.getSimpleName();
 
     @Nullable
     @Override

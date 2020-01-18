@@ -27,7 +27,7 @@ import com.silicium.otusfilmcatalog.ui.cuctomcomponents.UiComponets;
  */
 public class AboutFragment extends FragmentWithCallback implements NavigationView.OnNavigationItemSelectedListener {
 
-    public final static String FRAGMENT_TAG = "AboutFragment";
+    public final static String FRAGMENT_TAG = AboutFragment.class.getSimpleName();
     private View rootView;
 
     public AboutFragment() {
