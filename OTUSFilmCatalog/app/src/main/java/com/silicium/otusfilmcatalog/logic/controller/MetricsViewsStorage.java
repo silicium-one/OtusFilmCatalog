@@ -41,7 +41,7 @@ public class MetricsViewsStorage {
     public String getNameByTag(String tag)
     {
         for (MetricView element : metricsViews)
-            if (element.metricTag == tag)
+            if (element.metricTag.equals(tag))
                 return element.metricName;
 
         return "";
