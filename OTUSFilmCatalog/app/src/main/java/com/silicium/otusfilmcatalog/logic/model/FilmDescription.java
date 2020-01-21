@@ -21,6 +21,7 @@ public class FilmDescription {
         series,
         cartoon,
     }
+    public boolean ifFavorite;
 }
 
 
