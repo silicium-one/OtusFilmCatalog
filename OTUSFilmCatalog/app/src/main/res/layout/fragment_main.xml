@@ -23,11 +23,11 @@
                 android:layout_weight="1"
                 android:orientation="vertical">
 
-                <LinearLayout
-                    android:id="@+id/film_root_layout"
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/film_RecyclerView"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical" />
+                    tools:listitem="@layout/item_film"/>
 
             </androidx.core.widget.NestedScrollView>
 

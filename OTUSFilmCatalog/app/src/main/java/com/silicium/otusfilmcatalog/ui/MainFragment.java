@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -18,18 +17,25 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.silicium.otusfilmcatalog.R;
+import com.silicium.otusfilmcatalog.logic.controller.FilmDescriptionStorage;
 import com.silicium.otusfilmcatalog.logic.model.FragmentWithCallback;
+import com.silicium.otusfilmcatalog.logic.view.FilmItemAdapter;
 import com.silicium.otusfilmcatalog.logic.view.FilmViewWrapper;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainFragment extends FragmentWithCallback implements NavigationView.OnNavigationItemSelectedListener {
 
     private String selectedFilmTag = ""; // TODO: оптимизировать на доступ по индексу
     public final static String FRAGMENT_TAG = MainFragment.class.getSimpleName();
-    private LinearLayout film_root_layout;
+    private RecyclerView film_RecyclerView;
     private View rootView;
 
     public MainFragment()
@@ -49,16 +55,21 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
 
         rootView = view;
 
-        film_root_layout = view.findViewById(R.id.film_root_layout);
+        film_RecyclerView = view.findViewById(R.id.film_RecyclerView);
+        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
+        film_RecyclerView.setLayoutManager(linearLayoutManager);
+        List<String> items = new ArrayList<>(FilmDescriptionStorage.getInstance().getFilmsIDs());
+        film_RecyclerView.setAdapter(new FilmItemAdapter(LayoutInflater.from(getContext()), items));
 
-        film_root_layout.removeAllViews();
-        for(View v : FilmViewWrapper.getInstance().getFilmViews(getContext(), new View.OnClickListener() {
-            @Override
-            public void onClick(@NonNull View v) {
-                setSelectedFilmTag(v.getTag().toString());
-                gotoDetailFragment();
-            }}))
-            film_root_layout.addView(v);
+//        film_RecyclerView.removeAllViews();
+//        for(View v : FilmViewWrapper.getInstance().GetFilmViews(getContext(), new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                setSelectedFilmTag(v.getTag().toString());
+//                gotoDetailFragment();
+//            }}))
+//            film_RecyclerView.addView(v);
+
         setSelectedFilmTag(selectedFilmTag);
 
         Toolbar toolbar = view.findViewById(R.id.fragment_main_toolbar);
@@ -106,11 +117,11 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
     }
 
     public void setSelectedFilmTag(String selectedFilmTag) {
-        View prev = film_root_layout.findViewWithTag(getSelectedFilmTag());
+        View prev = film_RecyclerView.findViewWithTag(getSelectedFilmTag());
         if (prev != null)
-            prev.setBackgroundColor(film_root_layout.getDrawingCacheBackgroundColor());
+            prev.setBackgroundColor(film_RecyclerView.getDrawingCacheBackgroundColor());
         this.selectedFilmTag = selectedFilmTag;
-        View v = film_root_layout.findViewWithTag(getSelectedFilmTag());
+        View v = film_RecyclerView.findViewWithTag(getSelectedFilmTag());
         if (v != null) {
             TypedValue typedValue = new TypedValue();
             Resources.Theme theme = v.getContext().getTheme();
