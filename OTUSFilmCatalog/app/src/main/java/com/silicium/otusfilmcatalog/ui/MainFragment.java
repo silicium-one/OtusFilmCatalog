@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -50,7 +51,7 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         rootView = view;
@@ -59,7 +60,13 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(view.getContext(), RecyclerView.VERTICAL, false);
         film_RecyclerView.setLayoutManager(linearLayoutManager);
         List<String> items = new ArrayList<>(FilmDescriptionStorage.getInstance().getFilmsIDs());
-        filmItemAdapter = new FilmItemAdapter(LayoutInflater.from(getContext()), items, null,
+        filmItemAdapter = new FilmItemAdapter(LayoutInflater.from(getContext()), items,
+                new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        FilmDescriptionStorage.getInstance().GetFilmByID(buttonView.getTag().toString()).setFavorite(isChecked);
+                    }
+                },
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

@@ -6,13 +6,14 @@ import androidx.annotation.NonNull;
 
 import com.silicium.otusfilmcatalog.App;
 import com.silicium.otusfilmcatalog.R;
+import com.silicium.otusfilmcatalog.logic.controller.MetricsStorage;
 
 import java.util.UUID;
 
 public class FilmDescriptionFactory {
     @NonNull
     public static FilmDescription getNewFilmDescription() {
-        FilmDescription ret = new FilmDescription(UUID.randomUUID().toString());
+        FilmDescription ret = new FilmDescription(UUID.randomUUID().toString(), MetricsStorage.getMetricNotifier());
 
         ret.Name = "";
         ret.Description = "";
@@ -25,7 +26,7 @@ public class FilmDescriptionFactory {
 
     @NonNull
     public static FilmDescription getFilmDescription(String ID) {
-        FilmDescription ret = new FilmDescription(ID);
+        FilmDescription ret = new FilmDescription(ID, MetricsStorage.getMetricNotifier());
 
         ret.Name = "";
         ret.Description = "";
@@ -38,7 +39,7 @@ public class FilmDescriptionFactory {
 
     @NonNull
     public static FilmDescription getStubFilmDescription() {
-        FilmDescription ret = new FilmDescription("");
+        FilmDescription ret = new FilmDescription("", MetricsStorage.getMetricNotifier());
 
         ret.Name = "";
         ret.Description = "";

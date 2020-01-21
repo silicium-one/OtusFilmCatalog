@@ -2,23 +2,28 @@ package com.silicium.otusfilmcatalog.logic.controller;
 
 import androidx.annotation.NonNull;
 
+import com.silicium.otusfilmcatalog.logic.model.IMetricNotifier;
 import com.silicium.otusfilmcatalog.logic.model.Metric;
 import com.silicium.otusfilmcatalog.ui.widget.MetricWidgetUtils;
 
 import java.util.HashSet;
 
-class MetricsStorage {
-    final static String TOTAL_TAG = "total"; // Фильмов всего
-    @SuppressWarnings("WeakerAccess")
-    final static String FAVORITES_TAG = "favorites"; // Фильмов в избранном
-    @SuppressWarnings("WeakerAccess")
-    final static String SHARED_TAG = "shared"; // количество фильмов, которыми поделились
-    final static String CARTOON_TAG = "cartoon"; // мультфильмов
+public class MetricsStorage implements IMetricNotifier {
+    private static volatile IMetricNotifier instance = null;
+    @NonNull
+    public static IMetricNotifier getMetricNotifier()
+    {
+        if (instance == null)
+            synchronized (MetricsStorage.class) {
+                if (instance == null)
+                    instance = new MetricsStorage();
+            }
+        return instance;
+    }
 
     @NonNull
     private final HashSet<Metric> metrics;
-
-    MetricsStorage() {
+    private MetricsStorage() {
         metrics = new HashSet<>();
         metrics.add(new Metric(TOTAL_TAG));
         metrics.add(new Metric(FAVORITES_TAG));
@@ -26,17 +31,28 @@ class MetricsStorage {
         metrics.add(new Metric(CARTOON_TAG));
     }
 
-    void updateWidgetView() {
+    private void updateWidgetView()
+    {
         for (Metric metric : metrics)
             MetricWidgetUtils.notifyWidget(metric.metricTag, metric.value);
     }
 
     /**
-     * Увеличить метрику на 1
-     *
-     * @param tag метрика, которую надо увеличить
+     * Переслать наблюдателям все метрики
      */
-    void increment(String tag) {
+    @Override
+    public void notifyObserversDataChanged() {
+        updateWidgetView();
+    }
+
+    /**
+     * Увеличить метрику на 1 и оповестить наблюдателей
+     *
+     * @param tag ID метрики
+     * @return ИСТИНА, если метрика найдена, инача ЛОЖЬ
+     */
+    @Override
+    public boolean increment(String tag) {
         for (Metric metric : metrics) {
             if (metric.metricTag.equals(tag)) {
                 metric.value++;
@@ -44,5 +60,23 @@ class MetricsStorage {
                 return;
             }
         }
+    }
+
+    /**
+     * Уменьшить метрику на 1 и оповестить наблюдателей
+     *
+     * @param tag ID метрики
+     * @return ИСТИНА, если метрика найдена, инача ЛОЖЬ
+     */
+    @Override
+    public boolean decrement(String tag) {
+        for (Metric metric : metrics) {
+            if (metric.metricTag.equals(tag)) {
+                metric.value--;
+                MetricWidgetUtils.notifyWidget(metric.metricTag, metric.value);
+                return true;
+            }
+        }
+        return false;
     }
 }

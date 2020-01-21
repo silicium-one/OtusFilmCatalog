@@ -3,29 +3,36 @@ package com.silicium.otusfilmcatalog.logic.controller;
 import android.graphics.BitmapFactory;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 import com.silicium.otusfilmcatalog.App;
 import com.silicium.otusfilmcatalog.R;
 import com.silicium.otusfilmcatalog.logic.model.FilmDescription;
 import com.silicium.otusfilmcatalog.logic.model.FilmDescriptionFactory;
+import com.silicium.otusfilmcatalog.logic.model.IMetricNotifier;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
 public class FilmDescriptionStorage {
-    @Nullable
+    private Map<String, FilmDescription> Films;
+
     private static volatile FilmDescriptionStorage instance = null;
+
     @NonNull
-    private final Map<String, FilmDescription> Films;
-    @NonNull
-    private final MetricsStorage metricsStorage;
+    public static FilmDescriptionStorage getInstance()
+    {
+        if (instance == null)
+            synchronized (FilmDescriptionStorage.class) {
+                if (instance == null)
+                    instance = new FilmDescriptionStorage();
+            }
+        return instance;
+    }
 
     private FilmDescriptionStorage() {
         super();
         Films = new HashMap<>();
-        metricsStorage = new MetricsStorage();
 
         FilmDescription film1 = FilmDescriptionFactory.getFilmDescription("film1");
         film1.Name = "Детство Шелдона";
@@ -100,15 +107,11 @@ public class FilmDescriptionStorage {
         }
     }
 
-    public void addFilm(@NonNull FilmDescription film) {
+    public void addFilm(FilmDescription film) { //TODO: подумать о том, что бы максимально вынести генерацию метрик в FilmDescription
         Films.put(film.ID, film);
-        metricsStorage.increment(MetricsStorage.TOTAL_TAG);
+        MetricsStorage.getMetricNotifier().increment(MetricsStorage.TOTAL_TAG);
         if (film.Genre.contains(FilmDescription.FilmGenre.cartoon))
-            metricsStorage.increment(MetricsStorage.CARTOON_TAG);
-    }
-
-    public void updateWidgetView() {
-        metricsStorage.updateWidgetView();
+            MetricsStorage.getMetricNotifier().increment(MetricsStorage.CARTOON_TAG);
     }
 }
 
