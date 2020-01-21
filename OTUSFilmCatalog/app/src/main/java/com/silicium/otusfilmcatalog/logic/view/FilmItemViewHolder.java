@@ -45,12 +45,13 @@ class FilmItemViewHolder extends RecyclerView.ViewHolder {
         film_favorite_CheckBox.setOnCheckedChangeListener(favoriteStateChangedListener);
         film_detail_Button.setOnClickListener(detailBtnClickListener);
 
-        if (isSelected) {
-            TypedValue typedValue = new TypedValue();
-            Resources.Theme theme = itemView.getContext().getTheme();
+        TypedValue typedValue = new TypedValue();
+        Resources.Theme theme = itemView.getContext().getTheme();
+        if (isSelected)
             theme.resolveAttribute(R.attr.selectableItemBackgroundBorderless, typedValue, true);
-            int color = typedValue.data;
-            itemView.setBackgroundColor(color);
-        }
+        else
+            theme.resolveAttribute(R.attr.background, typedValue, true);
+        int color = typedValue.data;
+        itemView.setBackgroundColor(color);
     }
 }
