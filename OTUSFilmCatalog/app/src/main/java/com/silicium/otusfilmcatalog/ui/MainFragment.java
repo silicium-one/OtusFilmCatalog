@@ -59,17 +59,18 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(view.getContext(), RecyclerView.VERTICAL, false);
         film_RecyclerView.setLayoutManager(linearLayoutManager);
         List<String> items = new ArrayList<>(FilmDescriptionStorage.getInstance().getFilmsIDs());
-        filmItemAdapter = new FilmItemAdapter(LayoutInflater.from(getContext()), items);
+        filmItemAdapter = new FilmItemAdapter(LayoutInflater.from(getContext()), items, null,
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        setSelectedFilmTag(v.getTag().toString());
+                        gotoDetailFragment();
+                    }
+                }
+        );
+
         film_RecyclerView.setAdapter(filmItemAdapter);
         film_RecyclerView.addItemDecoration(new DividerItemDecoration(view.getContext(), DividerItemDecoration.VERTICAL));
-//        film_RecyclerView.removeAllViews();
-//        for(View v : FilmViewWrapper.getInstance().GetFilmViews(getContext(), new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                setSelectedFilmTag(v.getTag().toString());
-//                gotoDetailFragment();
-//            }}))
-//            film_RecyclerView.addView(v);
 
         setSelectedFilmTag(selectedFilmTag);
 
@@ -89,14 +90,13 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                try{
+                try {
                     gotoFragmentCallback.gotoAddFragment();
-                }
-                catch (NullPointerException e)
-                {
+                } catch (NullPointerException e) {
                     e.printStackTrace();
                 }
-            }});
+            }
+        });
     }
 
     private void gotoDetailFragment() {
