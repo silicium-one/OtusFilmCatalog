@@ -5,6 +5,7 @@ import android.util.TypedValue;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -33,14 +34,16 @@ class FilmItemViewHolder extends RecyclerView.ViewHolder {
         this.itemView = itemView;
     }
 
-    void bind(@NonNull FilmDescription item, boolean isSelected)
-    {
+    void bind(@NonNull FilmDescription item, boolean isSelected, CompoundButton.OnCheckedChangeListener favoriteStateChangedListener, View.OnClickListener detailBtnClickListener) {
         film_cover_preview_imageView.setImageBitmap(item.CoverPreview);
         film_name_TextView.setText(item.Name);
         film_description_TextView.setText(item.Description);
         film_favorite_CheckBox.setChecked(item.ifFavorite);
         film_detail_Button.setTag(item.ID);
         itemView.setTag(item.ID);
+
+        film_favorite_CheckBox.setOnCheckedChangeListener(favoriteStateChangedListener);
+        film_detail_Button.setOnClickListener(detailBtnClickListener);
 
         if (isSelected) {
             TypedValue typedValue = new TypedValue();

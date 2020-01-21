@@ -1,10 +1,13 @@
 package com.silicium.otusfilmcatalog.logic.view;
 
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.ListView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.silicium.otusfilmcatalog.R;
 import com.silicium.otusfilmcatalog.logic.controller.FilmDescriptionStorage;
@@ -14,15 +17,20 @@ import java.util.List;
 public class FilmItemAdapter extends androidx.recyclerview.widget.RecyclerView.Adapter<FilmItemViewHolder> {
     private final LayoutInflater inflater;
     private final List<String> filmIDs;
+    private final CompoundButton.OnCheckedChangeListener favoriteStateChangedListener;
+    private final View.OnClickListener detailBtnClickListener;
+
     private String selectedFilmTag = "";
 
-    public FilmItemAdapter(LayoutInflater inflater, List<String> filmIDs) { // TODO: нарушение принципа Single Responsibility, исправить
+    public FilmItemAdapter(LayoutInflater inflater, List<String> filmIDs, CompoundButton.OnCheckedChangeListener favoriteStateChangedListener, View.OnClickListener detailBtnClickListener) { // TODO: нарушение принципа Single Responsibility, исправить
         this.inflater = inflater;
         this.filmIDs = filmIDs;
+        this.favoriteStateChangedListener = favoriteStateChangedListener;
+        this.detailBtnClickListener = detailBtnClickListener;
     }
 
     /**
-     * Called when RecyclerView needs a new {@link ViewHolder} of the given type to represent
+     * Called when RecyclerView needs a new {@link RecyclerView.ViewHolder} of the given type to represent
      * an item.
      * <p>
      * This new ViewHolder should be constructed with a new View that can represent the items
@@ -30,7 +38,7 @@ public class FilmItemAdapter extends androidx.recyclerview.widget.RecyclerView.A
      * layout file.
      * <p>
      * The new ViewHolder will be used to display items of the adapter using
-     * {@link #onBindViewHolder(ViewHolder, int, List)}. Since it will be re-used to display
+     * {@link #onBindViewHolder(RecyclerView.ViewHolder, int, List)}. Since it will be re-used to display
      * different items in the data set, it is a good idea to cache references to sub views of
      * the View to avoid unnecessary {@link View#findViewById(int)} calls.
      *
@@ -70,7 +78,7 @@ public class FilmItemAdapter extends androidx.recyclerview.widget.RecyclerView.A
     @Override
     public void onBindViewHolder(@NonNull FilmItemViewHolder holder, int position) {
         String currentTag = filmIDs.get(position);
-        holder.bind(FilmDescriptionStorage.getInstance().GetFilmByID(currentTag), currentTag.equals(selectedFilmTag));
+        holder.bind(FilmDescriptionStorage.getInstance().GetFilmByID(currentTag), currentTag.equals(selectedFilmTag), favoriteStateChangedListener, detailBtnClickListener);
     }
 
     /**
