@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.silicium.otusfilmcatalog.R;
 import com.silicium.otusfilmcatalog.logic.model.FilmDescription;
 
-public class FilmItemViewHolder extends RecyclerView.ViewHolder {
+class FilmItemViewHolder extends RecyclerView.ViewHolder {
     private ImageView film_cover_preview_imageView;
     private TextView film_name_TextView;
     private TextView film_description_TextView;
@@ -22,7 +22,7 @@ public class FilmItemViewHolder extends RecyclerView.ViewHolder {
     private Button film_detail_Button;
     private View itemView;
 
-    public FilmItemViewHolder(@NonNull View itemView) {
+    FilmItemViewHolder(@NonNull View itemView) {
         super(itemView);
 
         film_cover_preview_imageView = itemView.findViewById(R.id.film_cover_preview_imageView);
@@ -33,7 +33,7 @@ public class FilmItemViewHolder extends RecyclerView.ViewHolder {
         this.itemView = itemView;
     }
 
-    public void bind(@NonNull FilmDescription item, boolean isSelected)
+    void bind(@NonNull FilmDescription item, boolean isSelected)
     {
         film_cover_preview_imageView.setImageBitmap(item.CoverPreview);
         film_name_TextView.setText(item.Name);
