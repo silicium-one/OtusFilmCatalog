@@ -27,13 +27,14 @@ import com.silicium.otusfilmcatalog.logic.model.FragmentWithCallback;
 import com.silicium.otusfilmcatalog.logic.view.FilmItemAdapter;
 import com.silicium.otusfilmcatalog.logic.view.FilmViewWrapper;
 
+import org.jetbrains.annotations.Contract;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainFragment extends FragmentWithCallback implements NavigationView.OnNavigationItemSelectedListener {
     private String selectedFilmTag = "";
     public final static String FRAGMENT_TAG = MainFragment.class.getSimpleName();
-    private RecyclerView film_RecyclerView;
     private View rootView;
     private FilmItemAdapter filmItemAdapter;
 
@@ -54,7 +55,7 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
 
         rootView = view;
 
-        film_RecyclerView = view.findViewById(R.id.film_RecyclerView);
+        RecyclerView film_RecyclerView = view.findViewById(R.id.film_RecyclerView);
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(view.getContext(), RecyclerView.VERTICAL, false);
         film_RecyclerView.setLayoutManager(linearLayoutManager);
         List<String> items = new ArrayList<>(FilmDescriptionStorage.getInstance().getFilmsIDs());
@@ -112,6 +113,7 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
             Toast.makeText(getContext(), R.string.noFilmByIDErr, Toast.LENGTH_LONG).show();
     }
 
+    @Contract(pure = true)
     private String getSelectedFilmTag() {
         return selectedFilmTag;
     }
