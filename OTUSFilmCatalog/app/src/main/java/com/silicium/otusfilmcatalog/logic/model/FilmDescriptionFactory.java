@@ -18,6 +18,7 @@ public class FilmDescriptionFactory {
         ret.Description = "";
         ret.Url = "https://www.kinopoisk.ru/error";
         ret.Cover = BitmapFactory.decodeResource(App.getAppResources(), R.drawable.film_no_image);
+        ret.CoverPreview = BitmapFactory.decodeResource(App.getAppResources(), R.drawable.film_no_image);
 
         return ret;
     }
@@ -30,6 +31,7 @@ public class FilmDescriptionFactory {
         ret.Description = "";
         ret.Url = "https://www.kinopoisk.ru/error";
         ret.Cover = BitmapFactory.decodeResource(App.getAppResources(), R.drawable.film_no_image);
+        ret.CoverPreview = BitmapFactory.decodeResource(App.getAppResources(), R.drawable.film_no_image);
 
         return ret;
     }
@@ -42,6 +44,7 @@ public class FilmDescriptionFactory {
         ret.Description = "";
         ret.Url = "https://www.kinopoisk.ru/error";
         ret.Cover = BitmapFactory.decodeResource(App.getAppResources(), R.drawable.film_no_image);
+        ret.CoverPreview = BitmapFactory.decodeResource(App.getAppResources(), R.drawable.film_no_image);
 
         return ret;
     }

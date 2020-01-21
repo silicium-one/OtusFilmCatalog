@@ -75,9 +75,9 @@ public class FilmViewWrapper {
         ret.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
 
         ret.setTag(film.ID);
-        ret.addView(getGenreChips(film, parent));
-        ret.addView(getPicView(film, parent)); // TODO: сделать отдельные большие картинки
-        ret.addView(getDescView(film, parent));
+        ret.addView(GetGenreChips(film, parent));
+        ret.addView(GetPicView(film, parent)); // TODO: сделать отдельные большие картинки, API теперь есть
+        ret.addView(GetDescView(film, parent));
         return ret;
     }
 
@@ -126,7 +126,7 @@ public class FilmViewWrapper {
         btnDetail.setRotation(-90F);
         btnDetail.setOnClickListener(detailClickListener);
 
-        View pic = getPicView(film, parent);
+        View pic = GetPicViewPreview(film, parent);
         pic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
@@ -173,8 +173,18 @@ public class FilmViewWrapper {
         return ret;
     }
 
-    @NonNull
-    private ImageView getPicView(@NonNull FilmDescription film, Context parent) {
+    private ImageView GetPicViewPreview(FilmDescription film, Context parent)
+    {
+        ImageView pic = new ImageView(parent);
+        pic.setLayoutParams(new LinearLayout.LayoutParams(200, 200));
+        pic.setPadding(10,10,10,10);
+        pic.setImageBitmap(film.CoverPreview);
+
+        return pic;
+    }
+
+    private ImageView GetPicView(FilmDescription film, Context parent)
+    {
         ImageView pic = new ImageView(parent);
         pic.setLayoutParams(new LinearLayout.LayoutParams(200, 200));
         pic.setPadding(10, 10, 10, 10);
