@@ -70,9 +70,8 @@ public class FilmDescriptionStorage {
     }
 
     /**
-     * Список ID фильмов
-     *
-     * @return список ключей доступных в базе фильмов
+     * Список фильмов
+     * @return список доступных в базе фильмов
      */
     @NonNull
     public Collection<FilmDescription> getFilms() {
