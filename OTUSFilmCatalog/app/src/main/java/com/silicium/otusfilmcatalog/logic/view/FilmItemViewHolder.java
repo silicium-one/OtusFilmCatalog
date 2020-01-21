@@ -38,7 +38,7 @@ class FilmItemViewHolder extends RecyclerView.ViewHolder {
         film_cover_preview_imageView.setImageBitmap(item.CoverPreview);
         film_name_TextView.setText(item.Name);
         film_description_TextView.setText(item.Description);
-        film_favorite_CheckBox.setChecked(item.ifFavorite);
+        film_favorite_CheckBox.setChecked(item.isFavorite);
         film_detail_Button.setTag(item.ID);
         itemView.setTag(item.ID);
 
