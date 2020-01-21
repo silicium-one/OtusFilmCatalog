@@ -42,4 +42,6 @@
     <string name="appwidget_cartoon_header">Мультфильмов</string>
     <string name="appwidget_default_value">0</string>
 
+    <string name="film_cover_preview_contentDescription">Предпросмотр обложки</string>
+
 </resources>
