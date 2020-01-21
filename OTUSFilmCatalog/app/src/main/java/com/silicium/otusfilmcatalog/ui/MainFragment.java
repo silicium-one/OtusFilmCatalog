@@ -1,9 +1,7 @@
 package com.silicium.otusfilmcatalog.ui;
 
 import android.content.DialogInterface;
-import android.content.res.Resources;
 import android.os.Bundle;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -33,11 +31,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainFragment extends FragmentWithCallback implements NavigationView.OnNavigationItemSelectedListener {
-
-    private String selectedFilmTag = ""; // TODO: оптимизировать на доступ по индексу
+    private String selectedFilmTag = "";
     public final static String FRAGMENT_TAG = MainFragment.class.getSimpleName();
     private RecyclerView film_RecyclerView;
     private View rootView;
+    private FilmItemAdapter filmItemAdapter;
 
     public MainFragment()
     {
@@ -60,7 +58,8 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(view.getContext(), RecyclerView.VERTICAL, false);
         film_RecyclerView.setLayoutManager(linearLayoutManager);
         List<String> items = new ArrayList<>(FilmDescriptionStorage.getInstance().getFilmsIDs());
-        film_RecyclerView.setAdapter(new FilmItemAdapter(LayoutInflater.from(getContext()), items));
+        filmItemAdapter = new FilmItemAdapter(LayoutInflater.from(getContext()), items);
+        film_RecyclerView.setAdapter(filmItemAdapter);
         film_RecyclerView.addItemDecoration(new DividerItemDecoration(view.getContext(), DividerItemDecoration.VERTICAL));
 //        film_RecyclerView.removeAllViews();
 //        for(View v : FilmViewWrapper.getInstance().GetFilmViews(getContext(), new View.OnClickListener() {
@@ -117,19 +116,9 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
         return selectedFilmTag;
     }
 
-    public void setSelectedFilmTag(String selectedFilmTag) { //todo: проверить, как работает для невидимых элментов
-        View prev = film_RecyclerView.findViewWithTag(getSelectedFilmTag());
-        if (prev != null)
-            prev.setBackgroundColor(film_RecyclerView.getDrawingCacheBackgroundColor());
+    public void setSelectedFilmTag(String selectedFilmTag) {
+        filmItemAdapter.setSelectedFilmTag(selectedFilmTag);
         this.selectedFilmTag = selectedFilmTag;
-        View v = film_RecyclerView.findViewWithTag(getSelectedFilmTag());
-        if (v != null) {
-            TypedValue typedValue = new TypedValue();
-            Resources.Theme theme = v.getContext().getTheme();
-            theme.resolveAttribute(R.attr.selectableItemBackgroundBorderless, typedValue, true);
-            int color = typedValue.data;
-            v.setBackgroundColor(color);
-        }
     }
 
     @Override

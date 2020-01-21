@@ -14,6 +14,7 @@ import java.util.List;
 public class FilmItemAdapter extends androidx.recyclerview.widget.RecyclerView.Adapter<FilmItemViewHolder> {
     private final LayoutInflater inflater;
     private final List<String> filmIDs;
+    private String selectedFilmTag = "";
 
     public FilmItemAdapter(LayoutInflater inflater, List<String> filmIDs) { // TODO: нарушение принципа Single Responsibility, исправить
         this.inflater = inflater;
@@ -68,7 +69,8 @@ public class FilmItemAdapter extends androidx.recyclerview.widget.RecyclerView.A
      */
     @Override
     public void onBindViewHolder(@NonNull FilmItemViewHolder holder, int position) {
-        holder.bind(FilmDescriptionStorage.getInstance().GetFilmByID(filmIDs.get(position)));
+        String currentTag = filmIDs.get(position);
+        holder.bind(FilmDescriptionStorage.getInstance().GetFilmByID(currentTag), currentTag.equals(selectedFilmTag));
     }
 
     /**
@@ -79,5 +81,17 @@ public class FilmItemAdapter extends androidx.recyclerview.widget.RecyclerView.A
     @Override
     public int getItemCount() {
         return filmIDs.size();
+    }
+
+    public void setSelectedFilmTag(String selectedFilmTag) {
+        int prevPosition = filmIDs.indexOf(this.selectedFilmTag);
+        this.selectedFilmTag = selectedFilmTag;
+        int currentPosition = filmIDs.indexOf(this.selectedFilmTag);
+
+        if (prevPosition != -1)
+            notifyItemChanged(prevPosition); // снимаем выделение
+
+        if (currentPosition != -1)
+            notifyItemChanged(currentPosition); // ставим выделение
     }
 }
