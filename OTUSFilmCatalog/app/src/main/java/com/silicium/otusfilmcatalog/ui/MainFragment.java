@@ -57,7 +57,7 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
         rootView = view;
 
         film_RecyclerView = view.findViewById(R.id.film_RecyclerView);
-        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
+        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(view.getContext(), RecyclerView.VERTICAL, false);
         film_RecyclerView.setLayoutManager(linearLayoutManager);
         List<String> items = new ArrayList<>(FilmDescriptionStorage.getInstance().getFilmsIDs());
         film_RecyclerView.setAdapter(new FilmItemAdapter(LayoutInflater.from(getContext()), items));
