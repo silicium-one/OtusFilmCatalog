@@ -70,6 +70,15 @@ public class FilmDescriptionStorage {
     }
 
     /**
+     * Список ID фильмов
+     * @return список ключей доступных в базе фильмов
+     */
+    public Collection<String> getFilmsIDs()
+    {
+        return Films.keySet();
+    }
+
+    /**
      * Список фильмов
      * @return список доступных в базе фильмов
      */
