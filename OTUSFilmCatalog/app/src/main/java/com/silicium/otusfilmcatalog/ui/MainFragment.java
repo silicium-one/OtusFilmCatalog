@@ -17,6 +17,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -60,7 +61,7 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
         film_RecyclerView.setLayoutManager(linearLayoutManager);
         List<String> items = new ArrayList<>(FilmDescriptionStorage.getInstance().getFilmsIDs());
         film_RecyclerView.setAdapter(new FilmItemAdapter(LayoutInflater.from(getContext()), items));
-
+        film_RecyclerView.addItemDecoration(new DividerItemDecoration(view.getContext(), DividerItemDecoration.VERTICAL));
 //        film_RecyclerView.removeAllViews();
 //        for(View v : FilmViewWrapper.getInstance().GetFilmViews(getContext(), new View.OnClickListener() {
 //            @Override
@@ -116,7 +117,7 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
         return selectedFilmTag;
     }
 
-    public void setSelectedFilmTag(String selectedFilmTag) {
+    public void setSelectedFilmTag(String selectedFilmTag) { //todo: проверить, как работает для невидимых элментов
         View prev = film_RecyclerView.findViewWithTag(getSelectedFilmTag());
         if (prev != null)
             prev.setBackgroundColor(film_RecyclerView.getDrawingCacheBackgroundColor());
