@@ -18,13 +18,16 @@
 
     <TextView
         android:id="@+id/film_name_TextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/item_film_name_height"
         android:textSize="@dimen/item_film_name_text_size"
         android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/film_description_TextView"
+        app:layout_constraintEnd_toStartOf="@id/film_detail_Button"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@id/film_cover_preview_imageView"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="Название фильма" />
+        tools:text="Название фильма Название фильма Название фильма " />
 
     <TextView
         android:id="@+id/film_description_TextView"
