@@ -12,9 +12,7 @@
         android:contentDescription="@string/film_cover_preview_contentDescription"
         android:scaleType="fitStart"
         android:src="@drawable/film_no_image"
-        app:layout_constraintStart_toStartOf="parent">
-
-    </ImageView>
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/film_name_TextView"
