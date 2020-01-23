@@ -1,13 +1,15 @@
 package com.silicium.otusfilmcatalog.ui.cuctomcomponents;
 
 import android.graphics.Canvas;
-import android.util.Log;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.silicium.otusfilmcatalog.R;
 import com.silicium.otusfilmcatalog.logic.model.IItemTouchHelperAdapter;
 
 public class SwipeProcessor extends ItemTouchHelper.Callback {
@@ -197,7 +199,7 @@ public class SwipeProcessor extends ItemTouchHelper.Callback {
             swipeBack = true;
     }
 
-    private int lastProcessedPos = -1;
+    private RecyclerView.ViewHolder lastProcessedViewHolder = null;
     /**
      * Called by the ItemTouchHelper when user action finished on a ViewHolder and now the View
      * will be animated to its final position.
@@ -220,8 +222,9 @@ public class SwipeProcessor extends ItemTouchHelper.Callback {
      */
     @Override
     public long getAnimationDuration(@NonNull RecyclerView recyclerView, int animationType, float animateDx, float animateDy) {
-        if (animationType == ItemTouchHelper.ANIMATION_TYPE_SWIPE_CANCEL && !isSwipePossible) {
-            Log.d("Swipe", "lastProcessedPos = " + lastProcessedPos);
+        if (animationType == ItemTouchHelper.ANIMATION_TYPE_SWIPE_CANCEL && !isSwipePossible && lastProcessedViewHolder != null) {
+            Animation shakeAnimation = AnimationUtils.loadAnimation(recyclerView.getContext(), R.anim.shake);
+            lastProcessedViewHolder.itemView.startAnimation(shakeAnimation);
         }
         return super.getAnimationDuration(recyclerView, animationType, animateDx, animateDy);
     }
@@ -242,6 +245,6 @@ public class SwipeProcessor extends ItemTouchHelper.Callback {
     public void onSelectedChanged(@Nullable RecyclerView.ViewHolder viewHolder, int actionState) {
         super.onSelectedChanged(viewHolder, actionState);
         if (viewHolder != null)
-            lastProcessedPos = viewHolder.getAdapterPosition();
+            lastProcessedViewHolder = viewHolder;
     }
 }
