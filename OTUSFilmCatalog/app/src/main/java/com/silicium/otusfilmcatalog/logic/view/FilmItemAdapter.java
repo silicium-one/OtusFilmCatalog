@@ -19,6 +19,7 @@ public class FilmItemAdapter extends androidx.recyclerview.widget.RecyclerView.A
     private final List<String> filmIDs;
     private final CompoundButton.OnCheckedChangeListener favoriteStateChangedListener;
     private final View.OnClickListener detailBtnClickListener;
+    private final View.OnLongClickListener itemLongClickListener;
 
     private String selectedFilmTag = "";
 
@@ -33,11 +34,12 @@ public class FilmItemAdapter extends androidx.recyclerview.widget.RecyclerView.A
 
     private boolean isMultiselectMode = false;
 
-    public FilmItemAdapter(LayoutInflater inflater, List<String> filmIDs, CompoundButton.OnCheckedChangeListener favoriteStateChangedListener, View.OnClickListener detailBtnClickListener) { // TODO: нарушение принципа Single Responsibility, исправить
+    public FilmItemAdapter(LayoutInflater inflater, List<String> filmIDs, CompoundButton.OnCheckedChangeListener favoriteStateChangedListener, View.OnClickListener detailBtnClickListener, View.OnLongClickListener itemLongClickListener) { // TODO: нарушение принципа Single Responsibility, исправить
         this.inflater = inflater;
         this.filmIDs = filmIDs;
         this.favoriteStateChangedListener = favoriteStateChangedListener;
         this.detailBtnClickListener = detailBtnClickListener;
+        this.itemLongClickListener = itemLongClickListener;
     }
 
     /**
@@ -89,7 +91,7 @@ public class FilmItemAdapter extends androidx.recyclerview.widget.RecyclerView.A
     @Override
     public void onBindViewHolder(@NonNull FilmItemViewHolder holder, int position) {
         String currentTag = filmIDs.get(position);
-        holder.bind(FilmDescriptionStorage.getInstance().GetFilmByID(currentTag), currentTag.equals(selectedFilmTag), isMultiselectMode(), favoriteStateChangedListener, detailBtnClickListener);
+        holder.bind(FilmDescriptionStorage.getInstance().GetFilmByID(currentTag), currentTag.equals(selectedFilmTag), isMultiselectMode(), favoriteStateChangedListener, detailBtnClickListener, itemLongClickListener);
     }
 
     /**

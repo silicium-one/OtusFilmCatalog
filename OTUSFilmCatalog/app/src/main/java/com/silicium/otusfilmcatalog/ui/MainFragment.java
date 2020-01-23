@@ -7,6 +7,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -25,19 +26,25 @@ import com.google.android.material.navigation.NavigationView;
 import com.silicium.otusfilmcatalog.R;
 import com.silicium.otusfilmcatalog.logic.controller.FilmDescriptionStorage;
 import com.silicium.otusfilmcatalog.logic.model.FragmentWithCallback;
+import com.silicium.otusfilmcatalog.logic.model.IOnBackPressedListener;
 import com.silicium.otusfilmcatalog.logic.view.FilmItemAdapter;
 import com.silicium.otusfilmcatalog.logic.view.FilmViewWrapper;
+import com.silicium.otusfilmcatalog.ui.cuctomcomponents.DisappearingSnackCircularProgressBar;
+import com.tingyik90.snackprogressbar.SnackProgressBar;
+import com.tingyik90.snackprogressbar.SnackProgressBarLayout;
+import com.tingyik90.snackprogressbar.SnackProgressBarManager;
 
 import org.jetbrains.annotations.Contract;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainFragment extends FragmentWithCallback implements NavigationView.OnNavigationItemSelectedListener {
+public class MainFragment extends FragmentWithCallback implements NavigationView.OnNavigationItemSelectedListener, IOnBackPressedListener {
     private String selectedFilmTag = "";
     public final static String FRAGMENT_TAG = MainFragment.class.getSimpleName();
     private View rootView;
     private FilmItemAdapter filmItemAdapter;
+    private DisappearingSnackCircularProgressBar snackProgressBar;
 
     public MainFragment()
     {
@@ -73,8 +80,14 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
                         setSelectedFilmTag(v.getTag().toString());
                         gotoDetailFragment();
                     }
-                }
-        );
+                },
+                new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+                        filmItemAdapter.setMultiselectMode(true);
+                        return false;
+                    }
+                });
 
         film_RecyclerView.setAdapter(filmItemAdapter);
         film_RecyclerView.addItemDecoration(new DividerItemDecoration(view.getContext(), DividerItemDecoration.VERTICAL));
@@ -104,6 +117,22 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
                 }
             }
         });
+
+        snackProgressBar = new DisappearingSnackCircularProgressBar(rootView, this,
+                getString(R.string.backPressedCancelSelectionToastText),
+                new SnackProgressBarManager.OnDisplayListener()
+                {
+                    @Override
+                    public void onDismissed(@NonNull SnackProgressBar snackProgressBar, int onDisplayId) {
+                        doubleBackToExitPressedOnce = false;
+                    }
+
+                    @Override
+                    public void onShown(@NonNull SnackProgressBar snackProgressBar, int onDisplayId) {}
+
+                    @Override
+                    public void onLayoutInflated(@NonNull SnackProgressBarLayout snackProgressBarLayout, @NonNull FrameLayout overlayLayout, @NonNull SnackProgressBar snackProgressBar, int onDisplayId) {}
+                });
     }
 
     private void gotoDetailFragment() {
@@ -159,5 +188,26 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
         DrawerLayout drawer = rootView.findViewById(R.id.drawer_main_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private boolean doubleBackToExitPressedOnce = false;
+    /**
+     * Если вернуть ИСТИНА, то нажатие кнопки "назад" обрабтано. Если вернуть ЛОЖЬ, то требуется обработка выше по стэку.
+     *
+     * @return ИСТИНА, если нажание кнопки back обработано и ЛОЖЬ в противном случае
+     */
+    @Override
+    public boolean onBackPressed() {
+        if (filmItemAdapter.isMultiselectMode()) {
+            if (doubleBackToExitPressedOnce) {
+                filmItemAdapter.setMultiselectMode(false);
+                snackProgressBar.dismiss();
+            } else {
+                snackProgressBar.Show();
+                this.doubleBackToExitPressedOnce = true;
+            }
+            return true;
+        }
+        return false;
     }
 }

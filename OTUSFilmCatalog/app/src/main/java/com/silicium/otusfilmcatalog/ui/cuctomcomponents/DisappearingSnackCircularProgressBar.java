@@ -59,4 +59,9 @@ public class DisappearingSnackCircularProgressBar {
         snackProgressBarManager.show(circularProgressBar, duration);
         hideTimer.start();
     }
+
+    public void dismiss()
+    {
+        snackProgressBarManager.dismiss();
+    }
 }

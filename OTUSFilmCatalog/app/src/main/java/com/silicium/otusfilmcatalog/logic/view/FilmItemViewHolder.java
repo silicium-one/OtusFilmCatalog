@@ -42,7 +42,7 @@ class FilmItemViewHolder extends RecyclerView.ViewHolder {
         });
     }
 
-    void bind(@NonNull FilmDescription item, boolean isSelected, boolean isMultiselectMode, CompoundButton.OnCheckedChangeListener favoriteStateChangedListener, View.OnClickListener detailBtnClickListener) {
+    void bind(@NonNull FilmDescription item, boolean isSelected, boolean isMultiselectMode, CompoundButton.OnCheckedChangeListener favoriteStateChangedListener, View.OnClickListener detailBtnClickListener, View.OnLongClickListener itemLongClickListener) {
         film_cover_preview_imageView.setImageBitmap(item.CoverPreview);
         film_name_TextView.setText(item.Name);
         film_description_TextView.setText(item.Description);
@@ -54,6 +54,7 @@ class FilmItemViewHolder extends RecyclerView.ViewHolder {
 
         film_favorite_CheckBox.setOnCheckedChangeListener(favoriteStateChangedListener);
         film_detail_Button.setOnClickListener(detailBtnClickListener);
+        itemView.setOnLongClickListener(itemLongClickListener);
 
         this.isSelected = isSelected;
         if (isMultiselectMode)
