@@ -9,9 +9,6 @@ import com.google.android.material.snackbar.Snackbar;
 import com.silicium.otusfilmcatalog.R;
 
 public class UiComponents {
-    private UiComponents() {
-    }
-
     public static void showUnderConstructionSnackBar(@NonNull View v)
     {
         Snackbar.make(v, R.string.under_construction_string, Snackbar.LENGTH_LONG)
