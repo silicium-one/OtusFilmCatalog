@@ -51,7 +51,7 @@ public class FilmItemAdapter extends androidx.recyclerview.widget.RecyclerView.A
      * layout file.
      * <p>
      * The new ViewHolder will be used to display items of the adapter using
-     * {@link #onBindViewHolder(RecyclerView.ViewHolder, int, List)}. Since it will be re-used to display
+     * {@link RecyclerView.Adapter#onBindViewHolder(RecyclerView.ViewHolder, int, List)}. Since it will be re-used to display
      * different items in the data set, it is a good idea to cache references to sub views of
      * the View to avoid unnecessary {@link View#findViewById(int)} calls.
      *
@@ -60,7 +60,7 @@ public class FilmItemAdapter extends androidx.recyclerview.widget.RecyclerView.A
      * @param viewType The view type of the new View.
      * @return A new ViewHolder that holds a View of the given view type.
      * @see #getItemViewType(int)
-     * @see #onBindViewHolder(ViewHolder, int)
+     * @see RecyclerView.Adapter#onBindViewHolder(RecyclerView.ViewHolder, int)
      */
     @NonNull
     @Override
@@ -70,7 +70,7 @@ public class FilmItemAdapter extends androidx.recyclerview.widget.RecyclerView.A
 
     /**
      * Called by RecyclerView to display the data at the specified position. This method should
-     * update the contents of the {@link ViewHolder#itemView} to reflect the item at the given
+     * update the contents of the {@link RecyclerView.ViewHolder#itemView} to reflect the item at the given
      * position.
      * <p>
      * Note that unlike {@link ListView}, RecyclerView will not call this method
@@ -78,10 +78,10 @@ public class FilmItemAdapter extends androidx.recyclerview.widget.RecyclerView.A
      * invalidated or the new position cannot be determined. For this reason, you should only
      * use the <code>position</code> parameter while acquiring the related data item inside
      * this method and should not keep a copy of it. If you need the position of an item later
-     * on (e.g. in a click listener), use {@link ViewHolder#getAdapterPosition()} which will
+     * on (e.g. in a click listener), use {@link RecyclerView.ViewHolder#getAdapterPosition()} which will
      * have the updated adapter position.
      * <p>
-     * Override {@link #onBindViewHolder(ViewHolder, int, List)} instead if Adapter can
+     * Override {@link RecyclerView.Adapter#onBindViewHolder(RecyclerView.ViewHolder, int, List)} instead if Adapter can
      * handle efficient partial bind.
      *
      * @param holder   The ViewHolder which should be updated to represent the contents of the
