@@ -22,6 +22,17 @@ public class FilmItemAdapter extends androidx.recyclerview.widget.RecyclerView.A
 
     private String selectedFilmTag = "";
 
+    public boolean isMultiselectMode() {
+        return isMultiselectMode;
+    }
+
+    public void setMultiselectMode(boolean multiselectMode) {
+        isMultiselectMode = multiselectMode;
+        notifyDataSetChanged();
+    }
+
+    private boolean isMultiselectMode = false;
+
     public FilmItemAdapter(LayoutInflater inflater, List<String> filmIDs, CompoundButton.OnCheckedChangeListener favoriteStateChangedListener, View.OnClickListener detailBtnClickListener) { // TODO: нарушение принципа Single Responsibility, исправить
         this.inflater = inflater;
         this.filmIDs = filmIDs;
@@ -78,7 +89,7 @@ public class FilmItemAdapter extends androidx.recyclerview.widget.RecyclerView.A
     @Override
     public void onBindViewHolder(@NonNull FilmItemViewHolder holder, int position) {
         String currentTag = filmIDs.get(position);
-        holder.bind(FilmDescriptionStorage.getInstance().GetFilmByID(currentTag), currentTag.equals(selectedFilmTag), favoriteStateChangedListener, detailBtnClickListener);
+        holder.bind(FilmDescriptionStorage.getInstance().GetFilmByID(currentTag), currentTag.equals(selectedFilmTag), isMultiselectMode(), favoriteStateChangedListener, detailBtnClickListener);
     }
 
     /**
