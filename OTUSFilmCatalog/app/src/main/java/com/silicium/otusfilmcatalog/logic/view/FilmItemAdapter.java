@@ -11,10 +11,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.silicium.otusfilmcatalog.R;
 import com.silicium.otusfilmcatalog.logic.controller.FilmDescriptionStorage;
+import com.silicium.otusfilmcatalog.logic.model.IItemTouchHelperAdapter;
 
+import java.util.Collections;
 import java.util.List;
 
-public class FilmItemAdapter extends androidx.recyclerview.widget.RecyclerView.Adapter<FilmItemViewHolder> {
+public class FilmItemAdapter extends androidx.recyclerview.widget.RecyclerView.Adapter<FilmItemViewHolder> implements IItemTouchHelperAdapter {
     private final LayoutInflater inflater;
     private final List<String> filmIDs;
     private final CompoundButton.OnCheckedChangeListener favoriteStateChangedListener;
@@ -114,5 +116,36 @@ public class FilmItemAdapter extends androidx.recyclerview.widget.RecyclerView.A
 
         if (currentPosition != -1)
             notifyItemChanged(currentPosition); // ставим выделение
+    }
+
+    /**
+     * Перестановка элементов в адаптере местами (поддержка drag-n-drop)
+     *
+     * @param fromPosition откуда
+     * @param toPosition   куда
+     */
+    @Override
+    public void onItemMove(int fromPosition, int toPosition) {
+        if (fromPosition < toPosition) {
+            for (int i = fromPosition; i < toPosition; i++) {
+                Collections.swap(filmIDs, i, i + 1);
+            }
+        } else {
+            for (int i = fromPosition; i > toPosition; i--) {
+                Collections.swap(filmIDs, i, i - 1);
+            }
+        }
+        notifyItemMoved(fromPosition, toPosition);
+    }
+
+    /**
+     * Удаление элемента
+     *
+     * @param position откуда
+     */
+    @Override
+    public void onItemDismiss(int position) {
+        filmIDs.remove(position);
+        notifyItemRemoved(position);
     }
 }
