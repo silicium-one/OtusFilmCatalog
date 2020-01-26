@@ -130,7 +130,7 @@ public class FilmViewWrapper {
         pic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                ObjectAnimator fadeOut = ObjectAnimator.ofFloat(v, View.ALPHA, 1, 0);
+                ObjectAnimator fadeOut = ObjectAnimator.ofFloat(v, View.ALPHA,1, 0);
                 fadeOut.setDuration(parent.getResources().getInteger(R.integer.smooth_transition_time_ms));
                 fadeOut.addListener(new Animator.AnimatorListener() {
                     @Override
