@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.OvershootInterpolator;
 import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.Toast;
@@ -38,8 +39,7 @@ import com.tingyik90.snackprogressbar.SnackProgressBarManager;
 
 import org.jetbrains.annotations.Contract;
 
-import java.util.ArrayList;
-import java.util.List;
+import jp.wasabeef.recyclerview.animators.SlideInUpAnimator;
 
 public class MainFragment extends FragmentWithCallback implements NavigationView.OnNavigationItemSelectedListener, IOnBackPressedListener {
     private String selectedFilmTag = "";
@@ -68,8 +68,7 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
         RecyclerView film_RecyclerView = view.findViewById(R.id.film_RecyclerView);
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(view.getContext(), RecyclerView.VERTICAL, false);
         film_RecyclerView.setLayoutManager(linearLayoutManager);
-        List<String> items = new ArrayList<>(FilmDescriptionStorage.getInstance().getFilmsIDs());
-        filmItemAdapter = new FilmItemAdapter(LayoutInflater.from(getContext()), items,
+        filmItemAdapter = new FilmItemAdapter(LayoutInflater.from(getContext()),
                 new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -98,7 +97,18 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
         ItemTouchHelper touchHelper = new ItemTouchHelper(swipeCallback);
         touchHelper.attachToRecyclerView(film_RecyclerView);
 
-        setSelectedFilmTag(selectedFilmTag);
+        RecyclerView.ItemAnimator itemAnimator = new SlideInUpAnimator(new OvershootInterpolator(1f));
+        itemAnimator.setAddDuration(view.getResources().getInteger(R.integer.element_adding_animation_time_ms));
+        film_RecyclerView.setItemAnimator(itemAnimator);
+
+        film_RecyclerView.post(new Runnable() {
+            @Override
+            public void run() {
+                setSelectedFilmTag(selectedFilmTag);
+                for (String item : FilmDescriptionStorage.getInstance().getFilmsIDs())
+                    filmItemAdapter.addItem(item);
+            }
+        });
 
         Toolbar toolbar = view.findViewById(R.id.fragment_main_toolbar);
 

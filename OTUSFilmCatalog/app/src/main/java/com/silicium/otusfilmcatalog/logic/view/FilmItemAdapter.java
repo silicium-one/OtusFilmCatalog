@@ -13,6 +13,7 @@ import com.silicium.otusfilmcatalog.R;
 import com.silicium.otusfilmcatalog.logic.controller.FilmDescriptionStorage;
 import com.silicium.otusfilmcatalog.logic.model.IItemTouchHelperAdapter;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -36,9 +37,9 @@ public class FilmItemAdapter extends androidx.recyclerview.widget.RecyclerView.A
 
     private boolean isMultiselectMode = false;
 
-    public FilmItemAdapter(LayoutInflater inflater, List<String> filmIDs, CompoundButton.OnCheckedChangeListener favoriteStateChangedListener, View.OnClickListener detailBtnClickListener, View.OnLongClickListener itemLongClickListener) { // TODO: нарушение принципа Single Responsibility, исправить
+    public FilmItemAdapter(LayoutInflater inflater, CompoundButton.OnCheckedChangeListener favoriteStateChangedListener, View.OnClickListener detailBtnClickListener, View.OnLongClickListener itemLongClickListener) { // TODO: нарушение принципа Single Responsibility, исправить
         this.inflater = inflater;
-        this.filmIDs = filmIDs;
+        this.filmIDs = new ArrayList<>();
         this.favoriteStateChangedListener = favoriteStateChangedListener;
         this.detailBtnClickListener = detailBtnClickListener;
         this.itemLongClickListener = itemLongClickListener;
@@ -147,5 +148,10 @@ public class FilmItemAdapter extends androidx.recyclerview.widget.RecyclerView.A
     public void onItemDismiss(int position) {
         filmIDs.remove(position);
         notifyItemRemoved(position);
+    }
+
+    public void addItem(String filmID){
+        filmIDs.add(filmID);
+        notifyItemInserted(filmIDs.size()-1);
     }
 }
