@@ -12,34 +12,27 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:openDrawer="start">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <androidx.core.widget.NestedScrollView
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/film_RecyclerView"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/film_RecyclerView"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    tools:listitem="@layout/item_film"/>
-
-            </androidx.core.widget.NestedScrollView>
+                android:layout_height="match_parent"
+                tools:listitem="@layout/item_film"/>
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/fab"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="bottom|end"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 android:layout_margin="@dimen/margin"
                 app:srcCompat="@drawable/ic_film_add" />
 
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <com.google.android.material.navigation.NavigationView
             android:id="@+id/nav_view"
@@ -47,7 +40,8 @@
             android:layout_height="match_parent"
             android:layout_gravity="start"
             android:fitsSystemWindows="true"
-            app:menu="@menu/fragment_main_drawer_menu" />
+            app:menu="@menu/fragment_main_drawer_menu"
+            tools:visibility="gone"/>
 
     </androidx.drawerlayout.widget.DrawerLayout>
 
