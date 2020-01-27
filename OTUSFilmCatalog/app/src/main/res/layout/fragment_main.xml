@@ -20,7 +20,12 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/film_RecyclerView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toTopOf="@+id/bottom_main_navigation"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0"
+                tools:itemCount="3"
+                tools:layout_editor_absoluteX="16dp"
                 tools:listitem="@layout/item_film" />
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -28,7 +33,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/margin"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/bottom_main_navigation"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:srcCompat="@drawable/ic_film_add" />
 
@@ -38,7 +43,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/margin"
                 android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/bottom_main_navigation"
                 app:layout_constraintEnd_toStartOf="@id/fab_add"
                 app:srcCompat="@drawable/ic_film_del"
                 tools:visibility="visible" />
@@ -49,10 +54,19 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/margin"
                 android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/bottom_main_navigation"
                 app:layout_constraintEnd_toStartOf="@id/fab_del"
                 app:srcCompat="@drawable/ic_film_del_fav"
                 tools:visibility="visible" />
+
+            <com.google.android.material.bottomnavigation.BottomNavigationView
+                android:id="@+id/bottom_main_navigation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:menu="@menu/fragment_main_menu" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

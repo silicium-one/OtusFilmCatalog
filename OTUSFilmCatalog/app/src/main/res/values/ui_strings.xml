@@ -44,4 +44,7 @@
 
     <string name="film_cover_preview_contentDescription">Предпросмотр обложки</string>
 
+    <string name="main_favoritesList">Избранное</string>
+    <string name="maim_fullList">Все фильмы</string>
+
 </resources>
