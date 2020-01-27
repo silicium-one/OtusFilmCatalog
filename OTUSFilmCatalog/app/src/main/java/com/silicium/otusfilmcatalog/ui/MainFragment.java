@@ -1,5 +1,6 @@
 package com.silicium.otusfilmcatalog.ui;
 
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -23,11 +24,13 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.silicium.otusfilmcatalog.R;
 import com.silicium.otusfilmcatalog.logic.controller.FilmDescriptionStorage;
 import com.silicium.otusfilmcatalog.logic.model.FragmentWithCallback;
+import com.silicium.otusfilmcatalog.logic.model.IItemTouchHelperAdapter;
 import com.silicium.otusfilmcatalog.logic.model.IOnBackPressedListener;
 import com.silicium.otusfilmcatalog.logic.view.FilmItemAdapter;
 import com.silicium.otusfilmcatalog.logic.view.FilmViewWrapper;
@@ -47,10 +50,72 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
     private View rootView;
     private FilmItemAdapter filmItemAdapter;
     private DisappearingSnackCircularProgressBar snackProgressBar;
+    private boolean isFavoritesOnly;
+    private RecyclerView film_RecyclerView;
+    FloatingActionButton fab_del;
+    FloatingActionButton fab_del_favorites;
 
-    public MainFragment()
-    {
+    private SwipeProcessor swipeCallback = new SwipeProcessor(new IItemTouchHelperAdapter() {
+        @Override
+        public void onItemMove(int fromPosition, int toPosition) {
+            filmItemAdapter.onItemMove(fromPosition, toPosition);
+        }
+
+        @Override
+        public void onItemDismiss(int position) {
+            if (isFavoritesOnly())
+                FilmDescriptionStorage.getInstance().GetFilmByID(filmItemAdapter.getTagByPos(position)).setFavorite(false);
+            filmItemAdapter.onItemDismiss(position);
+        }
+    });
+
+    private ItemTouchHelper swipeProcessingHelper = new ItemTouchHelper(swipeCallback);
+
+    public MainFragment() {
         setRetainInstance(true);
+    }
+
+    @Contract(pure = true)
+    private boolean isFavoritesOnly() {
+        return isFavoritesOnly;
+    }
+
+    private void setFavoritesOnly(boolean favoritesOnly) {
+        isFavoritesOnly = favoritesOnly;
+        if (isFavoritesOnly)
+            favoritesListMode();
+        else
+            fullListMode();
+    }
+
+    private void favoritesListMode() {
+        swipeCallback.setSwipeDeletionPossible(true);
+        film_RecyclerView.post(new Runnable() {
+            @Override
+            public void run() {
+                filmItemAdapter.removeAllItems();
+
+                for (String item : FilmDescriptionStorage.getInstance().getFavoriteFilmsIDs())
+                    filmItemAdapter.addItem(item);
+
+                setSelectedFilmTag(getSelectedFilmTag());
+            }
+        });
+    }
+
+    private void fullListMode() {
+        swipeCallback.setSwipeDeletionPossible(false);
+        film_RecyclerView.post(new Runnable() {
+            @Override
+            public void run() {
+                filmItemAdapter.removeAllItems();
+
+                for (String item : FilmDescriptionStorage.getInstance().getFilmsIDs())
+                    filmItemAdapter.addItem(item);
+
+                setSelectedFilmTag(getSelectedFilmTag());
+            }
+        });
     }
 
     @Nullable
@@ -59,20 +124,86 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
         return inflater.inflate(R.layout.fragment_main, container, false);
     }
 
+    @SuppressLint("RestrictedApi")
     @Override
     public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         rootView = view;
 
-        RecyclerView film_RecyclerView = view.findViewById(R.id.film_RecyclerView);
-        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(view.getContext(), RecyclerView.VERTICAL, false);
+        final BottomNavigationView bnv = view.findViewById(R.id.bottom_main_navigation);
+        bnv.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                int id = menuItem.getItemId();
+                if (id == R.id.favorites_list)
+                    setFavoritesOnly(true);
+                else if (id == R.id.full_list)
+                    setFavoritesOnly(false);
+
+                return false;
+            }
+        });
+
+        Toolbar toolbar = view.findViewById(R.id.fragment_main_toolbar);
+
+        DrawerLayout drawer = view.findViewById(R.id.drawer_main_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                getActivity(), drawer, toolbar,
+                R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+
+        NavigationView navigationView = view.findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
+        FloatingActionButton fab_add = view.findViewById(R.id.fab_add);
+        fab_add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    gotoFragmentCallback.gotoAddFragment();
+                } catch (NullPointerException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        fab_del = view.findViewById(R.id.fab_del);
+        fab_del.setVisibility(View.GONE);
+
+        fab_del_favorites = view.findViewById(R.id.fab_del_favorites);
+        fab_del_favorites.setVisibility(View.GONE);
+
+        snackProgressBar = new DisappearingSnackCircularProgressBar(rootView, this,
+                getString(R.string.backPressedCancelSelectionToastText),
+                new SnackProgressBarManager.OnDisplayListener() {
+                    @Override
+                    public void onDismissed(@NonNull SnackProgressBar snackProgressBar, int onDisplayId) {
+                        doubleBackToExitPressedOnce = false;
+                    }
+
+                    @Override
+                    public void onShown(@NonNull SnackProgressBar snackProgressBar, int onDisplayId) {
+                    }
+
+                    @Override
+                    public void onLayoutInflated(@NonNull SnackProgressBarLayout snackProgressBarLayout, @NonNull FrameLayout overlayLayout, @NonNull SnackProgressBar snackProgressBar, int onDisplayId) {
+                    }
+                });
+
+        film_RecyclerView = rootView.findViewById(R.id.film_RecyclerView);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(rootView.getContext(), RecyclerView.VERTICAL, false);
         film_RecyclerView.setLayoutManager(linearLayoutManager);
+
         filmItemAdapter = new FilmItemAdapter(LayoutInflater.from(getContext()),
                 new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                        FilmDescriptionStorage.getInstance().GetFilmByID(buttonView.getTag().toString()).setFavorite(isChecked);
+                        String filmID = buttonView.getTag().toString();
+                        FilmDescriptionStorage.getInstance().GetFilmByID(filmID).setFavorite(isChecked);
+                        if (!isChecked && isFavoritesOnly())
+                            filmItemAdapter.removeItemByID(filmID);
                     }
                 },
                 new View.OnClickListener() {
@@ -91,77 +222,28 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
                 });
 
         film_RecyclerView.setAdapter(filmItemAdapter);
-        film_RecyclerView.addItemDecoration(new DividerItemDecoration(view.getContext(), DividerItemDecoration.VERTICAL));
-
-        SwipeProcessor swipeCallback = new SwipeProcessor(filmItemAdapter, false);
-        ItemTouchHelper touchHelper = new ItemTouchHelper(swipeCallback);
-        touchHelper.attachToRecyclerView(film_RecyclerView);
+        film_RecyclerView.addItemDecoration(new DividerItemDecoration(rootView.getContext(), DividerItemDecoration.VERTICAL));
 
         RecyclerView.ItemAnimator itemAnimator = new SlideInUpAnimator(new OvershootInterpolator(1f));
-        itemAnimator.setAddDuration(view.getResources().getInteger(R.integer.element_adding_animation_time_ms));
+        itemAnimator.setAddDuration(rootView.getResources().getInteger(R.integer.element_adding_animation_time_ms));
         film_RecyclerView.setItemAnimator(itemAnimator);
 
-        film_RecyclerView.post(new Runnable() {
-            @Override
-            public void run() {
-                setSelectedFilmTag(selectedFilmTag);
-                for (String item : FilmDescriptionStorage.getInstance().getFilmsIDs())
-                    filmItemAdapter.addItem(item);
-            }
-        });
+        swipeProcessingHelper.attachToRecyclerView(film_RecyclerView);
 
-        Toolbar toolbar = view.findViewById(R.id.fragment_main_toolbar);
-
-        DrawerLayout drawer = view.findViewById(R.id.drawer_main_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                getActivity(), drawer, toolbar,
-                R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
-
-        NavigationView navigationView = view.findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-
-        FloatingActionButton fab = view.findViewById(R.id.fab_add);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                try {
-                    gotoFragmentCallback.gotoAddFragment();
-                } catch (NullPointerException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-        snackProgressBar = new DisappearingSnackCircularProgressBar(rootView, this,
-                getString(R.string.backPressedCancelSelectionToastText),
-                new SnackProgressBarManager.OnDisplayListener()
-                {
-                    @Override
-                    public void onDismissed(@NonNull SnackProgressBar snackProgressBar, int onDisplayId) {
-                        doubleBackToExitPressedOnce = false;
-                    }
-
-                    @Override
-                    public void onShown(@NonNull SnackProgressBar snackProgressBar, int onDisplayId) {}
-
-                    @Override
-                    public void onLayoutInflated(@NonNull SnackProgressBarLayout snackProgressBarLayout, @NonNull FrameLayout overlayLayout, @NonNull SnackProgressBar snackProgressBar, int onDisplayId) {}
-                });
+        if (isFavoritesOnly())
+            favoritesListMode();
+        else
+            fullListMode();
     }
 
     private void gotoDetailFragment() {
         if (FilmViewWrapper.getInstance().containsID(getSelectedFilmTag())) {
-            try{
+            try {
                 gotoFragmentCallback.gotoDetailFragment(getSelectedFilmTag());
-            }
-            catch (NullPointerException e)
-            {
+            } catch (NullPointerException e) {
                 e.printStackTrace();
             }
-        }
-        else
+        } else
             Toast.makeText(getContext(), R.string.noFilmByIDErr, Toast.LENGTH_LONG).show();
     }
 
@@ -186,8 +268,7 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
             DialogInterface.OnClickListener exitDo =
                     new DialogInterface.OnClickListener() {
                         @Override
-                        public void onClick(DialogInterface dialog, int which)
-                        {
+                        public void onClick(DialogInterface dialog, int which) {
                             System.exit(0);
                         }
                     };
@@ -207,6 +288,7 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
     }
 
     private boolean doubleBackToExitPressedOnce = false;
+
     /**
      * Если вернуть ИСТИНА, то нажатие кнопки "назад" обрабтано. Если вернуть ЛОЖЬ, то требуется обработка выше по стэку.
      *

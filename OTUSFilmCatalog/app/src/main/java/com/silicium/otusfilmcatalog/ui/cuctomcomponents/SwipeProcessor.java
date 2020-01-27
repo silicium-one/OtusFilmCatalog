@@ -13,16 +13,17 @@ import com.silicium.otusfilmcatalog.R;
 import com.silicium.otusfilmcatalog.logic.model.IItemTouchHelperAdapter;
 
 public class SwipeProcessor extends ItemTouchHelper.Callback {
-    private final boolean isDnDPossible;
-    private final boolean isSwipePossible;
-    private boolean swipeBack = false;
-
-
     private final IItemTouchHelperAdapter itemAdapter;
 
-    public SwipeProcessor(IItemTouchHelperAdapter itemAdapter, boolean isSwipePossible) {
-        this.isDnDPossible = false;
-        this.isSwipePossible = isSwipePossible;
+    public void setSwipeDeletionPossible(boolean isPossible) {
+        isDelBySwipePossible = isPossible;
+    }
+
+    private boolean isDelBySwipePossible = false;
+    private boolean swipeBack = false;
+    private RecyclerView.ViewHolder lastProcessedViewHolder = null;
+
+    public SwipeProcessor(IItemTouchHelperAdapter itemAdapter) {
         this.itemAdapter = itemAdapter;
     }
 
@@ -99,9 +100,7 @@ public class SwipeProcessor extends ItemTouchHelper.Callback {
      */
     @Override
     public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
-        if (isDnDPossible)
-            itemAdapter.onItemMove(viewHolder.getAdapterPosition(), target.getAdapterPosition());
-        return isDnDPossible;
+        return false;
     }
 
     /**
@@ -117,7 +116,7 @@ public class SwipeProcessor extends ItemTouchHelper.Callback {
      */
     @Override
     public boolean isLongPressDragEnabled() {
-        return isDnDPossible;
+        return false;
     }
 
     /**
@@ -195,11 +194,10 @@ public class SwipeProcessor extends ItemTouchHelper.Callback {
     public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
         super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
 
-        if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE && !isSwipePossible)
+        if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE && !isDelBySwipePossible)
             swipeBack = true;
     }
 
-    private RecyclerView.ViewHolder lastProcessedViewHolder = null;
     /**
      * Called by the ItemTouchHelper when user action finished on a ViewHolder and now the View
      * will be animated to its final position.
@@ -222,7 +220,7 @@ public class SwipeProcessor extends ItemTouchHelper.Callback {
      */
     @Override
     public long getAnimationDuration(@NonNull RecyclerView recyclerView, int animationType, float animateDx, float animateDy) {
-        if (animationType == ItemTouchHelper.ANIMATION_TYPE_SWIPE_CANCEL && !isSwipePossible && lastProcessedViewHolder != null) {
+        if (animationType == ItemTouchHelper.ANIMATION_TYPE_SWIPE_CANCEL && !isDelBySwipePossible && lastProcessedViewHolder != null) {
             Animation shakeAnimation = AnimationUtils.loadAnimation(recyclerView.getContext(), R.anim.shake);
             lastProcessedViewHolder.itemView.startAnimation(shakeAnimation);
         }

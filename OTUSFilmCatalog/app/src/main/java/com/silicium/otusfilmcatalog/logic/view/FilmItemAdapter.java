@@ -1,5 +1,6 @@
 package com.silicium.otusfilmcatalog.logic.view;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -68,6 +69,7 @@ public class FilmItemAdapter extends androidx.recyclerview.widget.RecyclerView.A
     @NonNull
     @Override
     public FilmItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        Log.d("FilmItemAdapter", "onCreateViewHolder");
         return new FilmItemViewHolder(inflater.inflate(R.layout.item_film, parent, false));
     }
 
@@ -93,6 +95,7 @@ public class FilmItemAdapter extends androidx.recyclerview.widget.RecyclerView.A
      */
     @Override
     public void onBindViewHolder(@NonNull FilmItemViewHolder holder, int position) {
+        Log.d("FilmItemAdapter", "onBindViewHolder");
         String currentTag = filmIDs.get(position);
         holder.bind(FilmDescriptionStorage.getInstance().GetFilmByID(currentTag), currentTag.equals(selectedFilmTag), isMultiselectMode(), favoriteStateChangedListener, detailBtnClickListener, itemLongClickListener);
     }
@@ -153,5 +156,25 @@ public class FilmItemAdapter extends androidx.recyclerview.widget.RecyclerView.A
     public void addItem(String filmID){
         filmIDs.add(filmID);
         notifyItemInserted(filmIDs.size()-1);
+    }
+
+    public void removeAllItems() {
+        int size = filmIDs.size();
+        filmIDs.clear();
+        notifyItemRangeRemoved(0, size);
+    }
+
+    public String getTagByPos(int position) {
+        return filmIDs.get(position);
+    }
+
+    public boolean removeItemByID(String filmID) {
+        int pos = filmIDs.indexOf(filmID);
+        if (pos == -1)
+            return false;
+
+        filmIDs.remove(pos);
+        notifyItemRemoved(pos);
+        return true;
     }
 }

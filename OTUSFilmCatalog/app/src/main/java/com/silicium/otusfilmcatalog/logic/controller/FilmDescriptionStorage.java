@@ -8,8 +8,8 @@ import com.silicium.otusfilmcatalog.App;
 import com.silicium.otusfilmcatalog.R;
 import com.silicium.otusfilmcatalog.logic.model.FilmDescription;
 import com.silicium.otusfilmcatalog.logic.model.FilmDescriptionFactory;
-import com.silicium.otusfilmcatalog.logic.model.IMetricNotifier;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -83,6 +83,19 @@ public class FilmDescriptionStorage {
     public Collection<String> getFilmsIDs()
     {
         return Films.keySet();
+    }
+
+    /**
+     * Список ID фильмов из избранного списка
+     * @return список ключей доступных в базе фильмов
+     */
+    public Collection<String> getFavoriteFilmsIDs()
+    {
+        Collection<String> ret = new ArrayList<>();
+        for (FilmDescription film : getFilms())
+            if(film.isFavorite())
+                ret.add(film.ID);
+        return ret;
     }
 
     /**
