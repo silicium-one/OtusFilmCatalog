@@ -36,6 +36,7 @@ import com.silicium.otusfilmcatalog.logic.view.FilmItemAdapter;
 import com.silicium.otusfilmcatalog.logic.view.FilmViewWrapper;
 import com.silicium.otusfilmcatalog.ui.cuctomcomponents.DisappearingSnackCircularProgressBar;
 import com.silicium.otusfilmcatalog.ui.cuctomcomponents.SwipeProcessor;
+import com.silicium.otusfilmcatalog.ui.cuctomcomponents.UiComponents;
 import com.tingyik90.snackprogressbar.SnackProgressBar;
 import com.tingyik90.snackprogressbar.SnackProgressBarLayout;
 import com.tingyik90.snackprogressbar.SnackProgressBarManager;
@@ -52,9 +53,16 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
     private DisappearingSnackCircularProgressBar snackProgressBar;
     private boolean isFavoritesOnly;
     private RecyclerView film_RecyclerView;
-    FloatingActionButton fab_del;
-    FloatingActionButton fab_del_favorites;
+    private FloatingActionButton fab_del;
+    private FloatingActionButton fab_del_favorites;
 
+    @SuppressLint("RestrictedApi")
+    private void setMultiselectProcessingMode(boolean isMultiselect) {
+        filmItemAdapter.setMultiselectMode(isMultiselect);
+        int visibility = isMultiselect ? View.VISIBLE : View.GONE;
+        fab_del.setVisibility(visibility);
+        fab_del_favorites.setVisibility(visibility);
+    }
     private SwipeProcessor swipeCallback = new SwipeProcessor(new IItemTouchHelperAdapter() {
         @Override
         public void onItemMove(int fromPosition, int toPosition) {
@@ -89,6 +97,7 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
     }
 
     private void favoritesListMode() {
+        setMultiselectProcessingMode(false);
         swipeCallback.setSwipeDeletionPossible(true);
         film_RecyclerView.post(new Runnable() {
             @Override
@@ -104,6 +113,7 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
     }
 
     private void fullListMode() {
+        setMultiselectProcessingMode(false);
         swipeCallback.setSwipeDeletionPossible(false);
         film_RecyclerView.post(new Runnable() {
             @Override
@@ -170,10 +180,20 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
         });
 
         fab_del = view.findViewById(R.id.fab_del);
-        fab_del.setVisibility(View.GONE);
+        fab_del.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                UiComponents.showUnderConstructionSnackBar(v);
+            }
+        });
 
         fab_del_favorites = view.findViewById(R.id.fab_del_favorites);
-        fab_del_favorites.setVisibility(View.GONE);
+        fab_del_favorites.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                UiComponents.showUnderConstructionSnackBar(v);
+            }
+        });
 
         snackProgressBar = new DisappearingSnackCircularProgressBar(rootView, this,
                 getString(R.string.backPressedCancelSelectionToastText),
@@ -216,7 +236,7 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
                 new View.OnLongClickListener() {
                     @Override
                     public boolean onLongClick(View v) {
-                        filmItemAdapter.setMultiselectMode(true);
+                        setMultiselectProcessingMode(true);
                         return false;
                     }
                 });
@@ -298,7 +318,7 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
     public boolean onBackPressed() {
         if (filmItemAdapter.isMultiselectMode()) {
             if (doubleBackToExitPressedOnce) {
-                filmItemAdapter.setMultiselectMode(false);
+                setMultiselectProcessingMode(false);
                 snackProgressBar.dismiss();
             } else {
                 snackProgressBar.Show();
