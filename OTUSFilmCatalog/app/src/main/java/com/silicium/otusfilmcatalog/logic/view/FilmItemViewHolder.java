@@ -71,7 +71,7 @@ class FilmItemViewHolder extends RecyclerView.ViewHolder {
         TypedValue typedValue = new TypedValue();
         Resources.Theme theme = itemView.getContext().getTheme();
         if (isSelected)
-            theme.resolveAttribute(R.attr.selectableItemBackgroundBorderless, typedValue, true);
+            theme.resolveAttribute(R.attr.itemSelectedBackgroundColor, typedValue, true);
         else if (isChecked)
             theme.resolveAttribute(R.attr.multipleSelectionBackgroundColor, typedValue, true);
         else

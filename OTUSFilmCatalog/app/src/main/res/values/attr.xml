@@ -2,4 +2,5 @@
 <resources>
     <!-- Other values-->
     <attr name="multipleSelectionBackgroundColor" format="reference" />
+    <attr name="itemSelectedBackgroundColor" format="reference" />
 </resources>
