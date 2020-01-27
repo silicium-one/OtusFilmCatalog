@@ -7,7 +7,7 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="selectableItemBackgroundBorderless">@color/selectableItemBackgroundBorderless
         </item>
-        <item name="selectableItemBackground">@color/selectableItemBackground</item>
+        <item name="multipleSelectionBackgroundColor">@color/multipleSelectionBackgroundColor</item>
         <item name="colorBackgroundFloating">@color/colorBackgroundFloating</item>
     </style>
 
