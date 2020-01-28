@@ -61,9 +61,11 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
     private RecyclerView film_RecyclerView;
     private FloatingActionButton fab_del;
     private FloatingActionButton fab_manipulate_favorites;
+    private boolean isMultiselectMode;
 
     @SuppressLint("RestrictedApi")
     private void setMultiselectProcessingMode(boolean isMultiselect) {
+        isMultiselectMode = isMultiselect;
         filmItemAdapter.setMultiselectMode(isMultiselect);
         if (isMultiselect) { //TODO: поискать возможност анимации одной цепочкой
             ObjectAnimator del_fadeIn = ObjectAnimator.ofFloat(fab_del, View.ALPHA, 0, 1).setDuration(getResources().getInteger(R.integer.smooth_transition_time_ms));
@@ -145,6 +147,7 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
 
     private void setFavoritesOnly(boolean favoritesOnly) {
         isFavoritesOnly = favoritesOnly;
+        setMultiselectProcessingMode(false);
         if (isFavoritesOnly)
             favoritesListMode();
         else
@@ -152,7 +155,6 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
     }
 
     private void favoritesListMode() {
-        setMultiselectProcessingMode(false);
         swipeCallback.setSwipeDeletionPossible(true);
         film_RecyclerView.post(new Runnable() {
             @Override
@@ -168,7 +170,6 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
     }
 
     private void fullListMode() {
-        setMultiselectProcessingMode(false);
         swipeCallback.setSwipeDeletionPossible(false);
         film_RecyclerView.post(new Runnable() {
             @Override
@@ -297,45 +298,52 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
         film_RecyclerView = rootView.findViewById(R.id.film_RecyclerView);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(rootView.getContext(), RecyclerView.VERTICAL, false);
         film_RecyclerView.setLayoutManager(linearLayoutManager);
-
-        filmItemAdapter = new FilmItemAdapter(LayoutInflater.from(getContext()),
-                new CompoundButton.OnCheckedChangeListener() {
-                    @Override
-                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                        String filmID = buttonView.getTag().toString();
-                        FilmDescriptionStorage.getInstance().GetFilmByID(filmID).setFavorite(isChecked);
-                        if (!isChecked && isFavoritesOnly())
-                            filmItemAdapter.removeItemByID(filmID);
-                    }
-                },
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        setSelectedFilmTag(v.getTag().toString());
-                        gotoDetailFragment();
-                    }
-                },
-                new View.OnLongClickListener() {
-                    @Override
-                    public boolean onLongClick(View v) {
-                        setMultiselectProcessingMode(true);
-                        return false;
-                    }
-                });
-
-        film_RecyclerView.setAdapter(filmItemAdapter);
         film_RecyclerView.addItemDecoration(new DividerItemDecoration(rootView.getContext(), DividerItemDecoration.VERTICAL));
-
         RecyclerView.ItemAnimator itemAnimator = new SlideInUpAnimator(new OvershootInterpolator(1f));
         itemAnimator.setAddDuration(rootView.getResources().getInteger(R.integer.element_adding_animation_time_ms));
         film_RecyclerView.setItemAnimator(itemAnimator);
-
         swipeProcessingHelper.attachToRecyclerView(film_RecyclerView);
 
-        if (isFavoritesOnly())
-            favoritesListMode();
-        else
-            fullListMode();
+
+        boolean adapterCreationRequired = filmItemAdapter == null;
+
+        if (adapterCreationRequired) {
+            filmItemAdapter = new FilmItemAdapter(LayoutInflater.from(getContext()),
+                    new CompoundButton.OnCheckedChangeListener() {
+                        @Override
+                        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                            String filmID = buttonView.getTag().toString();
+                            FilmDescriptionStorage.getInstance().GetFilmByID(filmID).setFavorite(isChecked);
+                            if (!isChecked && isFavoritesOnly())
+                                filmItemAdapter.removeItemByID(filmID);
+                        }
+                    },
+                    new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            setSelectedFilmTag(v.getTag().toString());
+                            gotoDetailFragment();
+                        }
+                    },
+                    new View.OnLongClickListener() {
+                        @Override
+                        public boolean onLongClick(View v) {
+                            setMultiselectProcessingMode(true);
+                            return false;
+                        }
+                    });
+        }
+
+        film_RecyclerView.setAdapter(filmItemAdapter);
+
+        if (adapterCreationRequired) {
+            if (isFavoritesOnly())
+                favoritesListMode();
+            else
+                fullListMode();
+        }
+
+        setMultiselectProcessingMode(isMultiselectMode);
     }
 
     private void gotoDetailFragment() {
