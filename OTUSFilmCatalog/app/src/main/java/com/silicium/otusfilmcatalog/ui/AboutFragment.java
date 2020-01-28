@@ -70,7 +70,7 @@ public class AboutFragment extends FragmentWithCallback implements NavigationVie
         int id = item.getItemId();
 
         if (id == R.id.item_home)
-            gotoFragmentCallback.GotoMainFragment();
+            gotoFragmentCallback.gotoMainFragment();
         else if (id == R.id.item_exit) {
             AlertDialog.Builder bld = new AlertDialog.Builder(rootView.getContext());
             DialogInterface.OnClickListener exitDo =

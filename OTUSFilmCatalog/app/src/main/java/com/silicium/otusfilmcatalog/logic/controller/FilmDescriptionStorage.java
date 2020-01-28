@@ -27,7 +27,7 @@ public class FilmDescriptionStorage {
         Films = new HashMap<>();
         metricsStorage = new MetricsStorage();
 
-        FilmDescription film1 = FilmDescriptionFactory.GetFilmDescription("film1");
+        FilmDescription film1 = FilmDescriptionFactory.getFilmDescription("film1");
         film1.Name = "Детство Шелдона";
         film1.Description = App.getAppResources().getString(R.string.film1);
         film1.Url = "https://www.kinopoisk.ru/film/1040419/";
@@ -36,7 +36,7 @@ public class FilmDescriptionStorage {
         film1.Genre.add(FilmDescription.FilmGenre.series);
         addFilm(film1);
 
-        FilmDescription film2 = FilmDescriptionFactory.GetFilmDescription("film2");
+        FilmDescription film2 = FilmDescriptionFactory.getFilmDescription("film2");
         film2.Name = "Теория большого взрыва";
         film2.Description = App.getAppResources().getString(R.string.film2);
         film2.Url = "https://www.kinopoisk.ru/film/306084/";
@@ -45,7 +45,7 @@ public class FilmDescriptionStorage {
         film2.Genre.add(FilmDescription.FilmGenre.series);
         addFilm(film2);
 
-        FilmDescription film3 = FilmDescriptionFactory.GetFilmDescription("film3");
+        FilmDescription film3 = FilmDescriptionFactory.getFilmDescription("film3");
         film3.Name = "Кролик Багз или Дорожный Бегун";
         film3.Description = App.getAppResources().getString(R.string.film3);
         film3.Url = "https://www.kinopoisk.ru/film/33821/";
@@ -81,19 +81,19 @@ public class FilmDescriptionStorage {
     }
 
     @Nullable
-    public FilmDescription GetFilmByID(String ID) {
+    public FilmDescription getFilmByID(String ID) {
         try {
             return Films.get(ID);
         } catch (Exception ex) {
-            return FilmDescriptionFactory.GetStubFilmDescription();
+            return FilmDescriptionFactory.getStubFilmDescription();
         }
     }
 
     public void addFilm(@NonNull FilmDescription film) {
         Films.put(film.ID, film);
-        metricsStorage.Increment(MetricsStorage.TOTAL_TAG);
+        metricsStorage.increment(MetricsStorage.TOTAL_TAG);
         if (film.Genre.contains(FilmDescription.FilmGenre.cartoon))
-            metricsStorage.Increment(MetricsStorage.CARTOON_TAG);
+            metricsStorage.increment(MetricsStorage.CARTOON_TAG);
     }
 
     public void updateWidgetView() {

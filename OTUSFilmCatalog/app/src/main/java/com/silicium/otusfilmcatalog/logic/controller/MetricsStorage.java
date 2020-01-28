@@ -36,7 +36,7 @@ class MetricsStorage {
      *
      * @param tag метрика, которую надо увеличить
      */
-    void Increment(String tag) {
+    void increment(String tag) {
         for (Metric metric : metrics) {
             if (metric.metricTag.equals(tag)) {
                 metric.value++;

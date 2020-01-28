@@ -1,11 +1,11 @@
 package com.silicium.otusfilmcatalog.logic.model;
 
 public interface IGotoFragmentCallback {
-    void GotoDetailFragment(String filmID);
+    void gotoDetailFragment(String filmID);
 
-    void GotoAddFragment();
+    void gotoAddFragment();
 
-    void GotoMainFragment();
+    void gotoMainFragment();
 
-    void GotoAboutFragment();
+    void gotoAboutFragment();
 }

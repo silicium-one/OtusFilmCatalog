@@ -11,7 +11,7 @@ import java.util.UUID;
 
 public class FilmDescriptionFactory {
     @NonNull
-    public static FilmDescription GetNewFilmDescription() {
+    public static FilmDescription getNewFilmDescription() {
         FilmDescription ret = new FilmDescription(UUID.randomUUID().toString());
 
         ret.Name = "";
@@ -23,7 +23,7 @@ public class FilmDescriptionFactory {
     }
 
     @NonNull
-    public static FilmDescription GetFilmDescription(String ID) {
+    public static FilmDescription getFilmDescription(String ID) {
         FilmDescription ret = new FilmDescription(ID);
 
         ret.Name = "";
@@ -35,7 +35,7 @@ public class FilmDescriptionFactory {
     }
 
     @NonNull
-    public static FilmDescription GetStubFilmDescription() {
+    public static FilmDescription getStubFilmDescription() {
         FilmDescription ret = new FilmDescription("");
 
         ret.Name = "";
@@ -48,7 +48,7 @@ public class FilmDescriptionFactory {
 
     //todo: добавить работу с разными локалями
     @NonNull
-    public static String GetReadableGenre(@NonNull FilmDescription.FilmGenre genre) {
+    public static String getReadableGenre(@NonNull FilmDescription.FilmGenre genre) {
         switch (genre) {
             case comedy:
                 return "Комедия";

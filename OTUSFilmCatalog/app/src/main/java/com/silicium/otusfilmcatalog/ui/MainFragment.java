@@ -52,7 +52,7 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
         film_root_layout = view.findViewById(R.id.film_root_layout);
 
         film_root_layout.removeAllViews();
-        for(View v : FilmViewWrapper.getInstance().GetFilmViews(getContext(), new View.OnClickListener() {
+        for(View v : FilmViewWrapper.getInstance().getFilmViews(getContext(), new View.OnClickListener() {
             @Override
             public void onClick(@NonNull View v) {
                 setSelectedFilmTag(v.getTag().toString());
@@ -78,7 +78,7 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
             @Override
             public void onClick(View view) {
                 try{
-                    gotoFragmentCallback.GotoAddFragment();
+                    gotoFragmentCallback.gotoAddFragment();
                 }
                 catch (NullPointerException e)
                 {
@@ -90,7 +90,7 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
     private void gotoDetailFragment() {
         if (FilmViewWrapper.getInstance().containsID(getSelectedFilmTag())) {
             try{
-                gotoFragmentCallback.GotoDetailFragment(getSelectedFilmTag());
+                gotoFragmentCallback.gotoDetailFragment(getSelectedFilmTag());
             }
             catch (NullPointerException e)
             {
@@ -125,7 +125,7 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
         int id = item.getItemId();
 
         if (id == R.id.item_about)
-            gotoFragmentCallback.GotoAboutFragment();
+            gotoFragmentCallback.gotoAboutFragment();
         else if (id == R.id.item_exit) {
             AlertDialog.Builder bld = new AlertDialog.Builder(rootView.getContext());
             DialogInterface.OnClickListener exitDo =

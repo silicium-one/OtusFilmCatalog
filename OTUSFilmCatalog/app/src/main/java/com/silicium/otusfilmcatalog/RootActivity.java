@@ -32,9 +32,9 @@ public class RootActivity extends AppCompatActivity implements IGotoFragmentCall
 
         Fragment topFragment = getTopFragmentOrNull();
         if (topFragment == null) // первый запуск
-            GotoMainFragment();
+            gotoMainFragment();
         else
-            CheckContainerSizes();
+            checkContainerSizes();
 
         getSupportFragmentManager().addOnBackStackChangedListener(this);
         FilmDescriptionStorage.getInstance().updateWidgetView();
@@ -63,11 +63,11 @@ public class RootActivity extends AppCompatActivity implements IGotoFragmentCall
             mainFragment.setSelectedFilmTag(filmID);
         }
 
-        CheckContainerSizes();
+        checkContainerSizes();
     }
 
     @Override
-    public void GotoDetailFragment(String filmID) {
+    public void gotoDetailFragment(String filmID) {
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.adds_fragment, DetailFragment.newInstance(filmID), DetailFragment.FRAGMENT_TAG)
@@ -77,7 +77,7 @@ public class RootActivity extends AppCompatActivity implements IGotoFragmentCall
     }
 
     @Override
-    public void GotoAddFragment() {
+    public void gotoAddFragment() {
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.root_fragment, new AddFragment(), AddFragment.FRAGMENT_TAG)
@@ -87,7 +87,7 @@ public class RootActivity extends AppCompatActivity implements IGotoFragmentCall
     }
 
     @Override
-    public void GotoMainFragment() {
+    public void gotoMainFragment() {
         FragmentManager fragmentManager = getSupportFragmentManager();
 
         // В случае перехода к главному фрагменту никаких скачков по кнопке "Назад" быть не должно
@@ -103,7 +103,7 @@ public class RootActivity extends AppCompatActivity implements IGotoFragmentCall
     }
 
     @Override
-    public void GotoAboutFragment() {
+    public void gotoAboutFragment() {
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.root_fragment, new AboutFragment(), AboutFragment.FRAGMENT_TAG)
@@ -135,7 +135,7 @@ public class RootActivity extends AppCompatActivity implements IGotoFragmentCall
         return getResources().getConfiguration().orientation == ORIENTATION_PORTRAIT;
     }
 
-    private void CheckContainerSizes() {
+    private void checkContainerSizes() {
         Fragment topFragment = getTopFragmentOrNull();
         FrameLayout root_fragment = findViewById(R.id.root_fragment);
         FrameLayout adds_fragment = findViewById(R.id.adds_fragment);

@@ -47,8 +47,8 @@ public class FilmViewWrapper {
 
     ///region API
     @Nullable
-    public FilmDescription GetFilmByID(String ID) {
-        return storageInstance.GetFilmByID(ID);
+    public FilmDescription getFilmByID(String ID) {
+        return storageInstance.getFilmByID(ID);
     }
 
     /**
@@ -69,15 +69,15 @@ public class FilmViewWrapper {
      * @return представление с картинкой и описанием
      */
     @NonNull
-    public View GetFilmViewDetails(@NonNull FilmDescription film, @NonNull final Context parent) {
+    public View getFilmViewDetails(@NonNull FilmDescription film, @NonNull final Context parent) {
         LinearLayout ret = new LinearLayout(parent);
         ret.setOrientation(LinearLayout.VERTICAL);
         ret.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
 
         ret.setTag(film.ID);
-        ret.addView(GetGenreChips(film, parent));
-        ret.addView(GetPicView(film, parent)); // TODO: сделать отдельные большие картинки
-        ret.addView(GetDescView(film, parent));
+        ret.addView(getGenreChips(film, parent));
+        ret.addView(getPicView(film, parent)); // TODO: сделать отдельные большие картинки
+        ret.addView(getDescView(film, parent));
         return ret;
     }
 
@@ -88,19 +88,21 @@ public class FilmViewWrapper {
      * @return Список View
      */
     @NonNull
-    public List<View> GetFilmViews(@NonNull Context parent, View.OnClickListener detailClickListener) {
+    public List<View> getFilmViews(@NonNull Context parent, View.OnClickListener detailClickListener) {
         List<View> views = new ArrayList<>();
         for (FilmDescription film : storageInstance.getFilms()) {
-            views.add(GetFilmView(film, parent, detailClickListener));
+            views.add(getFilmView(film, parent, detailClickListener));
         }
         return views;
     }
 
     @NonNull
-    public String GetFilmUrl(@NonNull FilmDescription film) {
+    public String getFilmUrl(@NonNull FilmDescription film) {
         return String.format("<a href=\"%s\">%s</a>", film.Url, film.Name);
     }
+    //endregion
 
+    //region wrappers
     /**
      * Получение представления с описанием фильма для списка
      *
@@ -110,7 +112,7 @@ public class FilmViewWrapper {
      * @return представление с картинкой и описанием
      */
     @NonNull
-    private View GetFilmView(@NonNull FilmDescription film, @NonNull final Context parent, View.OnClickListener detailClickListener) {
+    private View getFilmView(@NonNull FilmDescription film, @NonNull final Context parent, View.OnClickListener detailClickListener) {
         LinearLayout ret = new LinearLayout(parent);
         ret.setOrientation(LinearLayout.HORIZONTAL);
         ret.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
@@ -124,7 +126,7 @@ public class FilmViewWrapper {
         btnDetail.setRotation(-90F);
         btnDetail.setOnClickListener(detailClickListener);
 
-        View pic = GetPicView(film, parent);
+        View pic = getPicView(film, parent);
         pic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
@@ -154,27 +156,25 @@ public class FilmViewWrapper {
         });
 
         ret.addView(pic); //TODO: Принимать картинки разного размера и приводить к одному
-        ret.addView(GetDescView(film, parent));
+        ret.addView(getDescView(film, parent));
         ret.addView(btnDetail);
         return ret;
     }
-    //endregion
 
-    //region wrappers
     @NonNull
-    private View GetGenreChips(@NonNull FilmDescription film, @NonNull Context parent) {
+    private View getGenreChips(@NonNull FilmDescription film, @NonNull Context parent) {
         ChipGroup ret = new ChipGroup(parent); // TODO: добавиить отступы
         ret.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
         for (FilmDescription.FilmGenre filmGenre : film.Genre) {
             Chip genre = new Chip(parent);
-            genre.setText(FilmDescriptionFactory.GetReadableGenre(filmGenre));
+            genre.setText(FilmDescriptionFactory.getReadableGenre(filmGenre));
             ret.addView(genre);
         }
         return ret;
     }
 
     @NonNull
-    private ImageView GetPicView(@NonNull FilmDescription film, Context parent) {
+    private ImageView getPicView(@NonNull FilmDescription film, Context parent) {
         ImageView pic = new ImageView(parent);
         pic.setLayoutParams(new LinearLayout.LayoutParams(200, 200));
         pic.setPadding(10, 10, 10, 10);
@@ -184,7 +184,7 @@ public class FilmViewWrapper {
     }
 
     @NonNull
-    private TextView GetDescView(@NonNull FilmDescription film, Context parent) {
+    private TextView getDescView(@NonNull FilmDescription film, Context parent) {
         TextView description = new TextView(parent);
         description.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, 200, 3.0F));
         description.setPadding(10, 10, 10, 10);
