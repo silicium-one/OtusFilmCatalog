@@ -1,6 +1,5 @@
 package com.silicium.otusfilmcatalog.logic.view;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,19 +7,91 @@ import android.widget.CompoundButton;
 import android.widget.ListView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.silicium.otusfilmcatalog.R;
 import com.silicium.otusfilmcatalog.logic.controller.FilmDescriptionStorage;
 import com.silicium.otusfilmcatalog.logic.model.IItemTouchHelperAdapter;
 
+import org.jetbrains.annotations.Contract;
+
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 public class FilmItemAdapter extends androidx.recyclerview.widget.RecyclerView.Adapter<FilmItemViewHolder> implements IItemTouchHelperAdapter {
+    class FilmItemData {
+        final String filmID;
+        boolean isChecked;
+
+        FilmItemData(String filmID) {
+            this.filmID = filmID;
+            this.isChecked = false;
+        }
+
+        FilmItemData(String filmID, boolean isChecked) {
+            this.filmID = filmID;
+            this.isChecked = isChecked;
+        }
+
+        /**
+         * Indicates whether some other object is "equal to" this one.
+         * <p>
+         * The {@code equals} method implements an equivalence relation
+         * on non-null object references:
+         * <ul>
+         * <li>It is <i>reflexive</i>: for any non-null reference value
+         * {@code x}, {@code x.equals(x)} should return
+         * {@code true}.
+         * <li>It is <i>symmetric</i>: for any non-null reference values
+         * {@code x} and {@code y}, {@code x.equals(y)}
+         * should return {@code true} if and only if
+         * {@code y.equals(x)} returns {@code true}.
+         * <li>It is <i>transitive</i>: for any non-null reference values
+         * {@code x}, {@code y}, and {@code z}, if
+         * {@code x.equals(y)} returns {@code true} and
+         * {@code y.equals(z)} returns {@code true}, then
+         * {@code x.equals(z)} should return {@code true}.
+         * <li>It is <i>consistent</i>: for any non-null reference values
+         * {@code x} and {@code y}, multiple invocations of
+         * {@code x.equals(y)} consistently return {@code true}
+         * or consistently return {@code false}, provided no
+         * information used in {@code equals} comparisons on the
+         * objects is modified.
+         * <li>For any non-null reference value {@code x},
+         * {@code x.equals(null)} should return {@code false}.
+         * </ul>
+         * <p>
+         * The {@code equals} method for class {@code Object} implements
+         * the most discriminating possible equivalence relation on objects;
+         * that is, for any non-null reference values {@code x} and
+         * {@code y}, this method returns {@code true} if and only
+         * if {@code x} and {@code y} refer to the same object
+         * ({@code x == y} has the value {@code true}).
+         * <p>
+         * Note that it is generally necessary to override the {@code hashCode}
+         * method whenever this method is overridden, so as to maintain the
+         * general contract for the {@code hashCode} method, which states
+         * that equal objects must have equal hash codes.
+         *
+         * @param obj the reference object with which to compare.
+         * @return {@code true} if this object is the same as the obj
+         * argument; {@code false} otherwise.
+         * @see #hashCode()
+         * @see HashMap
+         */
+        @Contract(value = "null -> false", pure = true)
+        @Override
+        public boolean equals(@Nullable Object obj) {
+            if (obj instanceof FilmItemData)
+                return filmID.equals(((FilmItemData) obj).filmID);
+            return super.equals(obj);
+        }
+    }
     private final LayoutInflater inflater;
-    private final List<String> filmIDs;
+    private final List<FilmItemData> filmsItemsData;
     private final CompoundButton.OnCheckedChangeListener favoriteStateChangedListener;
     private final View.OnClickListener detailBtnClickListener;
     private final View.OnLongClickListener itemLongClickListener;
@@ -40,7 +111,7 @@ public class FilmItemAdapter extends androidx.recyclerview.widget.RecyclerView.A
 
     public FilmItemAdapter(LayoutInflater inflater, CompoundButton.OnCheckedChangeListener favoriteStateChangedListener, View.OnClickListener detailBtnClickListener, View.OnLongClickListener itemLongClickListener) { // TODO: нарушение принципа Single Responsibility, исправить
         this.inflater = inflater;
-        this.filmIDs = new ArrayList<>();
+        this.filmsItemsData = new ArrayList<>();
         this.favoriteStateChangedListener = favoriteStateChangedListener;
         this.detailBtnClickListener = detailBtnClickListener;
         this.itemLongClickListener = itemLongClickListener;
@@ -69,7 +140,6 @@ public class FilmItemAdapter extends androidx.recyclerview.widget.RecyclerView.A
     @NonNull
     @Override
     public FilmItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        Log.d("FilmItemAdapter", "onCreateViewHolder");
         return new FilmItemViewHolder(inflater.inflate(R.layout.item_film, parent, false));
     }
 
@@ -95,9 +165,38 @@ public class FilmItemAdapter extends androidx.recyclerview.widget.RecyclerView.A
      */
     @Override
     public void onBindViewHolder(@NonNull FilmItemViewHolder holder, int position) {
-        Log.d("FilmItemAdapter", "onBindViewHolder");
-        String currentTag = filmIDs.get(position);
-        holder.bind(FilmDescriptionStorage.getInstance().GetFilmByID(currentTag), currentTag.equals(selectedFilmTag), isMultiselectMode(), favoriteStateChangedListener, detailBtnClickListener, itemLongClickListener);
+        String currentTag = filmsItemsData.get(position).filmID;
+        boolean isChecked = filmsItemsData.get(position).isChecked;
+        holder.bind(FilmDescriptionStorage.getInstance().GetFilmByID(currentTag), currentTag.equals(selectedFilmTag), isMultiselectMode(), isChecked, favoriteStateChangedListener, detailBtnClickListener, itemLongClickListener);
+    }
+
+    /**
+     * Called when a view created by this adapter has been recycled.
+     *
+     * <p>A view is recycled when a {@link RecyclerView.LayoutManager} decides that it no longer
+     * needs to be attached to its parent {@link RecyclerView}. This can be because it has
+     * fallen out of visibility or a set of cached views represented by views still
+     * attached to the parent RecyclerView. If an item view has large or expensive data
+     * bound to it such as large bitmaps, this may be a good place to release those
+     * resources.</p>
+     * <p>
+     * RecyclerView calls this method right before clearing ViewHolder's internal data and
+     * sending it to RecycledViewPool. This way, if ViewHolder was holding valid information
+     * before being recycled, you can call {@link RecyclerView.ViewHolder#getAdapterPosition()} to get
+     * its adapter position.
+     *
+     * @param holder The ViewHolder for the view being recycled
+     */
+    @Override
+    public void onViewRecycled(@NonNull FilmItemViewHolder holder) {
+        try {
+            filmsItemsData.get(holder.getAdapterPosition()).isChecked = holder.isChecked();
+        }
+        catch (IndexOutOfBoundsException ignored)
+        {
+
+        }
+        super.onViewRecycled(holder);
     }
 
     /**
@@ -107,13 +206,13 @@ public class FilmItemAdapter extends androidx.recyclerview.widget.RecyclerView.A
      */
     @Override
     public int getItemCount() {
-        return filmIDs.size();
+        return filmsItemsData.size();
     }
 
     public void setSelectedFilmTag(String selectedFilmTag) {
-        int prevPosition = filmIDs.indexOf(this.selectedFilmTag);
+        int prevPosition = filmsItemsData.indexOf(new FilmItemData(this.selectedFilmTag));
         this.selectedFilmTag = selectedFilmTag;
-        int currentPosition = filmIDs.indexOf(this.selectedFilmTag);
+        int currentPosition = filmsItemsData.indexOf(new FilmItemData(this.selectedFilmTag));
 
         if (prevPosition != -1)
             notifyItemChanged(prevPosition); // снимаем выделение
@@ -132,11 +231,11 @@ public class FilmItemAdapter extends androidx.recyclerview.widget.RecyclerView.A
     public void onItemMove(int fromPosition, int toPosition) {
         if (fromPosition < toPosition) {
             for (int i = fromPosition; i < toPosition; i++) {
-                Collections.swap(filmIDs, i, i + 1);
+                Collections.swap(filmsItemsData, i, i + 1);
             }
         } else {
             for (int i = fromPosition; i > toPosition; i--) {
-                Collections.swap(filmIDs, i, i - 1);
+                Collections.swap(filmsItemsData, i, i - 1);
             }
         }
         notifyItemMoved(fromPosition, toPosition);
@@ -149,31 +248,32 @@ public class FilmItemAdapter extends androidx.recyclerview.widget.RecyclerView.A
      */
     @Override
     public void onItemDismiss(int position) {
-        filmIDs.remove(position);
+        filmsItemsData.remove(position);
         notifyItemRemoved(position);
     }
 
     public void addItem(String filmID){
-        filmIDs.add(filmID);
-        notifyItemInserted(filmIDs.size()-1);
+        FilmItemData item = new FilmItemData(filmID, false);
+        filmsItemsData.add(item);
+        notifyItemInserted(filmsItemsData.size()-1);
     }
 
     public void removeAllItems() {
-        int size = filmIDs.size();
-        filmIDs.clear();
+        int size = filmsItemsData.size();
+        filmsItemsData.clear();
         notifyItemRangeRemoved(0, size);
     }
 
     public String getTagByPos(int position) {
-        return filmIDs.get(position);
+        return filmsItemsData.get(position).filmID;
     }
 
     public boolean removeItemByID(String filmID) {
-        int pos = filmIDs.indexOf(filmID);
+        int pos = filmsItemsData.indexOf(new FilmItemData(filmID));
         if (pos == -1)
             return false;
 
-        filmIDs.remove(pos);
+        filmsItemsData.remove(pos);
         notifyItemRemoved(pos);
         return true;
     }
