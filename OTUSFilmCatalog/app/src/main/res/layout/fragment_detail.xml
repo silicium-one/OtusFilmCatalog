@@ -14,7 +14,7 @@
             android:id="@+id/fragment_detail_toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="?attr/colorPrimary"/>
+            android:background="?attr/colorPrimary" />
 
         <LinearLayout
             android:id="@+id/film_root_layout"

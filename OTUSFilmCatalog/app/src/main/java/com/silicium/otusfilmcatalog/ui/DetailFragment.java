@@ -39,6 +39,7 @@ public class DetailFragment extends FragmentWithCallback implements IOnBackPress
         return filmID;
     }
 
+    @Nullable
     private FilmDescription film;
     @SuppressWarnings({"FieldCanBeLocal", "unused"})
     private CheckBox film_is_liked;

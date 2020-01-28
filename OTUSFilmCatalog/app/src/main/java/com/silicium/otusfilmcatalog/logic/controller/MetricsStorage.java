@@ -26,14 +26,14 @@ class MetricsStorage {
         metrics.add(new Metric(CARTOON_TAG));
     }
 
-    void updateWidgetView()
-    {
+    void updateWidgetView() {
         for (Metric metric : metrics)
             MetricWidgetUtils.notifyWidget(metric.metricTag, metric.value);
     }
 
     /**
      * Увеличить метрику на 1
+     *
      * @param tag метрика, которую надо увеличить
      */
     void Increment(String tag) {

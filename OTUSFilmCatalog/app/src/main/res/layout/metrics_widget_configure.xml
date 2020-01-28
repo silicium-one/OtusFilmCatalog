@@ -15,22 +15,22 @@
     <CheckBox
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:tag="total"/>
+        android:tag="total" />
 
     <CheckBox
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:tag="favorites"/>
+        android:tag="favorites" />
 
     <CheckBox
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:tag="shared"/>
+        android:tag="shared" />
 
     <CheckBox
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:tag="cartoon"/>
+        android:tag="cartoon" />
 
     <Button
         android:id="@+id/add_button"

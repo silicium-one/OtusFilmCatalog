@@ -13,8 +13,8 @@
         android:layout_height="wrap_content"
         android:layout_alignStart="@id/appwidget_total_header"
         android:layout_alignEnd="@id/appwidget_cartoon_header"
-        android:gravity="center"
         android:layout_margin="@dimen/widget_text_margin"
+        android:gravity="center"
         android:text="@string/appwidget_header"
         android:textColor="@color/colorPrimary"
         android:textSize="@dimen/widget_text_header_size"
@@ -24,48 +24,48 @@
         android:id="@+id/appwidget_total_header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/widget_text_margin"
         android:layout_below="@id/appwidget_header"
+        android:layout_margin="@dimen/widget_text_margin"
         android:text="@string/appwidget_total_header"
         android:textColor="@color/colorPrimary"
         android:textSize="@dimen/widget_text_column_header_size"
-        android:textStyle="bold|italic"/>
+        android:textStyle="bold|italic" />
 
     <TextView
         android:id="@+id/appwidget_favorites_header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/appwidget_header"
-        android:layout_toEndOf="@id/appwidget_total_header"
         android:layout_margin="@dimen/widget_text_margin"
+        android:layout_toEndOf="@id/appwidget_total_header"
         android:text="@string/appwidget_favorites_header"
         android:textColor="@color/colorPrimary"
         android:textSize="@dimen/widget_text_column_header_size"
-        android:textStyle="bold|italic"/>
+        android:textStyle="bold|italic" />
 
     <TextView
         android:id="@+id/appwidget_shared_header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/appwidget_header"
-        android:layout_toEndOf="@id/appwidget_favorites_header"
         android:layout_margin="@dimen/widget_text_margin"
+        android:layout_toEndOf="@id/appwidget_favorites_header"
         android:text="@string/appwidget_shared_header"
         android:textColor="@color/colorPrimary"
         android:textSize="@dimen/widget_text_column_header_size"
-        android:textStyle="bold|italic"/>
+        android:textStyle="bold|italic" />
 
     <TextView
         android:id="@+id/appwidget_cartoon_header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/appwidget_header"
-        android:layout_toEndOf="@id/appwidget_shared_header"
         android:layout_margin="@dimen/widget_text_margin"
+        android:layout_toEndOf="@id/appwidget_shared_header"
         android:text="@string/appwidget_cartoon_header"
         android:textColor="@color/colorPrimary"
         android:textSize="@dimen/widget_text_column_header_size"
-        android:textStyle="bold|italic"/>
+        android:textStyle="bold|italic" />
 
     <TextView
         android:id="@+id/appwidget_total_value"
@@ -73,12 +73,12 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/appwidget_total_header"
         android:layout_alignStart="@id/appwidget_total_header"
-        android:gravity="center"
         android:layout_margin="@dimen/widget_text_margin"
+        android:gravity="center"
         android:text="@string/appwidget_default_value"
         android:textColor="@color/colorAccent"
         android:textSize="@dimen/widget_text_column_value_size"
-        android:textStyle="bold|italic"/>
+        android:textStyle="bold|italic" />
 
     <TextView
         android:id="@+id/appwidget_favorites_value"
@@ -86,12 +86,12 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/appwidget_favorites_header"
         android:layout_alignStart="@id/appwidget_favorites_header"
-        android:gravity="center"
         android:layout_margin="@dimen/widget_text_margin"
+        android:gravity="center"
         android:text="@string/appwidget_default_value"
         android:textColor="@color/colorAccent"
         android:textSize="@dimen/widget_text_column_value_size"
-        android:textStyle="bold|italic"/>
+        android:textStyle="bold|italic" />
 
     <TextView
         android:id="@+id/appwidget_shared_value"
@@ -99,12 +99,12 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/appwidget_shared_header"
         android:layout_alignStart="@id/appwidget_shared_header"
-        android:gravity="center"
         android:layout_margin="@dimen/widget_text_margin"
+        android:gravity="center"
         android:text="@string/appwidget_default_value"
         android:textColor="@color/colorAccent"
         android:textSize="@dimen/widget_text_column_value_size"
-        android:textStyle="bold|italic"/>
+        android:textStyle="bold|italic" />
 
     <TextView
         android:id="@+id/appwidget_cartoon_value"
@@ -112,11 +112,11 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/appwidget_cartoon_header"
         android:layout_alignStart="@id/appwidget_cartoon_header"
-        android:gravity="center"
         android:layout_margin="@dimen/widget_text_margin"
+        android:gravity="center"
         android:text="@string/appwidget_default_value"
         android:textColor="@color/colorAccent"
         android:textSize="@dimen/widget_text_column_value_size"
-        android:textStyle="bold|italic"/>
+        android:textStyle="bold|italic" />
 
 </RelativeLayout>

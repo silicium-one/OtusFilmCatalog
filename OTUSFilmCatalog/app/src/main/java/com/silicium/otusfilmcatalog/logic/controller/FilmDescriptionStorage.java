@@ -15,23 +15,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class FilmDescriptionStorage {
+    @Nullable
+    private static volatile FilmDescriptionStorage instance = null;
     @NonNull
     private final Map<String, FilmDescription> Films;
     @NonNull
     private final MetricsStorage metricsStorage;
 
-    @Nullable
-    private static volatile FilmDescriptionStorage instance = null;
-    @Nullable
-    public static FilmDescriptionStorage getInstance()
-    {
-        if (instance == null)
-            synchronized (FilmDescriptionStorage.class) {
-                if (instance == null)
-                    instance = new FilmDescriptionStorage();
-            }
-        return instance;
-    }
     private FilmDescriptionStorage() {
         super();
         Films = new HashMap<>();
@@ -41,7 +31,7 @@ public class FilmDescriptionStorage {
         film1.Name = "Детство Шелдона";
         film1.Description = App.getAppResources().getString(R.string.film1);
         film1.Url = "https://www.kinopoisk.ru/film/1040419/";
-        film1.Cover = BitmapFactory.decodeResource(App.getAppResources(),R.drawable.film1);
+        film1.Cover = BitmapFactory.decodeResource(App.getAppResources(), R.drawable.film1);
         film1.Genre.add(FilmDescription.FilmGenre.comedy);
         film1.Genre.add(FilmDescription.FilmGenre.series);
         addFilm(film1);
@@ -50,7 +40,7 @@ public class FilmDescriptionStorage {
         film2.Name = "Теория большого взрыва";
         film2.Description = App.getAppResources().getString(R.string.film2);
         film2.Url = "https://www.kinopoisk.ru/film/306084/";
-        film2.Cover = BitmapFactory.decodeResource(App.getAppResources(),R.drawable.film2);
+        film2.Cover = BitmapFactory.decodeResource(App.getAppResources(), R.drawable.film2);
         film2.Genre.add(FilmDescription.FilmGenre.comedy);
         film2.Genre.add(FilmDescription.FilmGenre.series);
         addFilm(film2);
@@ -59,25 +49,34 @@ public class FilmDescriptionStorage {
         film3.Name = "Кролик Багз или Дорожный Бегун";
         film3.Description = App.getAppResources().getString(R.string.film3);
         film3.Url = "https://www.kinopoisk.ru/film/33821/";
-        film3.Cover = BitmapFactory.decodeResource(App.getAppResources(),R.drawable.film3);
+        film3.Cover = BitmapFactory.decodeResource(App.getAppResources(), R.drawable.film3);
         film3.Genre.add(FilmDescription.FilmGenre.comedy);
         film3.Genre.add(FilmDescription.FilmGenre.series);
         film3.Genre.add(FilmDescription.FilmGenre.cartoon);
         addFilm(film3);
     }
 
+    @Nullable
+    public static FilmDescriptionStorage getInstance() {
+        if (instance == null)
+            synchronized (FilmDescriptionStorage.class) {
+                if (instance == null)
+                    instance = new FilmDescriptionStorage();
+            }
+        return instance;
+    }
+
     /**
      * Список ID фильмов
+     *
      * @return список ключей доступных в базе фильмов
      */
     @NonNull
-    public Collection<FilmDescription> getFilms()
-    {
+    public Collection<FilmDescription> getFilms() {
         return Films.values();
     }
 
-    public boolean containsID(String ID)
-    {
+    public boolean containsID(String ID) {
         return Films.containsKey(ID);
     }
 
@@ -85,9 +84,7 @@ public class FilmDescriptionStorage {
     public FilmDescription GetFilmByID(String ID) {
         try {
             return Films.get(ID);
-        }
-        catch (Exception ex)
-        {
+        } catch (Exception ex) {
             return FilmDescriptionFactory.GetStubFilmDescription();
         }
     }
@@ -99,8 +96,7 @@ public class FilmDescriptionStorage {
             metricsStorage.Increment(MetricsStorage.CARTOON_TAG);
     }
 
-    public void updateWidgetView()
-    {
+    public void updateWidgetView() {
         metricsStorage.updateWidgetView();
     }
 }

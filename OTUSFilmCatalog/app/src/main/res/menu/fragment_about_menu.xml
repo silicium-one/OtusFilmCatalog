@@ -1,19 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
         android:icon="@drawable/ic_help"
-        android:title="@string/about_help_string"/>
+        android:title="@string/about_help_string" />
 
     <item
         android:icon="@drawable/ic_legal"
-        android:title="@string/about_legal_string"/>
+        android:title="@string/about_legal_string" />
 
     <item
         android:icon="@drawable/ic_tech_details"
         android:title="@string/about_tech_details_string"
-        app:showAsAction="always"/>
-
-
+        app:showAsAction="always" />
 </menu>
