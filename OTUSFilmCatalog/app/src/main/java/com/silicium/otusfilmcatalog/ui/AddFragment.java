@@ -74,7 +74,7 @@ public class AddFragment extends FragmentWithCallback implements IOnBackPressedL
             public boolean onLongClick(View view) {
                 AddMoreDialogFragment addPhotoBottomDialogFragment = new AddMoreDialogFragment(new View.OnClickListener() {
                     @Override
-                    public void onClick(View view) {
+                    public void onClick(@NonNull View view) {
                         onItemClick(view);
                     }
                 });
@@ -108,7 +108,7 @@ public class AddFragment extends FragmentWithCallback implements IOnBackPressedL
         FilmDescriptionStorage.getInstance().addFilm(film);
     }
 
-    private void onItemClick(View view) {
+    private void onItemClick(@NonNull View view) {
         Toast.makeText(view.getContext(),R.string.under_construction__hint_string,Toast.LENGTH_SHORT).show();
         UiComponents.showUnderConstructionSnackBar(rootLayout);
     }

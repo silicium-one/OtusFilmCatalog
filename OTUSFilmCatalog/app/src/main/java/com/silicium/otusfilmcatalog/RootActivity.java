@@ -5,6 +5,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
@@ -120,6 +121,7 @@ public class RootActivity extends AppCompatActivity implements IGotoFragmentCall
         super.onBackPressed();
     }
 
+    @Nullable
     private Fragment getTopFragmentOrNull() {
         Fragment fragment = null;
         FragmentManager fragmentManager = getSupportFragmentManager();

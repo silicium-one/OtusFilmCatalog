@@ -3,6 +3,7 @@ package com.silicium.otusfilmcatalog.ui.cuctomcomponents;
 import android.os.CountDownTimer;
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.LifecycleOwner;
 
 import com.silicium.otusfilmcatalog.R;
@@ -11,12 +12,15 @@ import com.tingyik90.snackprogressbar.SnackProgressBarManager;
 
 public class DisappearingSnackCircularProgressBar {
 
+    @NonNull
     private final SnackProgressBarManager snackProgressBarManager;
+    @NonNull
     private final SnackProgressBar circularProgressBar;
     private final Integer duration;
+    @NonNull
     private final CountDownTimer hideTimer;
 
-    public DisappearingSnackCircularProgressBar(View providedView, LifecycleOwner lifecycleOwner, String messageText, SnackProgressBarManager.OnDisplayListener callback)
+    public DisappearingSnackCircularProgressBar(@NonNull View providedView, LifecycleOwner lifecycleOwner, @NonNull String messageText, SnackProgressBarManager.OnDisplayListener callback)
     {
         this.duration = providedView.getResources().getInteger(R.integer.back_pressed_twice_await_time_ms);
 

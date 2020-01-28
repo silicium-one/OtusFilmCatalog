@@ -31,7 +31,7 @@ public class AboutFragment extends FragmentWithCallback implements NavigationVie
     private View rootView;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_about, container, false);
@@ -66,7 +66,7 @@ public class AboutFragment extends FragmentWithCallback implements NavigationVie
     }
 
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
 
         if (id == R.id.item_home)

@@ -9,6 +9,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.silicium.otusfilmcatalog.R;
@@ -24,7 +27,9 @@ public class FilmViewWrapper {
     private final FilmDescriptionStorage storageInstance = FilmDescriptionStorage.getInstance();
 
     //region  singleton
+    @Nullable
     private static volatile FilmViewWrapper instance = null;
+    @Nullable
     public static FilmViewWrapper getInstance()
     {
         if (instance == null)
@@ -61,7 +66,8 @@ public class FilmViewWrapper {
      * @param parent родитель
      * @return представление с картинкой и описанием
      */
-    public View GetFilmViewDetails(FilmDescription film, final Context parent)
+    @NonNull
+    public View GetFilmViewDetails(@NonNull FilmDescription film, final Context parent)
     {
         LinearLayout ret = new LinearLayout(parent);
         ret.setOrientation(LinearLayout.VERTICAL);
@@ -79,7 +85,8 @@ public class FilmViewWrapper {
      * @param parent родительский элемент
      * @return Список View
      */
-    public List<View> GetFilmViews(Context parent, View.OnClickListener detailClickListener)
+    @NonNull
+    public List<View> GetFilmViews(@NonNull Context parent, View.OnClickListener detailClickListener)
     {
         List<View> views = new ArrayList<>();
         for (FilmDescription film: storageInstance.getFilms()){
@@ -88,7 +95,8 @@ public class FilmViewWrapper {
         return views;
     }
 
-    public String GetFilmUrl(FilmDescription film)
+    @NonNull
+    public String GetFilmUrl(@NonNull FilmDescription film)
     {
         return String.format("<a href=\"%s\">%s</a>",film.Url, film.Name);
     }
@@ -100,7 +108,8 @@ public class FilmViewWrapper {
      * @param detailClickListener действие по нажатии кнопки "детали"
      * @return представление с картинкой и описанием
      */
-    private View GetFilmView(FilmDescription film, final Context parent, View.OnClickListener detailClickListener)
+    @NonNull
+    private View GetFilmView(@NonNull FilmDescription film, @NonNull final Context parent, View.OnClickListener detailClickListener)
     {
         LinearLayout ret = new LinearLayout(parent);
         ret.setOrientation(LinearLayout.HORIZONTAL);
@@ -151,7 +160,8 @@ public class FilmViewWrapper {
     //endregion
 
     //region wrappers
-    private View GetGenreChips(FilmDescription film, Context parent) {
+    @NonNull
+    private View GetGenreChips(@NonNull FilmDescription film, Context parent) {
         ChipGroup ret = new ChipGroup(parent); // TODO: добавиить отступы
         ret.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
         for (FilmDescription.FilmGenre filmGenre: film.Genre) {
@@ -162,7 +172,8 @@ public class FilmViewWrapper {
         return ret;
     }
 
-    private ImageView GetPicView(FilmDescription film, Context parent)
+    @NonNull
+    private ImageView GetPicView(@NonNull FilmDescription film, Context parent)
     {
         ImageView pic = new ImageView(parent);
         pic.setLayoutParams(new LinearLayout.LayoutParams(200, 200));
@@ -172,7 +183,8 @@ public class FilmViewWrapper {
         return pic;
     }
 
-    private TextView GetDescView(FilmDescription film, Context parent)
+    @NonNull
+    private TextView GetDescView(@NonNull FilmDescription film, Context parent)
     {
         TextView description = new TextView(parent);
         description.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, 200, 3.0F));

@@ -54,7 +54,7 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
         film_root_layout.removeAllViews();
         for(View v : FilmViewWrapper.getInstance().GetFilmViews(getContext(), new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(@NonNull View v) {
                 setSelectedFilmTag(v.getTag().toString());
                 gotoDetailFragment();
             }}))
@@ -121,7 +121,7 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
     }
 
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
 
         if (id == R.id.item_about)

@@ -2,6 +2,9 @@ package com.silicium.otusfilmcatalog.logic.controller;
 
 import android.graphics.BitmapFactory;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.silicium.otusfilmcatalog.App;
 import com.silicium.otusfilmcatalog.R;
 import com.silicium.otusfilmcatalog.logic.model.FilmDescription;
@@ -12,10 +15,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class FilmDescriptionStorage {
+    @NonNull
     private final Map<String, FilmDescription> Films;
+    @NonNull
     private final MetricsStorage metricsStorage;
 
+    @Nullable
     private static volatile FilmDescriptionStorage instance = null;
+    @Nullable
     public static FilmDescriptionStorage getInstance()
     {
         if (instance == null)
@@ -63,6 +70,7 @@ public class FilmDescriptionStorage {
      * Список ID фильмов
      * @return список ключей доступных в базе фильмов
      */
+    @NonNull
     public Collection<FilmDescription> getFilms()
     {
         return Films.values();
@@ -73,6 +81,7 @@ public class FilmDescriptionStorage {
         return Films.containsKey(ID);
     }
 
+    @Nullable
     public FilmDescription GetFilmByID(String ID) {
         try {
             return Films.get(ID);
@@ -83,7 +92,7 @@ public class FilmDescriptionStorage {
         }
     }
 
-    public void addFilm(FilmDescription film) {
+    public void addFilm(@NonNull FilmDescription film) {
         Films.put(film.ID, film);
         metricsStorage.Increment(MetricsStorage.TOTAL_TAG);
         if (film.Genre.contains(FilmDescription.FilmGenre.cartoon))

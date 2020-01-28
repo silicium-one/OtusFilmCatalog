@@ -1,5 +1,7 @@
 package com.silicium.otusfilmcatalog.logic.controller;
 
+import androidx.annotation.NonNull;
+
 import com.silicium.otusfilmcatalog.logic.model.Metric;
 import com.silicium.otusfilmcatalog.ui.widget.MetricWidgetUtils;
 
@@ -13,6 +15,7 @@ class MetricsStorage {
     final static String SHARED_TAG = "shared"; // количество фильмов, которыми поделились
     final static String CARTOON_TAG = "cartoon"; // мультфильмов
 
+    @NonNull
     private final HashSet<Metric> metrics;
 
     MetricsStorage() {

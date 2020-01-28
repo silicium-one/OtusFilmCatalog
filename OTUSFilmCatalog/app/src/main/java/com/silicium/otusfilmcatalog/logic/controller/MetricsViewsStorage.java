@@ -1,16 +1,20 @@
 package com.silicium.otusfilmcatalog.logic.controller;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.silicium.otusfilmcatalog.logic.model.MetricView;
 
 import java.util.HashSet;
 
 public class MetricsViewsStorage {
+    @NonNull
     private final HashSet<MetricView> metricsViews;
 
+    @Nullable
     private static volatile MetricsViewsStorage instance = null;
 
+    @Nullable
     public static MetricsViewsStorage getInstance() {
         if (instance == null)
             synchronized (MetricsViewsStorage.class) {

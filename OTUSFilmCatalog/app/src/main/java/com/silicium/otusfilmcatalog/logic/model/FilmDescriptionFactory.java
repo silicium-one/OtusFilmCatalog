@@ -10,6 +10,7 @@ import com.silicium.otusfilmcatalog.R;
 import java.util.UUID;
 
 public class FilmDescriptionFactory {
+    @NonNull
     public static FilmDescription GetNewFilmDescription ()
     {
         FilmDescription ret = new FilmDescription(UUID.randomUUID().toString());
@@ -22,6 +23,7 @@ public class FilmDescriptionFactory {
         return ret;
     }
 
+    @NonNull
     public static FilmDescription GetFilmDescription (String ID)
     {
         FilmDescription ret = new FilmDescription(ID);
@@ -34,6 +36,7 @@ public class FilmDescriptionFactory {
         return ret;
     }
 
+    @NonNull
     public static FilmDescription GetStubFilmDescription ()
     {
         FilmDescription ret = new FilmDescription("");

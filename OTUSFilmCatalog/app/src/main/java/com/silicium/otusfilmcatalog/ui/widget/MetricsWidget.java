@@ -24,7 +24,7 @@ public class MetricsWidget extends AppWidgetProvider {
 
     private final static String WIDGET_CLICK = "MetricsWidget.widget_click";
 
-    static void updateAppWidget(Context context, @NonNull AppWidgetManager appWidgetManager,
+    static void updateAppWidget(@NonNull Context context, @NonNull AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
 
         Boolean totalVisibility = MetricWidgetUtils.loadBoolean(context, appWidgetId, "total.visibility");
@@ -64,7 +64,7 @@ public class MetricsWidget extends AppWidgetProvider {
     }
 
     @Override
-    public void onUpdate(Context context, AppWidgetManager appWidgetManager, @NonNull int[] appWidgetIds) {
+    public void onUpdate(@NonNull Context context, @NonNull AppWidgetManager appWidgetManager, @NonNull int[] appWidgetIds) {
         // There may be multiple widgets active, so update all of them
         for (int appWidgetId : appWidgetIds) {
             updateAppWidget(context, appWidgetManager, appWidgetId);
@@ -72,7 +72,7 @@ public class MetricsWidget extends AppWidgetProvider {
     }
 
     @Override
-    public void onDeleted(Context context, @NonNull int[] appWidgetIds) {
+    public void onDeleted(@NonNull Context context, @NonNull int[] appWidgetIds) {
         MetricsViewsStorage instance = MetricsViewsStorage.getInstance();
         // When the user deletes the widget, delete the preference associated with it.
         for (int appWidgetId : appWidgetIds) {
@@ -94,7 +94,7 @@ public class MetricsWidget extends AppWidgetProvider {
     }
 
     @Override
-    public void onReceive(Context context, @NonNull Intent intent) {
+    public void onReceive(@NonNull Context context, @NonNull Intent intent) {
         if (WIDGET_CLICK.equals(intent.getAction())) {
             Intent intentSending = new Intent(context, RootActivity.class);
             intentSending.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | FLAG_ACTIVITY_CLEAR_TOP);

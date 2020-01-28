@@ -31,8 +31,10 @@ import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
 
 public class DetailFragment extends FragmentWithCallback implements IOnBackPressedListener{
 
+    @Nullable
     private String filmID;
 
+    @Nullable
     public String getFilmID() {
         return filmID;
     }
@@ -48,6 +50,7 @@ public class DetailFragment extends FragmentWithCallback implements IOnBackPress
 
     private DisappearingSnackCircularProgressBar snackProgressBar;
 
+    @NonNull
     public static DetailFragment newInstance(String text) {
         DetailFragment fragment = new DetailFragment();
 
@@ -140,7 +143,7 @@ public class DetailFragment extends FragmentWithCallback implements IOnBackPress
         toolbar.inflateMenu(R.menu.fragment_detail_menu);
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
-            public boolean onMenuItemClick(MenuItem item) {
+            public boolean onMenuItemClick(@NonNull MenuItem item) {
                 if (item.getItemId() == R.id.detail_share)
                 {
                     onShareBtnClick();
