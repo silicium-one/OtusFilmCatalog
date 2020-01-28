@@ -4,4 +4,5 @@
     <integer name="foolproof_time_ms">3000</integer>
     <integer name="smooth_transition_time_ms">1000</integer>
     <integer name="element_adding_animation_time_ms">2000</integer>
+    <integer name="element_shake_animation_time_ms">500</integer>
 </resources>
