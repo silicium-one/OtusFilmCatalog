@@ -28,7 +28,7 @@ public class MetricWidgetUtils {
         return prefs.getBoolean(PREF_PREFIX_KEY + appWidgetId + key, false);
     }
 
-    static void saveInteger(@NonNull Context context, int appWidgetId, String key, Integer value) {
+    private static void saveInteger(@NonNull Context context, int appWidgetId, String key, Integer value) {
         SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, 0).edit();
         prefs.putInt(PREF_PREFIX_KEY + appWidgetId + key, value);
         prefs.apply();

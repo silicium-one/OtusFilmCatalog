@@ -17,8 +17,8 @@ import com.silicium.otusfilmcatalog.logic.controller.MetricsViewsStorage;
  */
 public class MetricsWidgetConfigureActivity extends Activity {
 
-    int mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
-    View.OnClickListener mOnClickListener = new View.OnClickListener() {
+    private int mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
+    private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
         public void onClick(View v) {
             final Context context = MetricsWidgetConfigureActivity.this;
 
@@ -42,10 +42,6 @@ public class MetricsWidgetConfigureActivity extends Activity {
             finish();
         }
     };
-
-    public MetricsWidgetConfigureActivity() {
-        super();
-    }
 
     @Override
     public void onCreate(Bundle icicle) {

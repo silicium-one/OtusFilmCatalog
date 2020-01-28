@@ -7,7 +7,7 @@ import com.silicium.otusfilmcatalog.logic.model.MetricView;
 import java.util.HashSet;
 
 public class MetricsViewsStorage {
-    private HashSet<MetricView> metricsViews;
+    private final HashSet<MetricView> metricsViews;
 
     private static volatile MetricsViewsStorage instance = null;
 

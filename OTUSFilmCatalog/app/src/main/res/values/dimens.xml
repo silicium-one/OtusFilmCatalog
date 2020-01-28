@@ -1,13 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- general -->
-    <dimen name="padding_8x">64dp</dimen>
-    <dimen name="padding_5x">40dp</dimen>
-    <dimen name="padding_4x">32dp</dimen>
-    <dimen name="padding_3x">24dp</dimen>
-    <dimen name="padding_2x">16dp</dimen>
-    <dimen name="padding_1x">8dp</dimen>
-
     <!-- activity_root -->
     <dimen name="chooserSize_landscapeMode">300dp</dimen>
 
@@ -28,7 +20,7 @@
     <dimen name="bottomSheet_height">340dp</dimen>
     <dimen name="bottomSheet_header">40dp</dimen>
     <dimen name="bottomSheet_checkboxSize">40dp</dimen>
-    <dimen name="paddingLeft">10dp</dimen>
+    <dimen name="paddingStart">10dp</dimen>
 
     <!-- fragment_main -->
     <dimen name="padding">10dp</dimen>

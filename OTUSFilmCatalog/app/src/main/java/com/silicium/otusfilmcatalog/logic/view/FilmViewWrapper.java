@@ -21,7 +21,7 @@ import java.util.List;
 
 public class FilmViewWrapper {
 
-    private FilmDescriptionStorage storageInstance = FilmDescriptionStorage.getInstance();
+    private final FilmDescriptionStorage storageInstance = FilmDescriptionStorage.getInstance();
 
     //region  singleton
     private static volatile FilmViewWrapper instance = null;
@@ -120,7 +120,7 @@ public class FilmViewWrapper {
             @Override
             public void onClick(final View v) {
                 ObjectAnimator fadeOut = ObjectAnimator.ofFloat(v, View.ALPHA,1, 0);
-                fadeOut.setDuration(parent.getResources().getInteger(R.integer.smooth_transistion_time_ms));
+                fadeOut.setDuration(parent.getResources().getInteger(R.integer.smooth_transition_time_ms));
                 fadeOut.addListener(new Animator.AnimatorListener() {
                     @Override
                     public void onAnimationStart(Animator animator) {

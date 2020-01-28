@@ -3,7 +3,7 @@ package com.silicium.otusfilmcatalog.logic.model;
 public class MetricView {
     public final String metricTag;
     public final String metricName;
-    //public Boolean visibility; redundand
+    //public Boolean visibility; redundant
 
     public MetricView(String metricTag, String metricName) {
         this.metricTag = metricTag;

@@ -21,7 +21,7 @@ import com.silicium.otusfilmcatalog.logic.model.FragmentWithCallback;
 import com.silicium.otusfilmcatalog.logic.model.IOnBackPressedListener;
 import com.silicium.otusfilmcatalog.ui.cuctomcomponents.AddMoreDialogFragment;
 import com.silicium.otusfilmcatalog.ui.cuctomcomponents.DisappearingSnackCircularProgressBar;
-import com.silicium.otusfilmcatalog.ui.cuctomcomponents.UiComponets;
+import com.silicium.otusfilmcatalog.ui.cuctomcomponents.UiComponents;
 import com.tingyik90.snackprogressbar.SnackProgressBar;
 import com.tingyik90.snackprogressbar.SnackProgressBarLayout;
 import com.tingyik90.snackprogressbar.SnackProgressBarManager;
@@ -110,7 +110,7 @@ public class AddFragment extends FragmentWithCallback implements IOnBackPressedL
 
     private void onItemClick(View view) {
         Toast.makeText(view.getContext(),R.string.under_construction__hint_string,Toast.LENGTH_SHORT).show();
-        UiComponets.showUnderConstructionSnackBar(rootLayout);
+        UiComponents.showUnderConstructionSnackBar(rootLayout);
     }
 
 }

@@ -3,17 +3,14 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/about_help"
         android:icon="@drawable/ic_help"
         android:title="@string/about_help_string"/>
 
     <item
-        android:id="@+id/about_legal"
         android:icon="@drawable/ic_legal"
         android:title="@string/about_legal_string"/>
 
     <item
-        android:id="@+id/about_ver"
         android:icon="@drawable/ic_tech_details"
         android:title="@string/about_tech_details_string"
         app:showAsAction="always"/>

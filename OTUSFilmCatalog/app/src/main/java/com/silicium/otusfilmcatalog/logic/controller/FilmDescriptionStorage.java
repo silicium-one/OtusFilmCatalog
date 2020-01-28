@@ -12,8 +12,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class FilmDescriptionStorage {
-    private Map<String, FilmDescription> Films;
-    private MetricsStorage metricsStorage;
+    private final Map<String, FilmDescription> Films;
+    private final MetricsStorage metricsStorage;
 
     private static volatile FilmDescriptionStorage instance = null;
     public static FilmDescriptionStorage getInstance()

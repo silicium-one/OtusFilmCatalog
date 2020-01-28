@@ -6,8 +6,8 @@ import android.widget.Toast;
 import com.google.android.material.snackbar.Snackbar;
 import com.silicium.otusfilmcatalog.R;
 
-public class UiComponets {
-    private UiComponets() {
+public class UiComponents {
+    private UiComponents() {
     }
 
     public static void showUnderConstructionSnackBar(View v)

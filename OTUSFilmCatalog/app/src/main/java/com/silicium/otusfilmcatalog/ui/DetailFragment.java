@@ -38,7 +38,9 @@ public class DetailFragment extends FragmentWithCallback implements IOnBackPress
     }
 
     private FilmDescription film;
+    @SuppressWarnings({"FieldCanBeLocal", "unused"})
     private CheckBox film_is_liked;
+    @SuppressWarnings({"FieldCanBeLocal", "unused"})
     private EditText film_comment;
     public final static String FRAGMENT_TAG = DetailFragment.class.getSimpleName();
 
@@ -108,7 +110,7 @@ public class DetailFragment extends FragmentWithCallback implements IOnBackPress
                             float scaleFactor = 0.1F;
                             more_header.animate().y(-(oldHeight * (1 - scaleFactor) / 2F)).scaleY(scaleFactor).start();
                         } else if (newState == BottomSheetBehavior.STATE_COLLAPSED) {
-                            more_header.animate().setDuration(getResources().getInteger(R.integer.smooth_transistion_time_ms)).y(0).scaleY(1F).start();
+                            more_header.animate().setDuration(getResources().getInteger(R.integer.smooth_transition_time_ms)).y(0).scaleY(1F).start();
                         }
                     }
 

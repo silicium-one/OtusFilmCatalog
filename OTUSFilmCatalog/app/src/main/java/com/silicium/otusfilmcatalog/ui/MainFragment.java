@@ -30,7 +30,6 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
     private String selectedFilmTag = ""; // TODO: оптимизировать на доступ по индексу
     public final static String FRAGMENT_TAG = MainFragment.class.getSimpleName();
     private LinearLayout film_root_layout;
-    private FloatingActionButton fab;
     private View rootView;
 
     public MainFragment()
@@ -51,7 +50,6 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
         rootView = view;
 
         film_root_layout = view.findViewById(R.id.film_root_layout);
-        fab = view.findViewById(R.id.fab);
 
         film_root_layout.removeAllViews();
         for(View v : FilmViewWrapper.getInstance().GetFilmViews(getContext(), new View.OnClickListener() {

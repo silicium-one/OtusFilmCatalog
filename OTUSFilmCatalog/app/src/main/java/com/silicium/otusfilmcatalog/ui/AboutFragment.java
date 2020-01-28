@@ -20,7 +20,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.silicium.otusfilmcatalog.R;
 import com.silicium.otusfilmcatalog.logic.model.FragmentWithCallback;
-import com.silicium.otusfilmcatalog.ui.cuctomcomponents.UiComponets;
+import com.silicium.otusfilmcatalog.ui.cuctomcomponents.UiComponents;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -29,10 +29,6 @@ public class AboutFragment extends FragmentWithCallback implements NavigationVie
 
     public final static String FRAGMENT_TAG = AboutFragment.class.getSimpleName();
     private View rootView;
-
-    public AboutFragment() {
-        // Required empty public constructor
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -51,7 +47,7 @@ public class AboutFragment extends FragmentWithCallback implements NavigationVie
         bnv.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                UiComponets.showUnderConstructionSnackBar(bnv);
+                UiComponents.showUnderConstructionSnackBar(bnv);
                 return false;
             }
         });

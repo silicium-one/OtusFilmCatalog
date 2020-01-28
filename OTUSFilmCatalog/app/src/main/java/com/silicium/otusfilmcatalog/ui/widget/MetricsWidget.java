@@ -22,7 +22,7 @@ import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
  */
 public class MetricsWidget extends AppWidgetProvider {
 
-    final static String WIDGET_CLICK = "MetricsWidget.widget_click";
+    private final static String WIDGET_CLICK = "MetricsWidget.widget_click";
 
     static void updateAppWidget(Context context, @NonNull AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
