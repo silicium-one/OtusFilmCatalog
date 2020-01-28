@@ -42,6 +42,16 @@ class FilmItemViewHolder extends RecyclerView.ViewHolder {
     }
 
     void bind(@NonNull FilmDescription item, boolean isSelected, boolean isMultiselectMode, boolean isChecked, CompoundButton.OnCheckedChangeListener favoriteStateChangedListener, View.OnClickListener detailBtnClickListener, View.OnLongClickListener itemLongClickListener, @Nullable final CompoundButton.OnCheckedChangeListener checkedStateChangedListener) {
+
+        // во время привязки срабатывание старых callback абсолютно лишнее дело.
+        // В частности вызывает срабатывани IllegalStateException в FileItemAdapter.removeItemByID, если элемент ещё трясётся
+        // и мы снимаем звёздочку с элемента, а потом сразу переключаемся к виду "Избранное"
+
+        film_favorite_CheckBox.setOnCheckedChangeListener(null);
+        film_detail_Button.setOnClickListener(null);
+        itemView.setOnLongClickListener(null);
+        item_selected_CheckBox.setOnCheckedChangeListener(null);
+
         film_cover_preview_imageView.setImageBitmap(item.CoverPreview);
         film_name_TextView.setText(item.Name);
         film_description_TextView.setText(item.Description);
@@ -50,10 +60,6 @@ class FilmItemViewHolder extends RecyclerView.ViewHolder {
         film_favorite_CheckBox.setTag(item.ID);
         film_detail_Button.setTag(item.ID);
         itemView.setTag(item.ID);
-
-        film_favorite_CheckBox.setOnCheckedChangeListener(favoriteStateChangedListener);
-        film_detail_Button.setOnClickListener(detailBtnClickListener);
-        itemView.setOnLongClickListener(itemLongClickListener);
 
         this.isSelected = isSelected;
         if (isMultiselectMode) {
@@ -64,6 +70,10 @@ class FilmItemViewHolder extends RecyclerView.ViewHolder {
             item_selected_CheckBox.setChecked(false);
         }
         resolveRootItemBackgroundColor();
+
+        film_favorite_CheckBox.setOnCheckedChangeListener(favoriteStateChangedListener);
+        film_detail_Button.setOnClickListener(detailBtnClickListener);
+        itemView.setOnLongClickListener(itemLongClickListener);
 
         item_selected_CheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
