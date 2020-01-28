@@ -1,5 +1,8 @@
 package com.silicium.otusfilmcatalog.ui;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -62,9 +65,55 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
     @SuppressLint("RestrictedApi")
     private void setMultiselectProcessingMode(boolean isMultiselect) {
         filmItemAdapter.setMultiselectMode(isMultiselect);
-        int visibility = isMultiselect ? View.VISIBLE : View.GONE;
-        fab_del.setVisibility(visibility);
-        fab_manipulate_favorites.setVisibility(visibility);
+        if (isMultiselect) { //TODO: поискать возможност анимации одной цепочкой
+            ObjectAnimator del_fadeIn = ObjectAnimator.ofFloat(fab_del, View.ALPHA, 0, 1).setDuration(getResources().getInteger(R.integer.smooth_transition_time_ms));
+            final ObjectAnimator fav_fadeIn = ObjectAnimator.ofFloat(fab_manipulate_favorites, View.ALPHA, 0, 1).setDuration(getResources().getInteger(R.integer.smooth_transition_time_ms));
+
+            del_fadeIn.addListener(new AnimatorListenerAdapter() {
+
+                @Override
+                public void onAnimationStart(Animator animation) {
+                    fab_del.setVisibility(View.VISIBLE);
+                }
+
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    fav_fadeIn.start();
+                }
+            });
+
+            fav_fadeIn.addListener(new AnimatorListenerAdapter() {
+
+                @Override
+                public void onAnimationStart(Animator animation) {
+                    fab_manipulate_favorites.setVisibility(View.VISIBLE);
+                }
+            });
+
+            del_fadeIn.start();
+        } else { //TODO: поискать возможност анимации одной цепочкой
+            final ObjectAnimator del_fadeOut = ObjectAnimator.ofFloat(fab_del, View.ALPHA, 1, 0).setDuration(getResources().getInteger(R.integer.smooth_transition_time_ms));
+            ObjectAnimator fav_fadeOut = ObjectAnimator.ofFloat(fab_manipulate_favorites, View.ALPHA, 1, 0).setDuration(getResources().getInteger(R.integer.smooth_transition_time_ms));
+
+            fav_fadeOut.addListener(new AnimatorListenerAdapter() {
+
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    fab_manipulate_favorites.setVisibility(View.GONE);
+                    del_fadeOut.start();
+                }
+            });
+
+            del_fadeOut.addListener(new AnimatorListenerAdapter() {
+
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    fab_del.setVisibility(View.GONE);
+                }
+            });
+
+            fav_fadeOut.start();
+        }
     }
 
     private SwipeProcessor swipeCallback = new SwipeProcessor(new IItemTouchHelperAdapter() {
