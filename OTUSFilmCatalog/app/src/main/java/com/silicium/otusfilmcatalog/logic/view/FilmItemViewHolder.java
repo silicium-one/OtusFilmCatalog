@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.silicium.otusfilmcatalog.R;
@@ -38,16 +39,9 @@ class FilmItemViewHolder extends RecyclerView.ViewHolder {
         film_description_TextView = itemView.findViewById(R.id.film_description_TextView);
         film_favorite_CheckBox = itemView.findViewById(R.id.film_favorite_CheckBox);
         film_detail_Button = itemView.findViewById(R.id.film_detail_Button);
-
-        item_selected_CheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                resolveRootItemBackgroundColor();
-            }
-        });
     }
 
-    void bind(@NonNull FilmDescription item, boolean isSelected, boolean isMultiselectMode, boolean isChecked, CompoundButton.OnCheckedChangeListener favoriteStateChangedListener, View.OnClickListener detailBtnClickListener, View.OnLongClickListener itemLongClickListener) {
+    void bind(@NonNull FilmDescription item, boolean isSelected, boolean isMultiselectMode, boolean isChecked, CompoundButton.OnCheckedChangeListener favoriteStateChangedListener, View.OnClickListener detailBtnClickListener, View.OnLongClickListener itemLongClickListener, @Nullable final CompoundButton.OnCheckedChangeListener checkedStateChangedListener) {
         film_cover_preview_imageView.setImageBitmap(item.CoverPreview);
         film_name_TextView.setText(item.Name);
         film_description_TextView.setText(item.Description);
@@ -70,6 +64,16 @@ class FilmItemViewHolder extends RecyclerView.ViewHolder {
             item_selected_CheckBox.setChecked(false);
         }
         resolveRootItemBackgroundColor();
+
+        item_selected_CheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                resolveRootItemBackgroundColor();
+                if (checkedStateChangedListener != null) {
+                    checkedStateChangedListener.onCheckedChanged(buttonView, isChecked);
+                }
+            }
+        });
     }
 
     private void resolveRootItemBackgroundColor() {

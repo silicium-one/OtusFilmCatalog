@@ -117,6 +117,16 @@ public class FilmItemAdapter extends androidx.recyclerview.widget.RecyclerView.A
         this.itemLongClickListener = itemLongClickListener;
     }
 
+    public List<String> getCheckedIDs()
+    {
+        List<String> ret = new ArrayList<>();
+        for (FilmItemData filmItemData: filmsItemsData) {
+            if (filmItemData.isChecked)
+                ret.add(filmItemData.filmID);
+        }
+        return ret;
+    }
+
     /**
      * Called when RecyclerView needs a new {@link RecyclerView.ViewHolder} of the given type to represent
      * an item.
@@ -164,10 +174,15 @@ public class FilmItemAdapter extends androidx.recyclerview.widget.RecyclerView.A
      * @param position The position of the item within the adapter's data set.
      */
     @Override
-    public void onBindViewHolder(@NonNull FilmItemViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull FilmItemViewHolder holder, final int position) {
         String currentTag = filmsItemsData.get(position).filmID;
         boolean isChecked = filmsItemsData.get(position).isChecked;
-        holder.bind(FilmDescriptionStorage.getInstance().GetFilmByID(currentTag), currentTag.equals(selectedFilmTag), isMultiselectMode(), isChecked, favoriteStateChangedListener, detailBtnClickListener, itemLongClickListener);
+        holder.bind(FilmDescriptionStorage.getInstance().GetFilmByID(currentTag), currentTag.equals(selectedFilmTag), isMultiselectMode(), isChecked, favoriteStateChangedListener, detailBtnClickListener, itemLongClickListener, new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                filmsItemsData.get(position).isChecked = isChecked;
+            }
+        });
     }
 
     /**
@@ -264,8 +279,12 @@ public class FilmItemAdapter extends androidx.recyclerview.widget.RecyclerView.A
         notifyItemRangeRemoved(0, size);
     }
 
-    public String getTagByPos(int position) {
+    public String getFilmIDByPos(int position) {
         return filmsItemsData.get(position).filmID;
+    }
+
+    public int getPosByID(String filmID) {
+        return filmsItemsData.indexOf(new FilmItemData(filmID));
     }
 
     public boolean removeItemByID(String filmID) {

@@ -43,26 +43,30 @@ import com.tingyik90.snackprogressbar.SnackProgressBarManager;
 
 import org.jetbrains.annotations.Contract;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import jp.wasabeef.recyclerview.animators.SlideInUpAnimator;
 
 public class MainFragment extends FragmentWithCallback implements NavigationView.OnNavigationItemSelectedListener, IOnBackPressedListener {
-    private String selectedFilmTag = "";
     public final static String FRAGMENT_TAG = MainFragment.class.getSimpleName();
+    private String selectedFilmTag = "";
     private View rootView;
     private FilmItemAdapter filmItemAdapter;
     private DisappearingSnackCircularProgressBar snackProgressBar;
     private boolean isFavoritesOnly;
     private RecyclerView film_RecyclerView;
     private FloatingActionButton fab_del;
-    private FloatingActionButton fab_del_favorites;
+    private FloatingActionButton fab_manipulate_favorites;
 
     @SuppressLint("RestrictedApi")
     private void setMultiselectProcessingMode(boolean isMultiselect) {
         filmItemAdapter.setMultiselectMode(isMultiselect);
         int visibility = isMultiselect ? View.VISIBLE : View.GONE;
         fab_del.setVisibility(visibility);
-        fab_del_favorites.setVisibility(visibility);
+        fab_manipulate_favorites.setVisibility(visibility);
     }
+
     private SwipeProcessor swipeCallback = new SwipeProcessor(new IItemTouchHelperAdapter() {
         @Override
         public void onItemMove(int fromPosition, int toPosition) {
@@ -72,17 +76,19 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
         @Override
         public void onItemDismiss(int position) {
             if (isFavoritesOnly())
-                FilmDescriptionStorage.getInstance().GetFilmByID(filmItemAdapter.getTagByPos(position)).setFavorite(false);
+                FilmDescriptionStorage.getInstance().GetFilmByID(filmItemAdapter.getFilmIDByPos(position)).setFavorite(false);
             filmItemAdapter.onItemDismiss(position);
         }
     });
-
     private ItemTouchHelper swipeProcessingHelper = new ItemTouchHelper(swipeCallback);
+
+    private boolean doubleBackToExitPressedOnce = false;
 
     public MainFragment() {
         setRetainInstance(true);
     }
 
+    
     @Contract(pure = true)
     private boolean isFavoritesOnly() {
         return isFavoritesOnly;
@@ -187,11 +193,38 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
             }
         });
 
-        fab_del_favorites = view.findViewById(R.id.fab_del_favorites);
-        fab_del_favorites.setOnClickListener(new View.OnClickListener() {
+        fab_manipulate_favorites = view.findViewById(R.id.fab_manipulate_favorites);
+        fab_manipulate_favorites.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                UiComponents.showUnderConstructionSnackBar(v);
+                List<String> checkedIDs = filmItemAdapter.getCheckedIDs();
+                if (isFavoritesOnly()) {
+                    for (String filmID : checkedIDs) {
+                        FilmDescriptionStorage.getInstance().GetFilmByID(filmID).setFavorite(false);
+                        filmItemAdapter.removeItemByID(filmID);
+                    }
+
+                    if (filmItemAdapter.getItemCount() == 0)
+                        setMultiselectProcessingMode(false);
+                } else {
+                    List<String> favoriteIDs = new ArrayList<>();
+                    for (String filmID : checkedIDs) {
+                        if (FilmDescriptionStorage.getInstance().GetFilmByID(filmID).isFavorite())
+                            favoriteIDs.add(filmID);
+                    }
+
+                    if (favoriteIDs.size() == 0) { // в выбранных элементах избранных нет, надо добавить выбранные элементы в избранное
+                        for (String filmID : checkedIDs) {
+                            FilmDescriptionStorage.getInstance().GetFilmByID(filmID).setFavorite(true);
+                            filmItemAdapter.notifyItemChanged(filmItemAdapter.getPosByID(filmID));
+                        }
+                    } else { // надо удалить элементы из избранного
+                        for (String filmID : favoriteIDs) {
+                            FilmDescriptionStorage.getInstance().GetFilmByID(filmID).setFavorite(false);
+                            filmItemAdapter.notifyItemChanged(filmItemAdapter.getPosByID(filmID));
+                        }
+                    }
+                }
             }
         });
 
@@ -306,8 +339,6 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
-    private boolean doubleBackToExitPressedOnce = false;
 
     /**
      * Если вернуть ИСТИНА, то нажатие кнопки "назад" обрабтано. Если вернуть ЛОЖЬ, то требуется обработка выше по стэку.
