@@ -8,6 +8,8 @@ import com.silicium.otusfilmcatalog.App;
 import com.silicium.otusfilmcatalog.R;
 import com.silicium.otusfilmcatalog.logic.controller.MetricsStorage;
 
+import org.jetbrains.annotations.Contract;
+
 import java.util.UUID;
 
 public class FilmDescriptionFactory {
@@ -24,11 +26,13 @@ public class FilmDescriptionFactory {
         return ret;
     }
 
+    @Contract("_ -> new")
     @NonNull
     public static FilmDescription getFilmDescription(@NonNull String ID) {
         return new FilmDescription(ID, MetricsStorage.getMetricNotifier());
     }
 
+    @Contract(" -> new")
     @NonNull
     public static FilmDescription getStubFilmDescription() {
         return new FilmDescription("", MetricsStorage.getMetricNotifier());
