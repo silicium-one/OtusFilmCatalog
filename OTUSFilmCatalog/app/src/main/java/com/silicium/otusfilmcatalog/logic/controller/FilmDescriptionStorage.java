@@ -3,7 +3,6 @@ package com.silicium.otusfilmcatalog.logic.controller;
 import android.graphics.BitmapFactory;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 import com.silicium.otusfilmcatalog.App;
 import com.silicium.otusfilmcatalog.R;
@@ -16,7 +15,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class FilmDescriptionStorage {
-    private Map<String, FilmDescription> Films;
+    @NonNull
+    private final Map<String, FilmDescription> Films;
 
     private static volatile FilmDescriptionStorage instance = null;
 
@@ -56,7 +56,7 @@ public class FilmDescriptionStorage {
         addFilm(film3);
     }
 
-    @Nullable
+    @NonNull
     public static FilmDescriptionStorage getInstance() {
         if (instance == null)
             synchronized (FilmDescriptionStorage.class) {
@@ -70,6 +70,7 @@ public class FilmDescriptionStorage {
      * Список ID фильмов
      * @return список ключей доступных в базе фильмов
      */
+    @NonNull
     public Collection<String> getFilmsIDs()
     {
         return Films.keySet();
@@ -79,6 +80,7 @@ public class FilmDescriptionStorage {
      * Список ID фильмов из избранного списка
      * @return список ключей доступных в базе фильмов
      */
+    @NonNull
     public Collection<String> getFavoriteFilmsIDs()
     {
         Collection<String> ret = new ArrayList<>();
@@ -93,24 +95,25 @@ public class FilmDescriptionStorage {
      * @return список доступных в базе фильмов
      */
     @NonNull
-    public Collection<FilmDescription> getFilms() {
+    private Collection<FilmDescription> getFilms() {
         return Films.values();
     }
 
-    public boolean containsID(String ID) {
+    public boolean containsID(@NonNull String ID) {
         return Films.containsKey(ID);
     }
 
-    @Nullable
-    public FilmDescription getFilmByID(String ID) {
+    @NonNull
+    public FilmDescription getFilmByID(@NonNull String ID) {
         try {
-            return Films.get(ID);
+            FilmDescription ret = Films.get(ID);
+            return ret == null ? FilmDescriptionFactory.getStubFilmDescription() : ret;
         } catch (Exception ex) {
             return FilmDescriptionFactory.getStubFilmDescription();
         }
     }
 
-    public void addFilm(FilmDescription film) { //TODO: подумать о том, что бы максимально вынести генерацию метрик в FilmDescription
+    public void addFilm(@NonNull FilmDescription film) { //TODO: подумать о том, что бы максимально вынести генерацию метрик в FilmDescription
         Films.put(film.ID, film);
         MetricsStorage.getMetricNotifier().increment(MetricsStorage.TOTAL_TAG);
         if (film.Genre.contains(FilmDescription.FilmGenre.cartoon))

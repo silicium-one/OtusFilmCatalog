@@ -1,5 +1,6 @@
 package com.silicium.otusfilmcatalog.logic.view;
 
+import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,17 +24,13 @@ import java.util.List;
 
 public class FilmItemAdapter extends androidx.recyclerview.widget.RecyclerView.Adapter<FilmItemViewHolder> implements IItemTouchHelperAdapter {
     class FilmItemData {
+        @NonNull
         final String filmID;
         boolean isChecked;
 
-        FilmItemData(String filmID) {
+        FilmItemData(@NonNull String filmID) {
             this.filmID = filmID;
             this.isChecked = false;
-        }
-
-        FilmItemData(String filmID, boolean isChecked) {
-            this.filmID = filmID;
-            this.isChecked = isChecked;
         }
 
         /**
@@ -109,7 +106,7 @@ public class FilmItemAdapter extends androidx.recyclerview.widget.RecyclerView.A
 
     private boolean isMultiselectMode = false;
 
-    public FilmItemAdapter(LayoutInflater inflater, CompoundButton.OnCheckedChangeListener favoriteStateChangedListener, View.OnClickListener detailBtnClickListener, View.OnLongClickListener itemLongClickListener) { // TODO: нарушение принципа Single Responsibility, исправить
+    public FilmItemAdapter(@NonNull LayoutInflater inflater, @Nullable CompoundButton.OnCheckedChangeListener favoriteStateChangedListener, @Nullable View.OnClickListener detailBtnClickListener, @Nullable View.OnLongClickListener itemLongClickListener) { // TODO: нарушение принципа Single Responsibility, исправить
         this.inflater = inflater;
         this.filmsItemsData = new ArrayList<>();
         this.favoriteStateChangedListener = favoriteStateChangedListener;
@@ -117,6 +114,7 @@ public class FilmItemAdapter extends androidx.recyclerview.widget.RecyclerView.A
         this.itemLongClickListener = itemLongClickListener;
     }
 
+    @NonNull
     public List<String> getCheckedIDs()
     {
         List<String> ret = new ArrayList<>();
@@ -178,6 +176,7 @@ public class FilmItemAdapter extends androidx.recyclerview.widget.RecyclerView.A
         String currentTag = filmsItemsData.get(position).filmID;
         boolean isChecked = filmsItemsData.get(position).isChecked;
         holder.bind(FilmDescriptionStorage.getInstance().getFilmByID(currentTag), currentTag.equals(selectedFilmTag), isMultiselectMode(), isChecked, favoriteStateChangedListener, detailBtnClickListener, itemLongClickListener, new CompoundButton.OnCheckedChangeListener() {
+            @SuppressLint("SyntheticAccessor")
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 filmsItemsData.get(position).isChecked = isChecked;
@@ -224,7 +223,7 @@ public class FilmItemAdapter extends androidx.recyclerview.widget.RecyclerView.A
         return filmsItemsData.size();
     }
 
-    public void setSelectedFilmTag(String selectedFilmTag) {
+    public void setSelectedFilmTag(@NonNull String selectedFilmTag) {
         int prevPosition = filmsItemsData.indexOf(new FilmItemData(this.selectedFilmTag));
         this.selectedFilmTag = selectedFilmTag;
         int currentPosition = filmsItemsData.indexOf(new FilmItemData(this.selectedFilmTag));
@@ -267,8 +266,8 @@ public class FilmItemAdapter extends androidx.recyclerview.widget.RecyclerView.A
         notifyItemRemoved(position);
     }
 
-    public void addItem(String filmID){
-        FilmItemData item = new FilmItemData(filmID, false);
+    public void addItem(@NonNull String filmID){
+        FilmItemData item = new FilmItemData(filmID);
         filmsItemsData.add(item);
         notifyItemInserted(filmsItemsData.size()-1);
     }
@@ -279,21 +278,21 @@ public class FilmItemAdapter extends androidx.recyclerview.widget.RecyclerView.A
         notifyItemRangeRemoved(0, size);
     }
 
+    @NonNull
     public String getFilmIDByPos(int position) {
         return filmsItemsData.get(position).filmID;
     }
 
-    public int getPosByID(String filmID) {
+    public int getPosByID(@NonNull String filmID) {
         return filmsItemsData.indexOf(new FilmItemData(filmID));
     }
 
-    public boolean removeItemByID(String filmID) {
+    public void removeItemByID(@NonNull String filmID) {
         int pos = filmsItemsData.indexOf(new FilmItemData(filmID));
         if (pos == -1)
-            return false;
+            return;
 
         filmsItemsData.remove(pos);
         notifyItemRemoved(pos);
-        return true;
     }
 }

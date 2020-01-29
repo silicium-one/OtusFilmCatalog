@@ -73,6 +73,7 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
 
             del_fadeIn.addListener(new AnimatorListenerAdapter() {
 
+                @SuppressLint("SyntheticAccessor")
                 @Override
                 public void onAnimationStart(Animator animation) {
                     fab_del.setVisibility(View.VISIBLE);
@@ -86,6 +87,7 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
 
             fav_fadeIn.addListener(new AnimatorListenerAdapter() {
 
+                @SuppressLint("SyntheticAccessor")
                 @Override
                 public void onAnimationStart(Animator animation) {
                     fab_manipulate_favorites.setVisibility(View.VISIBLE);
@@ -99,6 +101,7 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
 
             fav_fadeOut.addListener(new AnimatorListenerAdapter() {
 
+                @SuppressLint("SyntheticAccessor")
                 @Override
                 public void onAnimationEnd(Animator animation) {
                     fab_manipulate_favorites.setVisibility(View.GONE);
@@ -108,6 +111,7 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
 
             del_fadeOut.addListener(new AnimatorListenerAdapter() {
 
+                @SuppressLint("SyntheticAccessor")
                 @Override
                 public void onAnimationEnd(Animator animation) {
                     fab_del.setVisibility(View.GONE);
@@ -118,12 +122,15 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
         }
     }
 
-    private SwipeProcessor swipeCallback = new SwipeProcessor(new IItemTouchHelperAdapter() {
+    private final SwipeProcessor swipeCallback = new SwipeProcessor(new IItemTouchHelperAdapter() {
+        @SuppressWarnings("unused")
+        @SuppressLint("SyntheticAccessor")
         @Override
         public void onItemMove(int fromPosition, int toPosition) {
             filmItemAdapter.onItemMove(fromPosition, toPosition);
         }
 
+        @SuppressLint("SyntheticAccessor")
         @Override
         public void onItemDismiss(int position) {
             if (isFavoritesOnly())
@@ -131,7 +138,7 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
             filmItemAdapter.onItemDismiss(position);
         }
     });
-    private ItemTouchHelper swipeProcessingHelper = new ItemTouchHelper(swipeCallback);
+    private final ItemTouchHelper swipeProcessingHelper = new ItemTouchHelper(swipeCallback);
 
     private boolean doubleBackToExitPressedOnce = false;
 
@@ -157,6 +164,7 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
     private void favoritesListMode() {
         swipeCallback.setSwipeDeletionPossible(true);
         film_RecyclerView.post(new Runnable() {
+            @SuppressLint("SyntheticAccessor")
             @Override
             public void run() {
                 filmItemAdapter.removeAllItems();
@@ -172,6 +180,7 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
     private void fullListMode() {
         swipeCallback.setSwipeDeletionPossible(false);
         film_RecyclerView.post(new Runnable() {
+            @SuppressLint("SyntheticAccessor")
             @Override
             public void run() {
                 filmItemAdapter.removeAllItems();
@@ -199,6 +208,7 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
 
         final BottomNavigationView bnv = view.findViewById(R.id.bottom_main_navigation);
         bnv.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @SuppressLint("SyntheticAccessor")
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 int id = menuItem.getItemId();
@@ -245,9 +255,10 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
 
         fab_manipulate_favorites = view.findViewById(R.id.fab_manipulate_favorites);
         fab_manipulate_favorites.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("SyntheticAccessor")
             @Override
             public void onClick(View v) {
-                List<String> checkedIDs = filmItemAdapter.getCheckedIDs();
+                @SuppressLint("SyntheticAccessor") List<String> checkedIDs = filmItemAdapter.getCheckedIDs();
                 if (isFavoritesOnly()) {
                     for (String filmID : checkedIDs) {
                         FilmDescriptionStorage.getInstance().getFilmByID(filmID).setFavorite(false);
@@ -278,9 +289,10 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
             }
         });
 
-        snackProgressBar = new DisappearingSnackCircularProgressBar(rootView, this,
+        snackProgressBar = new DisappearingSnackCircularProgressBar(rootView,
                 getString(R.string.backPressedCancelSelectionToastText),
                 new SnackProgressBarManager.OnDisplayListener() {
+                    @SuppressLint("SyntheticAccessor")
                     @Override
                     public void onDismissed(@NonNull SnackProgressBar snackProgressBar, int onDisplayId) {
                         doubleBackToExitPressedOnce = false;
@@ -293,7 +305,7 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
                     @Override
                     public void onLayoutInflated(@NonNull SnackProgressBarLayout snackProgressBarLayout, @NonNull FrameLayout overlayLayout, @NonNull SnackProgressBar snackProgressBar, int onDisplayId) {
                     }
-                });
+                }, this);
 
         film_RecyclerView = rootView.findViewById(R.id.film_RecyclerView);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(rootView.getContext(), RecyclerView.VERTICAL, false);
@@ -310,6 +322,7 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
         if (adapterCreationRequired) {
             filmItemAdapter = new FilmItemAdapter(LayoutInflater.from(getContext()),
                     new CompoundButton.OnCheckedChangeListener() {
+                        @SuppressLint("SyntheticAccessor")
                         @Override
                         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                             String filmID = buttonView.getTag().toString();
@@ -319,6 +332,7 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
                         }
                     },
                     new View.OnClickListener() {
+                        @SuppressLint("SyntheticAccessor")
                         @Override
                         public void onClick(View v) {
                             setSelectedFilmTag(v.getTag().toString());
@@ -326,6 +340,7 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
                         }
                     },
                     new View.OnLongClickListener() {
+                        @SuppressLint("SyntheticAccessor")
                         @Override
                         public boolean onLongClick(View v) {
                             setMultiselectProcessingMode(true);
@@ -357,12 +372,13 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
             Toast.makeText(getContext(), R.string.noFilmByIDErr, Toast.LENGTH_LONG).show();
     }
 
+    @SuppressLint("KotlinPropertyAccess")
     @Contract(pure = true)
     private String getSelectedFilmTag() {
         return selectedFilmTag;
     }
 
-    public void setSelectedFilmTag(String selectedFilmTag) {
+    public void setSelectedFilmTag(@NonNull String selectedFilmTag) {
         filmItemAdapter.setSelectedFilmTag(selectedFilmTag);
         this.selectedFilmTag = selectedFilmTag;
     }

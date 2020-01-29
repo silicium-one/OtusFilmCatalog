@@ -1,8 +1,12 @@
 package com.silicium.otusfilmcatalog.logic.model;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 
 import androidx.annotation.NonNull;
+
+import com.silicium.otusfilmcatalog.App;
+import com.silicium.otusfilmcatalog.R;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -15,7 +19,7 @@ public class FilmDescription {
         cartoon,
     }
 
-    FilmDescription(String ID, @NonNull IMetricNotifier metricNotifier)
+    FilmDescription(@NonNull String ID, @NonNull IMetricNotifier metricNotifier)
     {
         this.ID = ID;
         this.metricNotifier = metricNotifier;
@@ -23,12 +27,18 @@ public class FilmDescription {
 
     private final IMetricNotifier metricNotifier;
 
+    @NonNull
     public final String ID;
-    public String Name;
-    public String Description;
-    public String Url;
-    public Bitmap Cover;
-    public Bitmap CoverPreview;
+    @NonNull
+    public String Name = "";
+    @NonNull
+    public String Description = "";
+    @NonNull
+    public String Url = "https://www.kinopoisk.ru/error";
+    @NonNull
+    public Bitmap Cover = BitmapFactory.decodeResource(App.getAppResources(), R.drawable.film_no_image);
+    @NonNull
+    public Bitmap CoverPreview = BitmapFactory.decodeResource(App.getAppResources(), R.drawable.film_no_image);
     public final Set<FilmGenre> Genre = new HashSet<>();
 
     private boolean isFavorite;

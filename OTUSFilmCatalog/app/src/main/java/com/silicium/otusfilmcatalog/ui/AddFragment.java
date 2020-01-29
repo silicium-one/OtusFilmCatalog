@@ -1,5 +1,6 @@
 package com.silicium.otusfilmcatalog.ui;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,10 +45,11 @@ public class AddFragment extends FragmentWithCallback implements IOnBackPressedL
 
         rootLayout = view.findViewById(R.id.fragment_add);
 
-        snackProgressBar = new DisappearingSnackCircularProgressBar(rootLayout, this,
+        snackProgressBar = new DisappearingSnackCircularProgressBar(rootLayout,
                 getString(R.string.backPressedToastText),
                 new SnackProgressBarManager.OnDisplayListener()
                 {
+                    @SuppressLint("SyntheticAccessor")
                     @Override
                     public void onDismissed(@NonNull SnackProgressBar snackProgressBar, int onDisplayId) {
                         doubleBackToExitPressedOnce = false;
@@ -58,11 +60,12 @@ public class AddFragment extends FragmentWithCallback implements IOnBackPressedL
 
                     @Override
                     public void onLayoutInflated(@NonNull SnackProgressBarLayout snackProgressBarLayout, @NonNull FrameLayout overlayLayout, @NonNull SnackProgressBar snackProgressBar, int onDisplayId) {}
-                });
+                }, this);
 
         Button btn = view.findViewById(R.id.button);
 
         btn.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("SyntheticAccessor")
             @Override
             public void onClick(View view) {
                 onSaveClick();
@@ -73,6 +76,7 @@ public class AddFragment extends FragmentWithCallback implements IOnBackPressedL
             @Override
             public boolean onLongClick(View view) {
                 AddMoreDialogFragment addPhotoBottomDialogFragment = new AddMoreDialogFragment(new View.OnClickListener() {
+                    @SuppressLint("SyntheticAccessor")
                     @Override
                     public void onClick(@NonNull View view) {
                         onItemClick(view);

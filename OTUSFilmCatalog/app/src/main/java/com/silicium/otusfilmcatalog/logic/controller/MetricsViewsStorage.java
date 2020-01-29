@@ -21,13 +21,14 @@ public class MetricsViewsStorage {
         metricsViews.add(new MetricView("cartoon", "Мультфильмы"));
     }
 
-    @Nullable
+    @NonNull
     public static MetricsViewsStorage getInstance() {
         if (instance == null)
             synchronized (MetricsViewsStorage.class) {
                 if (instance == null)
                     instance = new MetricsViewsStorage();
             }
+        //noinspection ConstantConditions
         return instance;
     }
 
@@ -41,7 +42,7 @@ public class MetricsViewsStorage {
     }
 
     @NonNull
-    public String getNameByTag(String tag) {
+    public String getNameByTag(@NonNull String tag) {
         for (MetricView element : metricsViews)
             if (element.metricTag.equals(tag))
                 return element.metricName;

@@ -1,5 +1,6 @@
 package com.silicium.otusfilmcatalog.ui.widget;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
@@ -8,6 +9,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
+
+import androidx.annotation.Nullable;
 
 import com.silicium.otusfilmcatalog.R;
 import com.silicium.otusfilmcatalog.logic.controller.MetricsViewsStorage;
@@ -19,6 +22,7 @@ public class MetricsWidgetConfigureActivity extends Activity {
 
     private int mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
     private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
+        @SuppressLint("SyntheticAccessor")
         public void onClick(View v) {
             final Context context = MetricsWidgetConfigureActivity.this;
 
@@ -44,8 +48,8 @@ public class MetricsWidgetConfigureActivity extends Activity {
     };
 
     @Override
-    public void onCreate(Bundle icicle) {
-        super.onCreate(icicle);
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
         // Set the result to CANCELED.  This will cause the widget host to cancel
         // out of the widget placement if the user presses the back button.

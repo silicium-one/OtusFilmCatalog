@@ -1,9 +1,11 @@
 package com.silicium.otusfilmcatalog.ui.cuctomcomponents;
 
+import android.annotation.SuppressLint;
 import android.os.CountDownTimer;
 import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.lifecycle.LifecycleOwner;
 
 import com.silicium.otusfilmcatalog.R;
@@ -20,7 +22,7 @@ public class DisappearingSnackCircularProgressBar {
     @NonNull
     private final CountDownTimer hideTimer;
 
-    public DisappearingSnackCircularProgressBar(@NonNull View providedView, LifecycleOwner lifecycleOwner, @NonNull String messageText, SnackProgressBarManager.OnDisplayListener callback)
+    public DisappearingSnackCircularProgressBar(@NonNull View providedView, @NonNull String messageText, @Nullable SnackProgressBarManager.OnDisplayListener callback, @Nullable LifecycleOwner lifecycleOwner)
     {
         this.duration = providedView.getResources().getInteger(R.integer.back_pressed_twice_await_time_ms);
 
@@ -43,10 +45,12 @@ public class DisappearingSnackCircularProgressBar {
 
         final int countDownInterval = duration / 100;
         hideTimer = new CountDownTimer(duration, countDownInterval) {
+            @SuppressLint("SyntheticAccessor")
             @Override
             public void onTick(long millisUntilFinished) {
                 snackProgressBarManager.setProgress((int)millisUntilFinished/countDownInterval, String.valueOf(1 + millisUntilFinished/1000));
             }
+            @SuppressLint("SyntheticAccessor")
             @Override
             public void onFinish() {
                 snackProgressBarManager.dismiss();

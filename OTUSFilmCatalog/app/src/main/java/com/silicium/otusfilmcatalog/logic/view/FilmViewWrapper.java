@@ -20,27 +20,28 @@ public class FilmViewWrapper {
     //region  singleton
     @Nullable
     private static volatile FilmViewWrapper instance = null;
-    @Nullable
+    @NonNull
     private final FilmDescriptionStorage storageInstance = FilmDescriptionStorage.getInstance();
 
     private FilmViewWrapper() {
         super();
     }
 
-    @Nullable
+    @NonNull
     public static FilmViewWrapper getInstance() {
         if (instance == null)
             synchronized (FilmViewWrapper.class) {
                 if (instance == null)
                     instance = new FilmViewWrapper();
             }
+        //noinspection ConstantConditions
         return instance;
     }
     //endregion
 
     ///region API
-    @Nullable
-    public FilmDescription getFilmByID(String ID) {
+    @NonNull
+    public FilmDescription getFilmByID(@NonNull String ID) {
         return storageInstance.getFilmByID(ID);
     }
 
@@ -50,7 +51,7 @@ public class FilmViewWrapper {
      * @param ID идентификатор фильма
      * @return "истина", если пристусвует и "ложь", если нет
      */
-    public boolean containsID(String ID) {
+    public boolean containsID(@NonNull String ID) {
         return storageInstance.containsID(ID);
     }
 
@@ -61,7 +62,8 @@ public class FilmViewWrapper {
      * @param parent родитель
      * @return представление с картинкой и описанием
      */
-    public View getFilmViewDetails(@NonNull FilmDescription film, final Context parent)
+    @NonNull
+    public View getFilmViewDetails(@NonNull FilmDescription film, final @Nullable Context parent)
     {
         LinearLayout ret = new LinearLayout(parent);
         ret.setOrientation(LinearLayout.VERTICAL);

@@ -49,10 +49,9 @@ public class MetricsStorage implements IMetricNotifier {
      * Увеличить метрику на 1 и оповестить наблюдателей
      *
      * @param tag ID метрики
-     * @return ИСТИНА, если метрика найдена, инача ЛОЖЬ
      */
     @Override
-    public void increment(String tag) {
+    public void increment(@NonNull String tag) {
         for (Metric metric : metrics) {
             if (metric.metricTag.equals(tag)) {
                 metric.value++;
@@ -66,10 +65,9 @@ public class MetricsStorage implements IMetricNotifier {
      * Уменьшить метрику на 1 и оповестить наблюдателей
      *
      * @param tag ID метрики
-     * @return ИСТИНА, если метрика найдена, инача ЛОЖЬ
      */
     @Override
-    public void decrement(String tag) {
+    public void decrement(@NonNull String tag) {
         for (Metric metric : metrics) {
             if (metric.metricTag.equals(tag)) {
                 metric.value--;

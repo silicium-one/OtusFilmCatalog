@@ -48,7 +48,7 @@ public class MetricWidgetUtils {
 
     //endregion
 
-    public static void notifyWidget(String tag, Integer value) {
+    public static void notifyWidget(@NonNull String tag, int value) {
         Context context = getApplication().getApplicationContext();
         Intent intent = new Intent(context, MetricsWidget.class);
         intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);

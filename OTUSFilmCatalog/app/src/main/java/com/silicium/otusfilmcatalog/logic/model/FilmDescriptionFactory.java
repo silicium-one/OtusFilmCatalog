@@ -25,29 +25,13 @@ public class FilmDescriptionFactory {
     }
 
     @NonNull
-    public static FilmDescription getFilmDescription(String ID) {
-        FilmDescription ret = new FilmDescription(ID, MetricsStorage.getMetricNotifier());
-
-        ret.Name = "";
-        ret.Description = "";
-        ret.Url = "https://www.kinopoisk.ru/error";
-        ret.Cover = BitmapFactory.decodeResource(App.getAppResources(), R.drawable.film_no_image);
-        ret.CoverPreview = BitmapFactory.decodeResource(App.getAppResources(), R.drawable.film_no_image);
-
-        return ret;
+    public static FilmDescription getFilmDescription(@NonNull String ID) {
+        return new FilmDescription(ID, MetricsStorage.getMetricNotifier());
     }
 
     @NonNull
     public static FilmDescription getStubFilmDescription() {
-        FilmDescription ret = new FilmDescription("", MetricsStorage.getMetricNotifier());
-
-        ret.Name = "";
-        ret.Description = "";
-        ret.Url = "https://www.kinopoisk.ru/error";
-        ret.Cover = BitmapFactory.decodeResource(App.getAppResources(), R.drawable.film_no_image);
-        ret.CoverPreview = BitmapFactory.decodeResource(App.getAppResources(), R.drawable.film_no_image);
-
-        return ret;
+        return new FilmDescription("", MetricsStorage.getMetricNotifier());
     }
 
     //todo: добавить работу с разными локалями

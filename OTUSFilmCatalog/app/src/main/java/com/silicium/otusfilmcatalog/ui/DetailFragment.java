@@ -1,5 +1,6 @@
 package com.silicium.otusfilmcatalog.ui;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -19,6 +20,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.silicium.otusfilmcatalog.R;
 import com.silicium.otusfilmcatalog.logic.model.FilmDescription;
+import com.silicium.otusfilmcatalog.logic.model.FilmDescriptionFactory;
 import com.silicium.otusfilmcatalog.logic.model.FragmentWithCallback;
 import com.silicium.otusfilmcatalog.logic.model.IOnBackPressedListener;
 import com.silicium.otusfilmcatalog.logic.view.FilmViewWrapper;
@@ -31,16 +33,16 @@ import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
 
 public class DetailFragment extends FragmentWithCallback implements IOnBackPressedListener{
 
-    @Nullable
-    private String filmID;
+    @NonNull
+    private String filmID = "";
 
-    @Nullable
+    @NonNull
     public String getFilmID() {
         return filmID;
     }
 
-    @Nullable
-    private FilmDescription film;
+    @NonNull
+    private FilmDescription film = FilmDescriptionFactory.getStubFilmDescription();
     @SuppressWarnings({"FieldCanBeLocal", "unused"})
     private CheckBox film_is_liked;
     @SuppressWarnings({"FieldCanBeLocal", "unused"})
@@ -52,7 +54,7 @@ public class DetailFragment extends FragmentWithCallback implements IOnBackPress
     private DisappearingSnackCircularProgressBar snackProgressBar;
 
     @NonNull
-    public static DetailFragment newInstance(String text) {
+    public static DetailFragment newInstance(@NonNull String text) {
         DetailFragment fragment = new DetailFragment();
 
         Bundle bundle = new Bundle();
@@ -72,7 +74,7 @@ public class DetailFragment extends FragmentWithCallback implements IOnBackPress
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         Bundle bundle = getArguments();
         if (bundle != null)
-            filmID = bundle.getString("filmID");
+            filmID = bundle.getString("filmID", "");
         setHasOptionsMenu(true);
         return inflater.inflate(R.layout.fragment_detail, container, false);
     }
@@ -124,10 +126,11 @@ public class DetailFragment extends FragmentWithCallback implements IOnBackPress
                 }
         );
 
-        snackProgressBar = new DisappearingSnackCircularProgressBar(rootView.findViewById(R.id.fragment_detail), this,
+        snackProgressBar = new DisappearingSnackCircularProgressBar(rootView.findViewById(R.id.fragment_detail),
                 getString(R.string.backPressedToastText),
                 new SnackProgressBarManager.OnDisplayListener()
         {
+            @SuppressLint("SyntheticAccessor")
             @Override
             public void onDismissed(@NonNull SnackProgressBar snackProgressBar, int onDisplayId) {
                 doubleBackToExitPressedOnce = false;
@@ -138,11 +141,12 @@ public class DetailFragment extends FragmentWithCallback implements IOnBackPress
 
             @Override
             public void onLayoutInflated(@NonNull SnackProgressBarLayout snackProgressBarLayout, @NonNull FrameLayout overlayLayout, @NonNull SnackProgressBar snackProgressBar, int onDisplayId) {}
-        });
+        }, this);
 
         Toolbar toolbar = view.findViewById(R.id.fragment_detail_toolbar);
         toolbar.inflateMenu(R.menu.fragment_detail_menu);
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @SuppressLint("SyntheticAccessor")
             @Override
             public boolean onMenuItemClick(@NonNull MenuItem item) {
                 if (item.getItemId() == R.id.detail_share)

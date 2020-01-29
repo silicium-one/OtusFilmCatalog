@@ -23,7 +23,7 @@ public class SwipeProcessor extends ItemTouchHelper.Callback {
     private boolean swipeBack = false;
     private RecyclerView.ViewHolder lastProcessedViewHolder = null;
 
-    public SwipeProcessor(IItemTouchHelperAdapter itemAdapter) {
+    public SwipeProcessor(@NonNull IItemTouchHelperAdapter itemAdapter) {
         this.itemAdapter = itemAdapter;
     }
 

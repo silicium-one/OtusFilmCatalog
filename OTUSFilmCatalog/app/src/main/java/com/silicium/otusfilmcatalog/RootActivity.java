@@ -26,7 +26,7 @@ import static android.content.res.Configuration.ORIENTATION_PORTRAIT;
 public class RootActivity extends AppCompatActivity implements IGotoFragmentCallback, FragmentManager.OnBackStackChangedListener {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_root);
 
@@ -67,7 +67,7 @@ public class RootActivity extends AppCompatActivity implements IGotoFragmentCall
     }
 
     @Override
-    public void gotoDetailFragment(String filmID) {
+    public void gotoDetailFragment(@NonNull String filmID) {
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.adds_fragment, DetailFragment.newInstance(filmID), DetailFragment.FRAGMENT_TAG)

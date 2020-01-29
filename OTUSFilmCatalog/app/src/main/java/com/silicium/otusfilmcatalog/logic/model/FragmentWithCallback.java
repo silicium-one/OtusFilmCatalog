@@ -1,13 +1,15 @@
 package com.silicium.otusfilmcatalog.logic.model;
 
-import androidx.annotation.Nullable;
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-public class FragmentWithCallback extends Fragment {
-    @Nullable
-    protected IGotoFragmentCallback gotoFragmentCallback = null;
+import com.silicium.otusfilmcatalog.RootActivity;
 
-    public void setGotoFragmentCallback(IGotoFragmentCallback callback) {
+public class FragmentWithCallback extends Fragment {
+    @NonNull
+    protected IGotoFragmentCallback gotoFragmentCallback = new RootActivity(); // будет уставновлен позже в setGotoFragmentCallback
+
+    public void setGotoFragmentCallback(@NonNull IGotoFragmentCallback callback) {
         gotoFragmentCallback = callback;
     }
 }

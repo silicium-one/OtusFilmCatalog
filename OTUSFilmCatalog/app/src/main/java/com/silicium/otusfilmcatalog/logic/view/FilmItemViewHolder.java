@@ -1,5 +1,6 @@
 package com.silicium.otusfilmcatalog.logic.view;
 
+import android.annotation.SuppressLint;
 import android.content.res.Resources;
 import android.util.TypedValue;
 import android.view.View;
@@ -17,12 +18,12 @@ import com.silicium.otusfilmcatalog.R;
 import com.silicium.otusfilmcatalog.logic.model.FilmDescription;
 
 class FilmItemViewHolder extends RecyclerView.ViewHolder {
-    private ImageView film_cover_preview_imageView;
-    private CheckBox item_selected_CheckBox;
-    private TextView film_name_TextView;
-    private TextView film_description_TextView;
-    private CheckBox film_favorite_CheckBox;
-    private Button film_detail_Button;
+    private final ImageView film_cover_preview_imageView;
+    private final CheckBox item_selected_CheckBox;
+    private final TextView film_name_TextView;
+    private final TextView film_description_TextView;
+    private final CheckBox film_favorite_CheckBox;
+    private final Button film_detail_Button;
     private boolean isSelected = false;
 
     boolean isChecked()
@@ -76,6 +77,7 @@ class FilmItemViewHolder extends RecyclerView.ViewHolder {
         itemView.setOnLongClickListener(itemLongClickListener);
 
         item_selected_CheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @SuppressLint("SyntheticAccessor")
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 resolveRootItemBackgroundColor();

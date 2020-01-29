@@ -41,7 +41,8 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@id/film_cover_preview_imageView"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="Название фильма Название фильма Название фильма " />
+        tools:text="Название фильма Название фильма Название фильма "
+        android:textIsSelectable="true" />
 
     <TextView
         android:id="@+id/film_description_TextView"
@@ -52,7 +53,8 @@
         app:layout_constraintEnd_toStartOf="@id/film_detail_Button"
         app:layout_constraintStart_toEndOf="@id/film_cover_preview_imageView"
         app:layout_constraintTop_toBottomOf="@id/film_name_TextView"
-        tools:text="Описание фильма Описание фильма Описание фильма Описание фильма Описание фильма Описание фильма Описание фильма " />
+        tools:text="Описание фильма Описание фильма Описание фильма Описание фильма Описание фильма Описание фильма Описание фильма "
+        android:textIsSelectable="true" />
 
     <CheckBox
         android:id="@+id/film_favorite_CheckBox"

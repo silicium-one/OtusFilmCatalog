@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="DuplicateStrings">
     <string name="shareTextBtnText">Пригласить друга на просмотр</string>
     <string name="shareFilmDlgTitle">Выберите, как пригласить на просмотр</string>
     <string name="isLikedCheckBoxText">Нравится</string>
@@ -14,7 +14,7 @@
     <string name="filmDescriptionAddHint">Краткое содержание</string>
     <string name="filmSaveBtnText">Сохранить / Дополнительно</string>
 
-    <string name="exitDialogTitle">Выход</string>
+    <string name="exitDialogTitle">Заавершение работы</string>
     <string name="exitDialogMessage">Покинуть программу?</string>
     <string name="exitDialogNegativeAnswer">Нет</string>
     <string name="exitDialogPositiveAnswer">Да</string>

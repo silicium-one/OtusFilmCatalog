@@ -1,5 +1,7 @@
 package com.silicium.otusfilmcatalog.logic.model;
 
+import androidx.annotation.NonNull;
+
 public interface IMetricNotifier {
     String TOTAL_TAG = "total"; // Фильмов всего
     String FAVORITES_TAG = "favorites"; // Фильмов в избранном
@@ -14,14 +16,12 @@ public interface IMetricNotifier {
     /**
      * Увеличить метрику на 1 и оповестить наблюдателей
      * @param tag ID метрики
-     * @return ИСТИНА, если метрика найдена, инача ЛОЖЬ
      */
-    void increment(String tag);
+    void increment(@NonNull String tag);
 
     /**
      * Уменьшить метрику на 1 и оповестить наблюдателей
      * @param tag ID метрики
-     * @return ИСТИНА, если метрика найдена, инача ЛОЖЬ
      */
-    void decrement(String tag);
+    void decrement(@NonNull String tag);
 }
