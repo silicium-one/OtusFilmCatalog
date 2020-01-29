@@ -15,8 +15,6 @@ import com.silicium.otusfilmcatalog.logic.controller.FilmDescriptionStorage;
 import com.silicium.otusfilmcatalog.logic.model.FilmDescription;
 import com.silicium.otusfilmcatalog.logic.model.FilmDescriptionFactory;
 
-import org.jetbrains.annotations.NotNull;
-
 public class FilmViewWrapper {
 
     //region  singleton
@@ -63,7 +61,7 @@ public class FilmViewWrapper {
      * @param parent родитель
      * @return представление с картинкой и описанием
      */
-    public View GetFilmViewDetails(@NotNull FilmDescription film, final Context parent)
+    public View getFilmViewDetails(@NonNull FilmDescription film, final Context parent)
     {
         LinearLayout ret = new LinearLayout(parent);
         ret.setOrientation(LinearLayout.VERTICAL);
@@ -77,7 +75,7 @@ public class FilmViewWrapper {
     }
 
     @NonNull
-    public String GetFilmUrl(@NotNull FilmDescription film)
+    public String getFilmUrl(@NonNull FilmDescription film)
     {
         return String.format("<a href=\"%s\">%s</a>",film.Url, film.Name);
     }
@@ -85,7 +83,7 @@ public class FilmViewWrapper {
 
 
     //region wrappers
-    private View GetGenreChips(@NotNull FilmDescription film, Context parent) {
+    private View GetGenreChips(@NonNull FilmDescription film, Context parent) {
         ChipGroup ret = new ChipGroup(parent); // TODO: добавиить отступы
         ret.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
         for (FilmDescription.FilmGenre filmGenre : film.Genre) {
@@ -96,7 +94,7 @@ public class FilmViewWrapper {
         return ret;
     }
 
-    private ImageView GetPicView(@NotNull FilmDescription film, Context parent)
+    private ImageView GetPicView(@NonNull FilmDescription film, Context parent)
     {
         ImageView pic = new ImageView(parent);
         pic.setLayoutParams(new LinearLayout.LayoutParams(200, 200));
@@ -106,7 +104,7 @@ public class FilmViewWrapper {
         return pic;
     }
 
-    private TextView GetDescView(@NotNull FilmDescription film, Context parent)
+    private TextView GetDescView(@NonNull FilmDescription film, Context parent)
     {
         TextView description = new TextView(parent);
         description.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, 200, 3.0F));

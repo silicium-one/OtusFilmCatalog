@@ -127,7 +127,7 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
         @Override
         public void onItemDismiss(int position) {
             if (isFavoritesOnly())
-                FilmDescriptionStorage.getInstance().GetFilmByID(filmItemAdapter.getFilmIDByPos(position)).setFavorite(false);
+                FilmDescriptionStorage.getInstance().getFilmByID(filmItemAdapter.getFilmIDByPos(position)).setFavorite(false);
             filmItemAdapter.onItemDismiss(position);
         }
     });
@@ -250,7 +250,7 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
                 List<String> checkedIDs = filmItemAdapter.getCheckedIDs();
                 if (isFavoritesOnly()) {
                     for (String filmID : checkedIDs) {
-                        FilmDescriptionStorage.getInstance().GetFilmByID(filmID).setFavorite(false);
+                        FilmDescriptionStorage.getInstance().getFilmByID(filmID).setFavorite(false);
                         filmItemAdapter.removeItemByID(filmID);
                     }
 
@@ -259,18 +259,18 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
                 } else {
                     List<String> favoriteIDs = new ArrayList<>();
                     for (String filmID : checkedIDs) {
-                        if (FilmDescriptionStorage.getInstance().GetFilmByID(filmID).isFavorite())
+                        if (FilmDescriptionStorage.getInstance().getFilmByID(filmID).isFavorite())
                             favoriteIDs.add(filmID);
                     }
 
                     if (favoriteIDs.size() == 0) { // в выбранных элементах избранных нет, надо добавить выбранные элементы в избранное
                         for (String filmID : checkedIDs) {
-                            FilmDescriptionStorage.getInstance().GetFilmByID(filmID).setFavorite(true);
+                            FilmDescriptionStorage.getInstance().getFilmByID(filmID).setFavorite(true);
                             filmItemAdapter.notifyItemChanged(filmItemAdapter.getPosByID(filmID));
                         }
                     } else { // надо удалить элементы из избранного
                         for (String filmID : favoriteIDs) {
-                            FilmDescriptionStorage.getInstance().GetFilmByID(filmID).setFavorite(false);
+                            FilmDescriptionStorage.getInstance().getFilmByID(filmID).setFavorite(false);
                             filmItemAdapter.notifyItemChanged(filmItemAdapter.getPosByID(filmID));
                         }
                     }
@@ -313,7 +313,7 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
                         @Override
                         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                             String filmID = buttonView.getTag().toString();
-                            FilmDescriptionStorage.getInstance().GetFilmByID(filmID).setFavorite(isChecked);
+                            FilmDescriptionStorage.getInstance().getFilmByID(filmID).setFavorite(isChecked);
                             if (!isChecked && isFavoritesOnly())
                                 filmItemAdapter.removeItemByID(filmID);
                         }

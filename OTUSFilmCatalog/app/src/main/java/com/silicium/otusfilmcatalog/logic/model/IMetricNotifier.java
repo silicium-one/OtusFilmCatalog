@@ -9,19 +9,19 @@ public interface IMetricNotifier {
     /**
      * Переслать наблюдателям все метрики
      */
-    void NotifyObserversDataChanged(); //TODO: замутить API для работы с наблюдатедями. Пока у меня только один фиджет, так что это лишнее
+    void notifyObserversDataChanged(); //TODO: замутить API для работы с наблюдатедями. Пока у меня только один фиджет, так что это лишнее
 
     /**
      * Увеличить метрику на 1 и оповестить наблюдателей
      * @param tag ID метрики
      * @return ИСТИНА, если метрика найдена, инача ЛОЖЬ
      */
-    boolean Increment(String tag);
+    void increment(String tag);
 
     /**
      * Уменьшить метрику на 1 и оповестить наблюдателей
      * @param tag ID метрики
      * @return ИСТИНА, если метрика найдена, инача ЛОЖЬ
      */
-    boolean Decrement(String tag);
+    void decrement(String tag);
 }

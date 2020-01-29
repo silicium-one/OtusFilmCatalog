@@ -177,7 +177,7 @@ public class FilmItemAdapter extends androidx.recyclerview.widget.RecyclerView.A
     public void onBindViewHolder(@NonNull FilmItemViewHolder holder, final int position) {
         String currentTag = filmsItemsData.get(position).filmID;
         boolean isChecked = filmsItemsData.get(position).isChecked;
-        holder.bind(FilmDescriptionStorage.getInstance().GetFilmByID(currentTag), currentTag.equals(selectedFilmTag), isMultiselectMode(), isChecked, favoriteStateChangedListener, detailBtnClickListener, itemLongClickListener, new CompoundButton.OnCheckedChangeListener() {
+        holder.bind(FilmDescriptionStorage.getInstance().getFilmByID(currentTag), currentTag.equals(selectedFilmTag), isMultiselectMode(), isChecked, favoriteStateChangedListener, detailBtnClickListener, itemLongClickListener, new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 filmsItemsData.get(position).isChecked = isChecked;

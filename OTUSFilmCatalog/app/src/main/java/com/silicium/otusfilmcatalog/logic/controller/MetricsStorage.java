@@ -52,7 +52,7 @@ public class MetricsStorage implements IMetricNotifier {
      * @return ИСТИНА, если метрика найдена, инача ЛОЖЬ
      */
     @Override
-    public boolean increment(String tag) {
+    public void increment(String tag) {
         for (Metric metric : metrics) {
             if (metric.metricTag.equals(tag)) {
                 metric.value++;
@@ -69,14 +69,13 @@ public class MetricsStorage implements IMetricNotifier {
      * @return ИСТИНА, если метрика найдена, инача ЛОЖЬ
      */
     @Override
-    public boolean decrement(String tag) {
+    public void decrement(String tag) {
         for (Metric metric : metrics) {
             if (metric.metricTag.equals(tag)) {
                 metric.value--;
                 MetricWidgetUtils.notifyWidget(metric.metricTag, metric.value);
-                return true;
+                return;
             }
         }
-        return false;
     }
 }

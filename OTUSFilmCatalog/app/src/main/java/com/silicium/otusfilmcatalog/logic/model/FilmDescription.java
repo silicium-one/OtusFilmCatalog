@@ -41,9 +41,9 @@ public class FilmDescription {
         if (favorite != isFavorite) {
             isFavorite = favorite;
             if (favorite)
-                metricNotifier.Increment(metricNotifier.FAVORITES_TAG);
+                metricNotifier.increment(metricNotifier.FAVORITES_TAG);
             else
-                metricNotifier.Decrement(metricNotifier.FAVORITES_TAG);
+                metricNotifier.decrement(metricNotifier.FAVORITES_TAG);
         }
     }
 }

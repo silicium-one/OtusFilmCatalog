@@ -3,6 +3,7 @@ package com.silicium.otusfilmcatalog.logic.controller;
 import android.graphics.BitmapFactory;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.silicium.otusfilmcatalog.App;
 import com.silicium.otusfilmcatalog.R;
@@ -18,17 +19,6 @@ public class FilmDescriptionStorage {
     private Map<String, FilmDescription> Films;
 
     private static volatile FilmDescriptionStorage instance = null;
-
-    @NonNull
-    public static FilmDescriptionStorage getInstance()
-    {
-        if (instance == null)
-            synchronized (FilmDescriptionStorage.class) {
-                if (instance == null)
-                    instance = new FilmDescriptionStorage();
-            }
-        return instance;
-    }
 
     private FilmDescriptionStorage() {
         super();

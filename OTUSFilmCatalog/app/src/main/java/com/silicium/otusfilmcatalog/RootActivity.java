@@ -37,7 +37,7 @@ public class RootActivity extends AppCompatActivity implements IGotoFragmentCall
             checkContainerSizes();
 
         getSupportFragmentManager().addOnBackStackChangedListener(this);
-        MetricsStorage.getMetricNotifier().NotifyObserversDataChanged();
+        MetricsStorage.getMetricNotifier().notifyObserversDataChanged();
     }
 
     @Override
