@@ -13,23 +13,11 @@ import java.util.Set;
 
 public class FilmDescription {
 
-    public enum FilmGenre {
-        comedy,
-        series,
-        cartoon,
-    }
-
-    FilmDescription(@NonNull String ID, @NonNull IMetricNotifier metricNotifier)
-    {
-        this.ID = ID;
-        this.metricNotifier = metricNotifier;
-    }
-
-    @NonNull
-    private final IMetricNotifier metricNotifier;
-
     @NonNull
     public final String ID;
+    public final Set<FilmGenre> Genre = new HashSet<>();
+    @NonNull
+    private final IMetricNotifier metricNotifier;
     @NonNull
     public String Name = "";
     @NonNull
@@ -40,9 +28,11 @@ public class FilmDescription {
     public Bitmap Cover = BitmapFactory.decodeResource(App.getAppResources(), R.drawable.film_no_image);
     @NonNull
     public Bitmap CoverPreview = BitmapFactory.decodeResource(App.getAppResources(), R.drawable.film_no_image);
-    public final Set<FilmGenre> Genre = new HashSet<>();
-
     private boolean isFavorite;
+    FilmDescription(@NonNull String ID, @NonNull IMetricNotifier metricNotifier) {
+        this.ID = ID;
+        this.metricNotifier = metricNotifier;
+    }
 
     public boolean isFavorite() {
         return isFavorite;
@@ -56,6 +46,12 @@ public class FilmDescription {
             else
                 metricNotifier.decrement(metricNotifier.FAVORITES_TAG);
         }
+    }
+
+    public enum FilmGenre {
+        comedy,
+        series,
+        cartoon,
     }
 }
 

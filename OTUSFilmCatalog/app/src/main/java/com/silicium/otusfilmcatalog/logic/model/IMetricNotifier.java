@@ -15,12 +15,14 @@ public interface IMetricNotifier {
 
     /**
      * Увеличить метрику на 1 и оповестить наблюдателей
+     *
      * @param tag ID метрики
      */
     void increment(@NonNull String tag);
 
     /**
      * Уменьшить метрику на 1 и оповестить наблюдателей
+     *
      * @param tag ID метрики
      */
     void decrement(@NonNull String tag);

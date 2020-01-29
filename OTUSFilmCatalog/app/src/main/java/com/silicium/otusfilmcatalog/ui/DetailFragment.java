@@ -31,27 +31,24 @@ import com.tingyik90.snackprogressbar.SnackProgressBarManager;
 
 import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
 
-public class DetailFragment extends FragmentWithCallback implements IOnBackPressedListener{
+public class DetailFragment extends FragmentWithCallback implements IOnBackPressedListener {
 
+    public final static String FRAGMENT_TAG = DetailFragment.class.getSimpleName();
     @NonNull
     private String filmID = "";
-
-    @NonNull
-    public String getFilmID() {
-        return filmID;
-    }
-
     @NonNull
     private FilmDescription film = FilmDescriptionFactory.getStubFilmDescription();
     @SuppressWarnings({"FieldCanBeLocal", "unused"})
     private CheckBox film_is_liked;
     @SuppressWarnings({"FieldCanBeLocal", "unused"})
     private EditText film_comment;
-    public final static String FRAGMENT_TAG = DetailFragment.class.getSimpleName();
-
     private View rootView;
-
     private DisappearingSnackCircularProgressBar snackProgressBar;
+    private boolean doubleBackToExitPressedOnce = false;
+
+    public DetailFragment() {
+        setRetainInstance(true);
+    }
 
     @NonNull
     public static DetailFragment newInstance(@NonNull String text) {
@@ -64,9 +61,9 @@ public class DetailFragment extends FragmentWithCallback implements IOnBackPress
         return fragment;
     }
 
-    public DetailFragment()
-    {
-        setRetainInstance(true);
+    @NonNull
+    public String getFilmID() {
+        return filmID;
     }
 
     @Nullable
@@ -128,20 +125,21 @@ public class DetailFragment extends FragmentWithCallback implements IOnBackPress
 
         snackProgressBar = new DisappearingSnackCircularProgressBar(rootView.findViewById(R.id.fragment_detail),
                 getString(R.string.backPressedToastText),
-                new SnackProgressBarManager.OnDisplayListener()
-        {
-            @SuppressLint("SyntheticAccessor")
-            @Override
-            public void onDismissed(@NonNull SnackProgressBar snackProgressBar, int onDisplayId) {
-                doubleBackToExitPressedOnce = false;
-            }
+                new SnackProgressBarManager.OnDisplayListener() {
+                    @SuppressLint("SyntheticAccessor")
+                    @Override
+                    public void onDismissed(@NonNull SnackProgressBar snackProgressBar, int onDisplayId) {
+                        doubleBackToExitPressedOnce = false;
+                    }
 
-            @Override
-            public void onShown(@NonNull SnackProgressBar snackProgressBar, int onDisplayId) {}
+                    @Override
+                    public void onShown(@NonNull SnackProgressBar snackProgressBar, int onDisplayId) {
+                    }
 
-            @Override
-            public void onLayoutInflated(@NonNull SnackProgressBarLayout snackProgressBarLayout, @NonNull FrameLayout overlayLayout, @NonNull SnackProgressBar snackProgressBar, int onDisplayId) {}
-        }, this);
+                    @Override
+                    public void onLayoutInflated(@NonNull SnackProgressBarLayout snackProgressBarLayout, @NonNull FrameLayout overlayLayout, @NonNull SnackProgressBar snackProgressBar, int onDisplayId) {
+                    }
+                }, this);
 
         Toolbar toolbar = view.findViewById(R.id.fragment_detail_toolbar);
         toolbar.inflateMenu(R.menu.fragment_detail_menu);
@@ -149,8 +147,7 @@ public class DetailFragment extends FragmentWithCallback implements IOnBackPress
             @SuppressLint("SyntheticAccessor")
             @Override
             public boolean onMenuItemClick(@NonNull MenuItem item) {
-                if (item.getItemId() == R.id.detail_share)
-                {
+                if (item.getItemId() == R.id.detail_share) {
                     onShareBtnClick();
                     return true;
                 }
@@ -174,9 +171,9 @@ public class DetailFragment extends FragmentWithCallback implements IOnBackPress
         }
     }
 
-    private boolean doubleBackToExitPressedOnce = false;
     /**
      * Если вернуть ИСТИНА, то нажатие кнопки "назад" обрабтано. Если вернуть ЛОЖЬ, то требуется обработка выше по стэку.
+     *
      * @return ИСТИНА, если нажание кнопки back обработано и ЛОЖЬ в противном случае
      */
     @Override

@@ -16,8 +16,7 @@ public class AddMoreDialogFragment extends BottomSheetDialogFragment {
     @Nullable
     private final View.OnClickListener itemOnClickListener;
 
-    public AddMoreDialogFragment(@Nullable View.OnClickListener itemOnClickListener)
-    {
+    public AddMoreDialogFragment(@Nullable View.OnClickListener itemOnClickListener) {
         this.itemOnClickListener = itemOnClickListener;
     }
 

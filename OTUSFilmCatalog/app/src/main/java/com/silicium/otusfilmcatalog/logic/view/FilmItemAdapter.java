@@ -23,70 +23,6 @@ import java.util.HashMap;
 import java.util.List;
 
 public class FilmItemAdapter extends androidx.recyclerview.widget.RecyclerView.Adapter<FilmItemViewHolder> implements IItemTouchHelperAdapter {
-    class FilmItemData {
-        @NonNull
-        final String filmID;
-        boolean isChecked;
-
-        FilmItemData(@NonNull String filmID) {
-            this.filmID = filmID;
-            this.isChecked = false;
-        }
-
-        /**
-         * Indicates whether some other object is "equal to" this one.
-         * <p>
-         * The {@code equals} method implements an equivalence relation
-         * on non-null object references:
-         * <ul>
-         * <li>It is <i>reflexive</i>: for any non-null reference value
-         * {@code x}, {@code x.equals(x)} should return
-         * {@code true}.
-         * <li>It is <i>symmetric</i>: for any non-null reference values
-         * {@code x} and {@code y}, {@code x.equals(y)}
-         * should return {@code true} if and only if
-         * {@code y.equals(x)} returns {@code true}.
-         * <li>It is <i>transitive</i>: for any non-null reference values
-         * {@code x}, {@code y}, and {@code z}, if
-         * {@code x.equals(y)} returns {@code true} and
-         * {@code y.equals(z)} returns {@code true}, then
-         * {@code x.equals(z)} should return {@code true}.
-         * <li>It is <i>consistent</i>: for any non-null reference values
-         * {@code x} and {@code y}, multiple invocations of
-         * {@code x.equals(y)} consistently return {@code true}
-         * or consistently return {@code false}, provided no
-         * information used in {@code equals} comparisons on the
-         * objects is modified.
-         * <li>For any non-null reference value {@code x},
-         * {@code x.equals(null)} should return {@code false}.
-         * </ul>
-         * <p>
-         * The {@code equals} method for class {@code Object} implements
-         * the most discriminating possible equivalence relation on objects;
-         * that is, for any non-null reference values {@code x} and
-         * {@code y}, this method returns {@code true} if and only
-         * if {@code x} and {@code y} refer to the same object
-         * ({@code x == y} has the value {@code true}).
-         * <p>
-         * Note that it is generally necessary to override the {@code hashCode}
-         * method whenever this method is overridden, so as to maintain the
-         * general contract for the {@code hashCode} method, which states
-         * that equal objects must have equal hash codes.
-         *
-         * @param obj the reference object with which to compare.
-         * @return {@code true} if this object is the same as the obj
-         * argument; {@code false} otherwise.
-         * @see #hashCode()
-         * @see HashMap
-         */
-        @Contract(value = "null -> false", pure = true)
-        @Override
-        public boolean equals(@Nullable Object obj) {
-            if (obj instanceof FilmItemData)
-                return filmID.equals(((FilmItemData) obj).filmID);
-            return super.equals(obj);
-        }
-    }
     @NonNull
     private final LayoutInflater inflater;
     @NonNull
@@ -97,19 +33,8 @@ public class FilmItemAdapter extends androidx.recyclerview.widget.RecyclerView.A
     private final View.OnClickListener detailBtnClickListener;
     @Nullable
     private final View.OnLongClickListener itemLongClickListener;
-
     @NonNull
     private String selectedFilmTag = "";
-
-    public boolean isMultiselectMode() {
-        return isMultiselectMode;
-    }
-
-    public void setMultiselectMode(boolean multiselectMode) {
-        isMultiselectMode = multiselectMode;
-        notifyDataSetChanged();
-    }
-
     private boolean isMultiselectMode = false;
 
     public FilmItemAdapter(@NonNull LayoutInflater inflater, @Nullable CompoundButton.OnCheckedChangeListener favoriteStateChangedListener, @Nullable View.OnClickListener detailBtnClickListener, @Nullable View.OnLongClickListener itemLongClickListener) { // TODO: нарушение принципа Single Responsibility, исправить
@@ -120,11 +45,19 @@ public class FilmItemAdapter extends androidx.recyclerview.widget.RecyclerView.A
         this.itemLongClickListener = itemLongClickListener;
     }
 
+    public boolean isMultiselectMode() {
+        return isMultiselectMode;
+    }
+
+    public void setMultiselectMode(boolean multiselectMode) {
+        isMultiselectMode = multiselectMode;
+        notifyDataSetChanged();
+    }
+
     @NonNull
-    public List<String> getCheckedIDs()
-    {
+    public List<String> getCheckedIDs() {
         List<String> ret = new ArrayList<>();
-        for (FilmItemData filmItemData: filmsItemsData) {
+        for (FilmItemData filmItemData : filmsItemsData) {
             if (filmItemData.isChecked)
                 ret.add(filmItemData.filmID);
         }
@@ -211,9 +144,7 @@ public class FilmItemAdapter extends androidx.recyclerview.widget.RecyclerView.A
     public void onViewRecycled(@NonNull FilmItemViewHolder holder) {
         try {
             filmsItemsData.get(holder.getAdapterPosition()).isChecked = holder.isChecked();
-        }
-        catch (IndexOutOfBoundsException ignored)
-        {
+        } catch (IndexOutOfBoundsException ignored) {
 
         }
         super.onViewRecycled(holder);
@@ -272,10 +203,10 @@ public class FilmItemAdapter extends androidx.recyclerview.widget.RecyclerView.A
         notifyItemRemoved(position);
     }
 
-    public void addItem(@NonNull String filmID){
+    public void addItem(@NonNull String filmID) {
         FilmItemData item = new FilmItemData(filmID);
         filmsItemsData.add(item);
-        notifyItemInserted(filmsItemsData.size()-1);
+        notifyItemInserted(filmsItemsData.size() - 1);
     }
 
     public void removeAllItems() {
@@ -300,5 +231,70 @@ public class FilmItemAdapter extends androidx.recyclerview.widget.RecyclerView.A
 
         filmsItemsData.remove(pos);
         notifyItemRemoved(pos);
+    }
+
+    class FilmItemData {
+        @NonNull
+        final String filmID;
+        boolean isChecked;
+
+        FilmItemData(@NonNull String filmID) {
+            this.filmID = filmID;
+            this.isChecked = false;
+        }
+
+        /**
+         * Indicates whether some other object is "equal to" this one.
+         * <p>
+         * The {@code equals} method implements an equivalence relation
+         * on non-null object references:
+         * <ul>
+         * <li>It is <i>reflexive</i>: for any non-null reference value
+         * {@code x}, {@code x.equals(x)} should return
+         * {@code true}.
+         * <li>It is <i>symmetric</i>: for any non-null reference values
+         * {@code x} and {@code y}, {@code x.equals(y)}
+         * should return {@code true} if and only if
+         * {@code y.equals(x)} returns {@code true}.
+         * <li>It is <i>transitive</i>: for any non-null reference values
+         * {@code x}, {@code y}, and {@code z}, if
+         * {@code x.equals(y)} returns {@code true} and
+         * {@code y.equals(z)} returns {@code true}, then
+         * {@code x.equals(z)} should return {@code true}.
+         * <li>It is <i>consistent</i>: for any non-null reference values
+         * {@code x} and {@code y}, multiple invocations of
+         * {@code x.equals(y)} consistently return {@code true}
+         * or consistently return {@code false}, provided no
+         * information used in {@code equals} comparisons on the
+         * objects is modified.
+         * <li>For any non-null reference value {@code x},
+         * {@code x.equals(null)} should return {@code false}.
+         * </ul>
+         * <p>
+         * The {@code equals} method for class {@code Object} implements
+         * the most discriminating possible equivalence relation on objects;
+         * that is, for any non-null reference values {@code x} and
+         * {@code y}, this method returns {@code true} if and only
+         * if {@code x} and {@code y} refer to the same object
+         * ({@code x == y} has the value {@code true}).
+         * <p>
+         * Note that it is generally necessary to override the {@code hashCode}
+         * method whenever this method is overridden, so as to maintain the
+         * general contract for the {@code hashCode} method, which states
+         * that equal objects must have equal hash codes.
+         *
+         * @param obj the reference object with which to compare.
+         * @return {@code true} if this object is the same as the obj
+         * argument; {@code false} otherwise.
+         * @see #hashCode()
+         * @see HashMap
+         */
+        @Contract(value = "null -> false", pure = true)
+        @Override
+        public boolean equals(@Nullable Object obj) {
+            if (obj instanceof FilmItemData)
+                return filmID.equals(((FilmItemData) obj).filmID);
+            return super.equals(obj);
+        }
     }
 }

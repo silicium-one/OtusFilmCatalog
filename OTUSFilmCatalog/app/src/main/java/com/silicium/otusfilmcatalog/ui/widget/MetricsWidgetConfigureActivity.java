@@ -21,6 +21,7 @@ import com.silicium.otusfilmcatalog.logic.controller.MetricsViewsStorage;
 public class MetricsWidgetConfigureActivity extends Activity {
 
     private int mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
+
     private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @SuppressLint("SyntheticAccessor")
         public void onClick(View v) {

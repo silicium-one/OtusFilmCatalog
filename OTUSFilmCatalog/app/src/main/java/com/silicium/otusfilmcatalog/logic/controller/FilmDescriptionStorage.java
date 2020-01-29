@@ -16,11 +16,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class FilmDescriptionStorage {
-    @NonNull
-    private final Map<String, FilmDescription> Films;
-
     @Nullable
     private static volatile FilmDescriptionStorage instance = null;
+    @NonNull
+    private final Map<String, FilmDescription> Films;
 
     private FilmDescriptionStorage() {
         super();
@@ -31,7 +30,7 @@ public class FilmDescriptionStorage {
         film1.Description = App.getAppResources().getString(R.string.film1);
         film1.Url = "https://www.kinopoisk.ru/film/1040419/";
         film1.Cover = BitmapFactory.decodeResource(App.getAppResources(), R.drawable.film1);
-        film1.CoverPreview = BitmapFactory.decodeResource(App.getAppResources(),R.drawable.film1);
+        film1.CoverPreview = BitmapFactory.decodeResource(App.getAppResources(), R.drawable.film1);
         film1.Genre.add(FilmDescription.FilmGenre.comedy);
         film1.Genre.add(FilmDescription.FilmGenre.series);
         addFilm(film1);
@@ -41,7 +40,7 @@ public class FilmDescriptionStorage {
         film2.Description = App.getAppResources().getString(R.string.film2);
         film2.Url = "https://www.kinopoisk.ru/film/306084/";
         film2.Cover = BitmapFactory.decodeResource(App.getAppResources(), R.drawable.film2);
-        film2.CoverPreview = BitmapFactory.decodeResource(App.getAppResources(),R.drawable.film2);
+        film2.CoverPreview = BitmapFactory.decodeResource(App.getAppResources(), R.drawable.film2);
         film2.Genre.add(FilmDescription.FilmGenre.comedy);
         film2.Genre.add(FilmDescription.FilmGenre.series);
         addFilm(film2);
@@ -51,7 +50,7 @@ public class FilmDescriptionStorage {
         film3.Description = App.getAppResources().getString(R.string.film3);
         film3.Url = "https://www.kinopoisk.ru/film/33821/";
         film3.Cover = BitmapFactory.decodeResource(App.getAppResources(), R.drawable.film3);
-        film3.CoverPreview = BitmapFactory.decodeResource(App.getAppResources(),R.drawable.film3);
+        film3.CoverPreview = BitmapFactory.decodeResource(App.getAppResources(), R.drawable.film3);
         film3.Genre.add(FilmDescription.FilmGenre.comedy);
         film3.Genre.add(FilmDescription.FilmGenre.series);
         film3.Genre.add(FilmDescription.FilmGenre.cartoon);
@@ -71,30 +70,31 @@ public class FilmDescriptionStorage {
 
     /**
      * Список ID фильмов
+     *
      * @return список ключей доступных в базе фильмов
      */
     @NonNull
-    public Collection<String> getFilmsIDs()
-    {
+    public Collection<String> getFilmsIDs() {
         return Films.keySet();
     }
 
     /**
      * Список ID фильмов из избранного списка
+     *
      * @return список ключей доступных в базе фильмов
      */
     @NonNull
-    public Collection<String> getFavoriteFilmsIDs()
-    {
+    public Collection<String> getFavoriteFilmsIDs() {
         Collection<String> ret = new ArrayList<>();
         for (FilmDescription film : getFilms())
-            if(film.isFavorite())
+            if (film.isFavorite())
                 ret.add(film.ID);
         return ret;
     }
 
     /**
      * Список фильмов
+     *
      * @return список доступных в базе фильмов
      */
     @NonNull

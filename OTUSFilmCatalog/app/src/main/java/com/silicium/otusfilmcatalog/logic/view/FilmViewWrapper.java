@@ -63,8 +63,7 @@ public class FilmViewWrapper {
      * @return представление с картинкой и описанием
      */
     @NonNull
-    public View getFilmViewDetails(@NonNull FilmDescription film, final @Nullable Context parent)
-    {
+    public View getFilmViewDetails(@NonNull FilmDescription film, final @Nullable Context parent) {
         LinearLayout ret = new LinearLayout(parent);
         ret.setOrientation(LinearLayout.VERTICAL);
         ret.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
@@ -77,12 +76,10 @@ public class FilmViewWrapper {
     }
 
     @NonNull
-    public String getFilmUrl(@NonNull FilmDescription film)
-    {
-        return String.format("<a href=\"%s\">%s</a>",film.Url, film.Name);
+    public String getFilmUrl(@NonNull FilmDescription film) {
+        return String.format("<a href=\"%s\">%s</a>", film.Url, film.Name);
     }
     //endregion
-
 
     //region wrappers
     @NonNull
@@ -99,22 +96,20 @@ public class FilmViewWrapper {
     }
 
     @NonNull
-    private ImageView GetPicView(@NonNull FilmDescription film, @Nullable Context parent)
-    {
+    private ImageView GetPicView(@NonNull FilmDescription film, @Nullable Context parent) {
         ImageView pic = new ImageView(parent);
         pic.setLayoutParams(new LinearLayout.LayoutParams(200, 200));
-        pic.setPadding(10,10,10,10);
+        pic.setPadding(10, 10, 10, 10);
         pic.setImageBitmap(film.Cover);
 
         return pic;
     }
 
     @NonNull
-    private TextView GetDescView(@NonNull FilmDescription film, @Nullable Context parent)
-    {
+    private TextView GetDescView(@NonNull FilmDescription film, @Nullable Context parent) {
         TextView description = new TextView(parent);
         description.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, 200, 3.0F));
-        description.setPadding(10,10,10,10);
+        description.setPadding(10, 10, 10, 10);
         description.setText(film.Description);
 
         return description;

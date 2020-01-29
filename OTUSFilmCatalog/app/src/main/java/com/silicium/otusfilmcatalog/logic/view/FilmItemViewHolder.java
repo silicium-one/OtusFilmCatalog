@@ -26,11 +26,6 @@ class FilmItemViewHolder extends RecyclerView.ViewHolder {
     private final Button film_detail_Button;
     private boolean isSelected = false;
 
-    boolean isChecked()
-    {
-        return item_selected_CheckBox.isChecked();
-    }
-
     FilmItemViewHolder(@NonNull final View itemView) {
         super(itemView);
 
@@ -40,6 +35,10 @@ class FilmItemViewHolder extends RecyclerView.ViewHolder {
         film_description_TextView = itemView.findViewById(R.id.film_description_TextView);
         film_favorite_CheckBox = itemView.findViewById(R.id.film_favorite_CheckBox);
         film_detail_Button = itemView.findViewById(R.id.film_detail_Button);
+    }
+
+    boolean isChecked() {
+        return item_selected_CheckBox.isChecked();
     }
 
     void bind(@NonNull FilmDescription item, boolean isSelected, boolean isMultiselectMode, boolean isChecked, CompoundButton.OnCheckedChangeListener favoriteStateChangedListener, View.OnClickListener detailBtnClickListener, View.OnLongClickListener itemLongClickListener, @Nullable final CompoundButton.OnCheckedChangeListener checkedStateChangedListener) {

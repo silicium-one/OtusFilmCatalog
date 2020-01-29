@@ -22,8 +22,7 @@ public class DisappearingSnackCircularProgressBar {
     @NonNull
     private final CountDownTimer hideTimer;
 
-    public DisappearingSnackCircularProgressBar(@NonNull View providedView, @NonNull String messageText, @Nullable SnackProgressBarManager.OnDisplayListener callback, @Nullable LifecycleOwner lifecycleOwner)
-    {
+    public DisappearingSnackCircularProgressBar(@NonNull View providedView, @NonNull String messageText, @Nullable SnackProgressBarManager.OnDisplayListener callback, @Nullable LifecycleOwner lifecycleOwner) {
         this.duration = providedView.getResources().getInteger(R.integer.back_pressed_twice_await_time_ms);
 
         snackProgressBarManager = new SnackProgressBarManager(providedView, lifecycleOwner);
@@ -37,7 +36,7 @@ public class DisappearingSnackCircularProgressBar {
                 .setOverlayLayoutAlpha(0)
                 .setOnDisplayListener(callback);
 
-         circularProgressBar = new SnackProgressBar(
+        circularProgressBar = new SnackProgressBar(
                 SnackProgressBar.TYPE_CIRCULAR, messageText)
                 .setIsIndeterminate(false)
                 .setProgressMax(100)
@@ -48,8 +47,9 @@ public class DisappearingSnackCircularProgressBar {
             @SuppressLint("SyntheticAccessor")
             @Override
             public void onTick(long millisUntilFinished) {
-                snackProgressBarManager.setProgress((int)millisUntilFinished/countDownInterval, String.valueOf(1 + millisUntilFinished/1000));
+                snackProgressBarManager.setProgress((int) millisUntilFinished / countDownInterval, String.valueOf(1 + millisUntilFinished / 1000));
             }
+
             @SuppressLint("SyntheticAccessor")
             @Override
             public void onFinish() {
@@ -58,14 +58,12 @@ public class DisappearingSnackCircularProgressBar {
         };
     }
 
-    public void Show()
-    {
+    public void Show() {
         snackProgressBarManager.show(circularProgressBar, duration);
         hideTimer.start();
     }
 
-    public void dismiss()
-    {
+    public void dismiss() {
         snackProgressBarManager.dismiss();
     }
 }

@@ -59,10 +59,32 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
     private FilmItemAdapter filmItemAdapter;
     private DisappearingSnackCircularProgressBar snackProgressBar;
     private boolean isFavoritesOnly;
+    private final SwipeProcessor swipeCallback = new SwipeProcessor(new IItemTouchHelperAdapter() {
+        @SuppressWarnings("unused")
+        @SuppressLint("SyntheticAccessor")
+        @Override
+        public void onItemMove(int fromPosition, int toPosition) {
+            filmItemAdapter.onItemMove(fromPosition, toPosition);
+        }
+
+        @SuppressLint("SyntheticAccessor")
+        @Override
+        public void onItemDismiss(int position) {
+            if (isFavoritesOnly())
+                FilmDescriptionStorage.getInstance().getFilmByID(filmItemAdapter.getFilmIDByPos(position)).setFavorite(false);
+            filmItemAdapter.onItemDismiss(position);
+        }
+    });
+    private final ItemTouchHelper swipeProcessingHelper = new ItemTouchHelper(swipeCallback);
     private RecyclerView film_RecyclerView;
     private FloatingActionButton fab_del;
     private FloatingActionButton fab_manipulate_favorites;
     private boolean isMultiselectMode;
+    private boolean doubleBackToExitPressedOnce = false;
+
+    public MainFragment() {
+        setRetainInstance(true);
+    }
 
     @SuppressLint("RestrictedApi")
     private void setMultiselectProcessingMode(boolean isMultiselect) {
@@ -123,31 +145,6 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
         }
     }
 
-    private final SwipeProcessor swipeCallback = new SwipeProcessor(new IItemTouchHelperAdapter() {
-        @SuppressWarnings("unused")
-        @SuppressLint("SyntheticAccessor")
-        @Override
-        public void onItemMove(int fromPosition, int toPosition) {
-            filmItemAdapter.onItemMove(fromPosition, toPosition);
-        }
-
-        @SuppressLint("SyntheticAccessor")
-        @Override
-        public void onItemDismiss(int position) {
-            if (isFavoritesOnly())
-                FilmDescriptionStorage.getInstance().getFilmByID(filmItemAdapter.getFilmIDByPos(position)).setFavorite(false);
-            filmItemAdapter.onItemDismiss(position);
-        }
-    });
-    private final ItemTouchHelper swipeProcessingHelper = new ItemTouchHelper(swipeCallback);
-
-    private boolean doubleBackToExitPressedOnce = false;
-
-    public MainFragment() {
-        setRetainInstance(true);
-    }
-
-    
     @Contract(pure = true)
     private boolean isFavoritesOnly() {
         return isFavoritesOnly;

@@ -77,8 +77,7 @@ public class AboutFragment extends FragmentWithCallback implements NavigationVie
             DialogInterface.OnClickListener exitDo =
                     new DialogInterface.OnClickListener() {
                         @Override
-                        public void onClick(DialogInterface dialog, int which)
-                        {
+                        public void onClick(DialogInterface dialog, int which) {
                             System.exit(0);
                         }
                     };

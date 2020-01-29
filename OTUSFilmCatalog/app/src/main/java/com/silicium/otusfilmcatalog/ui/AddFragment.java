@@ -29,9 +29,10 @@ import com.tingyik90.snackprogressbar.SnackProgressBarManager;
 
 public class AddFragment extends FragmentWithCallback implements IOnBackPressedListener {
 
+    public final static String FRAGMENT_TAG = AddFragment.class.getSimpleName();
     private DisappearingSnackCircularProgressBar snackProgressBar;
     private ConstraintLayout rootLayout;
-    public final static String FRAGMENT_TAG = AddFragment.class.getSimpleName();
+    private boolean doubleBackToExitPressedOnce = false;
 
     @Nullable
     @Override
@@ -47,8 +48,7 @@ public class AddFragment extends FragmentWithCallback implements IOnBackPressedL
 
         snackProgressBar = new DisappearingSnackCircularProgressBar(rootLayout,
                 getString(R.string.backPressedToastText),
-                new SnackProgressBarManager.OnDisplayListener()
-                {
+                new SnackProgressBarManager.OnDisplayListener() {
                     @SuppressLint("SyntheticAccessor")
                     @Override
                     public void onDismissed(@NonNull SnackProgressBar snackProgressBar, int onDisplayId) {
@@ -56,10 +56,12 @@ public class AddFragment extends FragmentWithCallback implements IOnBackPressedL
                     }
 
                     @Override
-                    public void onShown(@NonNull SnackProgressBar snackProgressBar, int onDisplayId) {}
+                    public void onShown(@NonNull SnackProgressBar snackProgressBar, int onDisplayId) {
+                    }
 
                     @Override
-                    public void onLayoutInflated(@NonNull SnackProgressBarLayout snackProgressBarLayout, @NonNull FrameLayout overlayLayout, @NonNull SnackProgressBar snackProgressBar, int onDisplayId) {}
+                    public void onLayoutInflated(@NonNull SnackProgressBarLayout snackProgressBarLayout, @NonNull FrameLayout overlayLayout, @NonNull SnackProgressBar snackProgressBar, int onDisplayId) {
+                    }
                 }, this);
 
         Button btn = view.findViewById(R.id.button);
@@ -89,7 +91,6 @@ public class AddFragment extends FragmentWithCallback implements IOnBackPressedL
         });
     }
 
-    private boolean doubleBackToExitPressedOnce = false;
     @Override
     public boolean onBackPressed() {
         if (doubleBackToExitPressedOnce)
@@ -113,7 +114,7 @@ public class AddFragment extends FragmentWithCallback implements IOnBackPressedL
     }
 
     private void onItemClick(@NonNull View view) {
-        Toast.makeText(view.getContext(),R.string.under_construction__hint_string,Toast.LENGTH_SHORT).show();
+        Toast.makeText(view.getContext(), R.string.under_construction__hint_string, Toast.LENGTH_SHORT).show();
         UiComponents.showUnderConstructionSnackBar(rootLayout);
     }
 

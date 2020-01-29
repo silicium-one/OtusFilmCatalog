@@ -13,8 +13,18 @@ public class MetricsStorage implements IMetricNotifier {
     @Nullable
     private static volatile IMetricNotifier instance = null;
     @NonNull
-    public static IMetricNotifier getMetricNotifier()
-    {
+    private final HashSet<Metric> metrics;
+
+    private MetricsStorage() {
+        metrics = new HashSet<>();
+        metrics.add(new Metric(TOTAL_TAG));
+        metrics.add(new Metric(FAVORITES_TAG));
+        metrics.add(new Metric(SHARED_TAG));
+        metrics.add(new Metric(CARTOON_TAG));
+    }
+
+    @NonNull
+    public static IMetricNotifier getMetricNotifier() {
         if (instance == null)
             synchronized (MetricsStorage.class) {
                 if (instance == null)
@@ -24,18 +34,7 @@ public class MetricsStorage implements IMetricNotifier {
         return instance;
     }
 
-    @NonNull
-    private final HashSet<Metric> metrics;
-    private MetricsStorage() {
-        metrics = new HashSet<>();
-        metrics.add(new Metric(TOTAL_TAG));
-        metrics.add(new Metric(FAVORITES_TAG));
-        metrics.add(new Metric(SHARED_TAG));
-        metrics.add(new Metric(CARTOON_TAG));
-    }
-
-    private void updateWidgetView()
-    {
+    private void updateWidgetView() {
         for (Metric metric : metrics)
             MetricWidgetUtils.notifyWidget(metric.metricTag, metric.value);
     }

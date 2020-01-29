@@ -15,18 +15,16 @@ import com.silicium.otusfilmcatalog.logic.model.IItemTouchHelperAdapter;
 public class SwipeProcessor extends ItemTouchHelper.Callback {
     @NonNull
     private final IItemTouchHelperAdapter itemAdapter;
-
-    public void setSwipeDeletionPossible(boolean isPossible) {
-        isDelBySwipePossible = isPossible;
-    }
-
     private boolean isDelBySwipePossible = false;
     private boolean swipeBack = false;
     @Nullable
     private RecyclerView.ViewHolder lastProcessedViewHolder = null;
-
     public SwipeProcessor(@NonNull IItemTouchHelperAdapter itemAdapter) {
         this.itemAdapter = itemAdapter;
+    }
+
+    public void setSwipeDeletionPossible(boolean isPossible) {
+        isDelBySwipePossible = isPossible;
     }
 
     /**
