@@ -69,9 +69,9 @@ public class FilmViewWrapper {
         ret.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
 
         ret.setTag(film.ID);
-        ret.addView(GetGenreChips(film, parent));
-        ret.addView(GetPicView(film, parent)); // TODO: сделать отдельные большие картинки, API теперь есть
-        ret.addView(GetDescView(film, parent));
+        ret.addView(getGenreChips(film, parent));
+        ret.addView(getPicView(film, parent)); // TODO: сделать отдельные большие картинки, API теперь есть
+        ret.addView(getDescView(film, parent));
         return ret;
     }
 
@@ -83,7 +83,7 @@ public class FilmViewWrapper {
 
     //region wrappers
     @NonNull
-    private View GetGenreChips(@NonNull FilmDescription film, @Nullable Context parent) {
+    private View getGenreChips(@NonNull FilmDescription film, @Nullable Context parent) {
         //noinspection ConstantConditions
         ChipGroup ret = new ChipGroup(parent); // TODO: добавиить отступы
         ret.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
@@ -96,7 +96,7 @@ public class FilmViewWrapper {
     }
 
     @NonNull
-    private ImageView GetPicView(@NonNull FilmDescription film, @Nullable Context parent) {
+    private ImageView getPicView(@NonNull FilmDescription film, @Nullable Context parent) {
         ImageView pic = new ImageView(parent);
         pic.setLayoutParams(new LinearLayout.LayoutParams(200, 200));
         pic.setPadding(10, 10, 10, 10);
@@ -106,7 +106,7 @@ public class FilmViewWrapper {
     }
 
     @NonNull
-    private TextView GetDescView(@NonNull FilmDescription film, @Nullable Context parent) {
+    private TextView getDescView(@NonNull FilmDescription film, @Nullable Context parent) {
         TextView description = new TextView(parent);
         description.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, 200, 3.0F));
         description.setPadding(10, 10, 10, 10);
