@@ -25,6 +25,7 @@ public class FilmDescription {
         this.metricNotifier = metricNotifier;
     }
 
+    @NonNull
     private final IMetricNotifier metricNotifier;
 
     @NonNull

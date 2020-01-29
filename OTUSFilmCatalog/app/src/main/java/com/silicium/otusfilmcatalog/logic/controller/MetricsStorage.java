@@ -1,6 +1,7 @@
 package com.silicium.otusfilmcatalog.logic.controller;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.silicium.otusfilmcatalog.logic.model.IMetricNotifier;
 import com.silicium.otusfilmcatalog.logic.model.Metric;
@@ -9,6 +10,7 @@ import com.silicium.otusfilmcatalog.ui.widget.MetricWidgetUtils;
 import java.util.HashSet;
 
 public class MetricsStorage implements IMetricNotifier {
+    @Nullable
     private static volatile IMetricNotifier instance = null;
     @NonNull
     public static IMetricNotifier getMetricNotifier()
@@ -18,6 +20,7 @@ public class MetricsStorage implements IMetricNotifier {
                 if (instance == null)
                     instance = new MetricsStorage();
             }
+        //noinspection ConstantConditions
         return instance;
     }
 

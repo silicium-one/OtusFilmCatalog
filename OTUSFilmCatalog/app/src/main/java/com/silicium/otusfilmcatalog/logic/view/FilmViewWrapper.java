@@ -85,7 +85,9 @@ public class FilmViewWrapper {
 
 
     //region wrappers
-    private View GetGenreChips(@NonNull FilmDescription film, Context parent) {
+    @NonNull
+    private View GetGenreChips(@NonNull FilmDescription film, @Nullable Context parent) {
+        //noinspection ConstantConditions
         ChipGroup ret = new ChipGroup(parent); // TODO: добавиить отступы
         ret.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
         for (FilmDescription.FilmGenre filmGenre : film.Genre) {
@@ -96,7 +98,8 @@ public class FilmViewWrapper {
         return ret;
     }
 
-    private ImageView GetPicView(@NonNull FilmDescription film, Context parent)
+    @NonNull
+    private ImageView GetPicView(@NonNull FilmDescription film, @Nullable Context parent)
     {
         ImageView pic = new ImageView(parent);
         pic.setLayoutParams(new LinearLayout.LayoutParams(200, 200));
@@ -106,7 +109,8 @@ public class FilmViewWrapper {
         return pic;
     }
 
-    private TextView GetDescView(@NonNull FilmDescription film, Context parent)
+    @NonNull
+    private TextView GetDescView(@NonNull FilmDescription film, @Nullable Context parent)
     {
         TextView description = new TextView(parent);
         description.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, 200, 3.0F));

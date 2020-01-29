@@ -13,6 +13,7 @@ import com.silicium.otusfilmcatalog.R;
 import com.silicium.otusfilmcatalog.logic.model.IItemTouchHelperAdapter;
 
 public class SwipeProcessor extends ItemTouchHelper.Callback {
+    @NonNull
     private final IItemTouchHelperAdapter itemAdapter;
 
     public void setSwipeDeletionPossible(boolean isPossible) {
@@ -21,6 +22,7 @@ public class SwipeProcessor extends ItemTouchHelper.Callback {
 
     private boolean isDelBySwipePossible = false;
     private boolean swipeBack = false;
+    @Nullable
     private RecyclerView.ViewHolder lastProcessedViewHolder = null;
 
     public SwipeProcessor(@NonNull IItemTouchHelperAdapter itemAdapter) {

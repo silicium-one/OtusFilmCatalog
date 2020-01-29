@@ -53,6 +53,7 @@ import jp.wasabeef.recyclerview.animators.SlideInUpAnimator;
 
 public class MainFragment extends FragmentWithCallback implements NavigationView.OnNavigationItemSelectedListener, IOnBackPressedListener {
     public final static String FRAGMENT_TAG = MainFragment.class.getSimpleName();
+    @NonNull
     private String selectedFilmTag = "";
     private View rootView;
     private FilmItemAdapter filmItemAdapter;
@@ -248,7 +249,7 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
         fab_del = view.findViewById(R.id.fab_del);
         fab_del.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(@NonNull View v) {
                 UiComponents.showUnderConstructionSnackBar(v);
             }
         });
@@ -324,7 +325,7 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
                     new CompoundButton.OnCheckedChangeListener() {
                         @SuppressLint("SyntheticAccessor")
                         @Override
-                        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        public void onCheckedChanged(@NonNull CompoundButton buttonView, boolean isChecked) {
                             String filmID = buttonView.getTag().toString();
                             FilmDescriptionStorage.getInstance().getFilmByID(filmID).setFavorite(isChecked);
                             if (!isChecked && isFavoritesOnly())
@@ -334,7 +335,7 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
                     new View.OnClickListener() {
                         @SuppressLint("SyntheticAccessor")
                         @Override
-                        public void onClick(View v) {
+                        public void onClick(@NonNull View v) {
                             setSelectedFilmTag(v.getTag().toString());
                             gotoDetailFragment();
                         }
@@ -372,6 +373,7 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
             Toast.makeText(getContext(), R.string.noFilmByIDErr, Toast.LENGTH_LONG).show();
     }
 
+    @NonNull
     @SuppressLint("KotlinPropertyAccess")
     @Contract(pure = true)
     private String getSelectedFilmTag() {

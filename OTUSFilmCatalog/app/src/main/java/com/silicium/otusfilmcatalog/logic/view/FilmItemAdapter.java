@@ -87,12 +87,18 @@ public class FilmItemAdapter extends androidx.recyclerview.widget.RecyclerView.A
             return super.equals(obj);
         }
     }
+    @NonNull
     private final LayoutInflater inflater;
+    @NonNull
     private final List<FilmItemData> filmsItemsData;
+    @Nullable
     private final CompoundButton.OnCheckedChangeListener favoriteStateChangedListener;
+    @Nullable
     private final View.OnClickListener detailBtnClickListener;
+    @Nullable
     private final View.OnLongClickListener itemLongClickListener;
 
+    @NonNull
     private String selectedFilmTag = "";
 
     public boolean isMultiselectMode() {
