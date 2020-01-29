@@ -15,7 +15,6 @@ public class MetricWidgetUtils {
     private static final String PREF_PREFIX_KEY = "appwidget_";
 
     //region settings storage API
-
     static void saveBoolean(@NonNull Context context, int appWidgetId, String key, Boolean value) {
         SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, 0).edit();
         prefs.putBoolean(PREF_PREFIX_KEY + appWidgetId + key, value);
@@ -45,7 +44,6 @@ public class MetricWidgetUtils {
         prefs.remove(PREF_PREFIX_KEY + appWidgetId + key);
         prefs.apply();
     }
-
     //endregion
 
     public static void notifyWidget(@NonNull String tag, int value) {
