@@ -4,7 +4,6 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -17,11 +16,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -29,7 +23,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.navigation.NavigationView;
 import com.silicium.otusfilmcatalog.R;
 import com.silicium.otusfilmcatalog.logic.controller.FilmDescriptionStorage;
 import com.silicium.otusfilmcatalog.logic.model.FragmentWithCallback;
@@ -51,11 +44,10 @@ import java.util.List;
 
 import jp.wasabeef.recyclerview.animators.SlideInUpAnimator;
 
-public class MainFragment extends FragmentWithCallback implements NavigationView.OnNavigationItemSelectedListener, IOnBackPressedListener {
+public class MainFragment extends FragmentWithCallback implements IOnBackPressedListener {
     public final static String FRAGMENT_TAG = MainFragment.class.getSimpleName();
     @NonNull
     private String selectedFilmTag = "";
-    private View rootView;
     private FilmItemAdapter filmItemAdapter;
     private DisappearingSnackCircularProgressBar snackProgressBar;
     private boolean isFavoritesOnly;
@@ -205,8 +197,6 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
     public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        rootView = view;
-
         nav_view = view.findViewById(R.id.bottom_main_navigation);
         nav_view.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @SuppressLint("SyntheticAccessor")
@@ -221,18 +211,6 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
                 return false;
             }
         });
-
-        Toolbar toolbar = view.findViewById(R.id.fragment_main_toolbar);
-
-        DrawerLayout drawer = view.findViewById(R.id.drawer_main_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                getActivity(), drawer, toolbar,
-                R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
-
-        NavigationView navigationView = view.findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
 
         FloatingActionButton fab_add = view.findViewById(R.id.fab_add);
         fab_add.setOnClickListener(new View.OnClickListener() {
@@ -290,7 +268,7 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
             }
         });
 
-        snackProgressBar = new DisappearingSnackCircularProgressBar(rootView,
+        snackProgressBar = new DisappearingSnackCircularProgressBar(view,
                 getString(R.string.backPressedCancelSelectionToastText),
                 new SnackProgressBarManager.OnDisplayListener() {
                     @SuppressLint("SyntheticAccessor")
@@ -308,12 +286,12 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
                     }
                 }, this);
 
-        film_recycler_view = rootView.findViewById(R.id.film_recycler_view);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(rootView.getContext(), RecyclerView.VERTICAL, false);
+        film_RecyclerView = view.findViewById(R.id.film_RecyclerView);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(view.getContext(), RecyclerView.VERTICAL, false);
         film_recycler_view.setLayoutManager(linearLayoutManager);
         film_recycler_view.addItemDecoration(new DividerItemDecoration(rootView.getContext(), DividerItemDecoration.VERTICAL));
         RecyclerView.ItemAnimator itemAnimator = new SlideInUpAnimator(new OvershootInterpolator(1f));
-        itemAnimator.setAddDuration(rootView.getResources().getInteger(R.integer.element_adding_animation_time_ms));
+        itemAnimator.setAddDuration(view.getResources().getInteger(R.integer.element_adding_animation_time_ms));
         film_recycler_view.setItemAnimator(itemAnimator);
         swipeProcessingHelper.attachToRecyclerView(film_recycler_view);
 
@@ -385,35 +363,6 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
         this.selectedFilmTag = selectedFilmTag;
     }
 
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        int id = item.getItemId();
-
-        if (id == R.id.item_about)
-            gotoFragmentCallback.gotoAboutFragment();
-        else if (id == R.id.item_exit) {
-            AlertDialog.Builder bld = new AlertDialog.Builder(rootView.getContext());
-            DialogInterface.OnClickListener exitDo =
-                    new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            System.exit(0);
-                        }
-                    };
-
-            bld.setMessage(R.string.exitDialogMessage);
-            bld.setTitle(R.string.exitDialogTitle);
-            bld.setNegativeButton(R.string.exitDialogNegativeAnswer, null);
-            bld.setPositiveButton(R.string.exitDialogPositiveAnswer, exitDo);
-            bld.setCancelable(false);
-            AlertDialog dialog = bld.create();
-            dialog.show();
-        }
-
-        DrawerLayout drawer = rootView.findViewById(R.id.drawer_main_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
-    }
 
     /**
      * Если вернуть ИСТИНА, то нажатие кнопки "назад" обрабтано. Если вернуть ЛОЖЬ, то требуется обработка выше по стэку.
