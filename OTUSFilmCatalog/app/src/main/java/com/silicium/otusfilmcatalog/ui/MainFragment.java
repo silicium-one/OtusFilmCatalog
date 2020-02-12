@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -163,7 +164,7 @@ public class MainFragment extends FragmentWithCallback implements IOnBackPressed
             public void run() {
                 filmItemAdapter.removeAllItems();
 
-                for (String item : FilmDescriptionStorage.getInstance().getFavoriteFilmsIDs())
+                for (String item : FilmDescriptionStorage.getInstance().getFavoriteFilmsIDs(true))
                     filmItemAdapter.addItem(item);
 
                 setSelectedFilmTag(getSelectedFilmTag());
@@ -288,7 +289,7 @@ public class MainFragment extends FragmentWithCallback implements IOnBackPressed
                 }, this);
 
         film_RecyclerView = view.findViewById(R.id.film_RecyclerView);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(view.getContext(), RecyclerView.VERTICAL, false);
+        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(view.getContext(), RecyclerView.VERTICAL, false);
         film_recycler_view.setLayoutManager(linearLayoutManager);
         film_recycler_view.addItemDecoration(new DividerItemDecoration(rootView.getContext(), DividerItemDecoration.VERTICAL));
         RecyclerView.ItemAnimator itemAnimator = new SlideInUpAnimator(new OvershootInterpolator(1f));
@@ -339,6 +340,45 @@ public class MainFragment extends FragmentWithCallback implements IOnBackPressed
         }
 
         setMultiselectProcessingMode(isMultiselectMode);
+
+        final SwipeRefreshLayout srl = view.findViewById(R.id.srl);
+
+        film_RecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            /**
+             * Callback method to be invoked when RecyclerView's scroll state changes.
+             *
+             * @param recyclerView The RecyclerView whose scroll state has changed.
+             * @param newState     The updated scroll state. One of {@link RecyclerView#SCROLL_STATE_IDLE},
+             *                     {@link RecyclerView#SCROLL_STATE_DRAGGING} or {@link RecyclerView#SCROLL_STATE_SETTLING}.
+             */
+            @SuppressLint("SyntheticAccessor")
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+
+                if (isFavoritesOnly())
+                    return;
+
+                if (linearLayoutManager.findLastVisibleItemPosition() == filmItemAdapter.getItemCount() - 1) {
+                    if (srl.isRefreshing())
+                        return;
+
+                    srl.setRefreshing(true);
+                    FilmDescriptionStorage.getInstance().getFilmsIDsNextPageAsync(new Consumer<Collection<String>>() {
+                        @Override
+                        public void accept(final Collection<String> filmIDs) {
+                            view.postDelayed(new Runnable() { // ИБД
+                                @Override
+                                public void run() {
+                                    filmItemAdapter.addRange(filmIDs);
+                                    srl.setRefreshing(false);
+                                }
+                            }, 333);
+                        }
+                    });
+                }
+            }
+        });
     }
 
     private void gotoDetailFragment() {
@@ -363,7 +403,6 @@ public class MainFragment extends FragmentWithCallback implements IOnBackPressed
         filmItemAdapter.setSelectedFilmTag(selectedFilmTag);
         this.selectedFilmTag = selectedFilmTag;
     }
-
 
     /**
      * Если вернуть ИСТИНА, то нажатие кнопки "назад" обрабтано. Если вернуть ЛОЖЬ, то требуется обработка выше по стэку.
