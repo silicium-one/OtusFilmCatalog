@@ -14,6 +14,7 @@ import com.google.android.material.chip.ChipGroup;
 import com.silicium.otusfilmcatalog.logic.controller.FilmDescriptionStorage;
 import com.silicium.otusfilmcatalog.logic.model.FilmDescription;
 import com.silicium.otusfilmcatalog.logic.model.FilmDescriptionFactory;
+import com.silicium.otusfilmcatalog.logic.model.IFilmDescriptionStorage;
 
 public class FilmViewWrapper {
 
@@ -21,7 +22,7 @@ public class FilmViewWrapper {
     @Nullable
     private static volatile FilmViewWrapper instance = null;
     @NonNull
-    private final FilmDescriptionStorage storageInstance = FilmDescriptionStorage.getInstance();
+    private final IFilmDescriptionStorage storageInstance = FilmDescriptionStorage.getInstance();
 
     private FilmViewWrapper() {
         super();

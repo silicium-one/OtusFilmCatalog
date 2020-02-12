@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.util.Consumer;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -40,6 +41,7 @@ import com.tingyik90.snackprogressbar.SnackProgressBarManager;
 import org.jetbrains.annotations.Contract;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import jp.wasabeef.recyclerview.animators.SlideInUpAnimator;
@@ -172,13 +174,12 @@ public class MainFragment extends FragmentWithCallback implements IOnBackPressed
     private void fullListMode() {
         swipeCallback.setSwipeDeletionPossible(false);
         nav_view.getMenu().getItem(1).setChecked(true); //nav_view.setSelectedItemId(R.id.full_list); - бесконечная рекурсия
-        film_recycler_view.post(new Runnable() {
-            @SuppressLint("SyntheticAccessor")
+        FilmDescriptionStorage.getInstance().getFilmsIDsNextPageAsync(new Consumer<Collection<String>>() {            @SuppressLint("SyntheticAccessor")
             @Override
-            public void run() {
+            public void accept(Collection<String> filmIDs) {
                 filmItemAdapter.removeAllItems();
 
-                for (String item : FilmDescriptionStorage.getInstance().getFilmsIDs())
+                for (String item : filmIDs)
                     filmItemAdapter.addItem(item);
 
                 setSelectedFilmTag(getSelectedFilmTag());

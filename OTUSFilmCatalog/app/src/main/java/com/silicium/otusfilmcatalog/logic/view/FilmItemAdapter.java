@@ -16,6 +16,7 @@ import com.silicium.otusfilmcatalog.logic.model.IItemTouchHelperAdapter;
 import org.jetbrains.annotations.Contract;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -142,6 +143,12 @@ public class FilmItemAdapter extends androidx.recyclerview.widget.RecyclerView.A
         FilmItemData item = new FilmItemData(filmID);
         filmsItemsData.add(item);
         notifyItemInserted(filmsItemsData.size() - 1);
+    }
+
+    public void addRange(@NonNull Collection<String> filmIDs)
+    {
+        for (String filmID : filmIDs)
+            addItem(filmID);
     }
 
     public void removeAllItems() {
