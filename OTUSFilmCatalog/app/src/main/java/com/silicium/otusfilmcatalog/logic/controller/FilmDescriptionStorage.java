@@ -19,7 +19,7 @@ import java.util.Map;
 
 public class FilmDescriptionStorage implements IFilmDescriptionStorage {
     @Nullable
-    private static volatile FilmDescriptionStorage instance = null;
+    private static volatile IFilmDescriptionStorage instance = null;
     @NonNull
     private final Map<String, FilmDescription> Films = new HashMap<>();
 
