@@ -23,6 +23,9 @@ public class FilmDescriptionStorage implements IFilmDescriptionStorage {
     @NonNull
     private final Map<String, FilmDescription> Films = new HashMap<>();
 
+    private FilmDescriptionStorage() {
+    }
+
     @NonNull
     public static IFilmDescriptionStorage getInstance() {
         if (instance == null)
