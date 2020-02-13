@@ -53,6 +53,10 @@ public class AboutFragment extends FragmentWithCallback implements NavigationVie
             }
         });
 
+        bnv.getMenu().getItem(0).setCheckable(false);
+        bnv.getMenu().getItem(1).setCheckable(false);
+        bnv.getMenu().getItem(2).setCheckable(false);
+
         Toolbar toolbar = view.findViewById(R.id.fragment_main_toolbar);
 
         DrawerLayout drawer = view.findViewById(R.id.drawer_main_layout);
