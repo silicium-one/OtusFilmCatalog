@@ -1,14 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- general -->
-    <dimen name="padding_8x">64dp</dimen>
-    <dimen name="padding_5x">40dp</dimen>
-    <dimen name="padding_4x">32dp</dimen>
-    <dimen name="padding_3x">24dp</dimen>
-    <dimen name="padding_2x">16dp</dimen>
-    <dimen name="padding_1x">8dp</dimen>
+    <!-- activity_root -->
+    <dimen name="chooserSize_landscapeMode">300dp</dimen>
 
-    <!-- activity_add -->
+    <!-- fragment_add -->
     <dimen name="filmName_height">80dp</dimen>
     <dimen name="filmLandButton_width">120dp</dimen>
     <dimen name="marginTop">10dp</dimen>
@@ -21,19 +16,35 @@
     <dimen name="text_chapterHead">20sp</dimen>
     <dimen name="text_chapterItem">16sp</dimen>
 
-    <!-- activity_detail -->
+    <!-- fragment_detail -->
     <dimen name="bottomSheet_height">340dp</dimen>
     <dimen name="bottomSheet_header">40dp</dimen>
     <dimen name="bottomSheet_checkboxSize">40dp</dimen>
-    <dimen name="paddingLeft">10dp</dimen>
+    <dimen name="paddingStart">10dp</dimen>
 
-    <!-- activity_main -->
+    <!-- fragment_main -->
     <dimen name="padding">10dp</dimen>
     <dimen name="margin">10dp</dimen>
-
 
     <!-- text -->
     <dimen name="text_body">14sp</dimen>
     <dimen name="text_body_dp">14dp</dimen>
+
+    <!--
+Refer to App Widget Documentation for margin information
+http://developer.android.com/guide/topics/appwidgets/index.html#CreatingLayout
+    -->
+    <dimen name="widget_padding">4dp</dimen>
+    <dimen name="widget_text_margin">2dp</dimen>
+    <dimen name="widget_text_header_size">16sp</dimen>
+    <dimen name="widget_text_column_header_size">14sp</dimen>
+    <dimen name="widget_text_column_value_size">30sp</dimen>
+
+    <!-- item_films -->
+    <dimen name="item_film_height">80dp</dimen>
+    <dimen name="item_film_image_width">80dp</dimen>
+    <dimen name="item_film_name_text_size">18sp</dimen>
+    <dimen name="item_film_name_height">20dp</dimen>
+    <dimen name="item_film_description_text_size">14sp</dimen>
 
 </resources>

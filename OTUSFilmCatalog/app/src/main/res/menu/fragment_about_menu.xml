@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:icon="@drawable/ic_help"
+        android:title="@string/about_help_string" />
+
+    <item
+        android:icon="@drawable/ic_legal"
+        android:title="@string/about_legal_string" />
+
+    <item
+        android:icon="@drawable/ic_tech_details"
+        android:title="@string/about_tech_details_string" />
+
+</menu>

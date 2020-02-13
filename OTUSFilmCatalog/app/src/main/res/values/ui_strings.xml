@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="DuplicateStrings">
     <string name="shareTextBtnText">Пригласить друга на просмотр</string>
     <string name="shareFilmDlgTitle">Выберите, как пригласить на просмотр</string>
     <string name="isLikedCheckBoxText">Нравится</string>
@@ -14,7 +14,7 @@
     <string name="filmDescriptionAddHint">Краткое содержание</string>
     <string name="filmSaveBtnText">Сохранить / Дополнительно</string>
 
-    <string name="exitDialogTitle">Выход</string>
+    <string name="exitDialogTitle">Заавершение работы</string>
     <string name="exitDialogMessage">Покинуть программу?</string>
     <string name="exitDialogNegativeAnswer">Нет</string>
     <string name="exitDialogPositiveAnswer">Да</string>
@@ -32,5 +32,19 @@
     <string name="about_help_string">Помощь</string>
     <string name="about_legal_string">О правах</string>
     <string name="about_tech_details_string">Версия</string>
+
+    <string name="configure">Выберите требуемые метрики:</string>
+    <string name="add_widget">Добавить виджет</string>
+    <string name="appwidget_header">Фильмов в базе</string>
+    <string name="appwidget_total_header">Всего</string>
+    <string name="appwidget_favorites_header">В избранном</string>
+    <string name="appwidget_shared_header">Поделились</string>
+    <string name="appwidget_cartoon_header">Мультфильмов</string>
+    <string name="appwidget_default_value">0</string>
+
+    <string name="film_cover_preview_contentDescription">Предпросмотр обложки</string>
+
+    <string name="main_favoritesList">Избранное</string>
+    <string name="maim_fullList">Все фильмы</string>
 
 </resources>

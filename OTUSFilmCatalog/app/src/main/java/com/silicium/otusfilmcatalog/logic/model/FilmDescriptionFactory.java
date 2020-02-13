@@ -2,51 +2,45 @@ package com.silicium.otusfilmcatalog.logic.model;
 
 import android.graphics.BitmapFactory;
 
+import androidx.annotation.NonNull;
+
 import com.silicium.otusfilmcatalog.App;
 import com.silicium.otusfilmcatalog.R;
+import com.silicium.otusfilmcatalog.logic.controller.MetricsStorage;
+
+import org.jetbrains.annotations.Contract;
 
 import java.util.UUID;
 
 public class FilmDescriptionFactory {
-    public static FilmDescription GetNewFilmDescription ()
-    {
-        FilmDescription ret = new FilmDescription(UUID.randomUUID().toString());
+    @NonNull
+    public static FilmDescription getNewFilmDescription() {
+        FilmDescription ret = new FilmDescription(UUID.randomUUID().toString(), MetricsStorage.getMetricNotifier());
 
         ret.Name = "";
         ret.Description = "";
         ret.Url = "https://www.kinopoisk.ru/error";
         ret.Cover = BitmapFactory.decodeResource(App.getAppResources(), R.drawable.film_no_image);
+        ret.CoverPreview = BitmapFactory.decodeResource(App.getAppResources(), R.drawable.film_no_image);
 
         return ret;
     }
 
-    public static FilmDescription GetFilmDescription (String ID)
-    {
-        FilmDescription ret = new FilmDescription(ID);
-
-        ret.Name = "";
-        ret.Description = "";
-        ret.Url = "https://www.kinopoisk.ru/error";
-        ret.Cover = BitmapFactory.decodeResource(App.getAppResources(), R.drawable.film_no_image);
-
-        return ret;
+    @Contract("_ -> new")
+    @NonNull
+    public static FilmDescription getFilmDescription(@NonNull String ID) {
+        return new FilmDescription(ID, MetricsStorage.getMetricNotifier());
     }
 
-    public static FilmDescription GetStubFilmDescription ()
-    {
-        FilmDescription ret = new FilmDescription("");
-
-        ret.Name = "";
-        ret.Description = "";
-        ret.Url = "https://www.kinopoisk.ru/error";
-        ret.Cover = BitmapFactory.decodeResource(App.getAppResources(), R.drawable.film_no_image);
-
-        return ret;
+    @Contract(" -> new")
+    @NonNull
+    public static FilmDescription getStubFilmDescription() {
+        return new FilmDescription("", MetricsStorage.getMetricNotifier());
     }
 
     //todo: добавить работу с разными локалями
-    public static String GetReadableGenre(FilmDescription.FilmGenre genre)
-    {
+    @NonNull
+    public static String getReadableGenre(@NonNull FilmDescription.FilmGenre genre) {
         switch (genre) {
             case comedy:
                 return "Комедия";

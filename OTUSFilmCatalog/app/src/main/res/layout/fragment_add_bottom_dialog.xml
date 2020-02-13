@@ -3,15 +3,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="@dimen/marginBottom"
     android:layout_marginTop="@dimen/marginTop"
+    android:layout_marginBottom="@dimen/marginBottom"
     android:orientation="vertical">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="@dimen/chapterHeaderHeight"
-        android:layout_marginRight="@dimen/marginRight"
         android:layout_marginLeft="@dimen/marginLeft"
+        android:layout_marginRight="@dimen/marginRight"
         android:gravity="center"
         android:text="@string/bottom_sheet_option_heading"
         android:textSize="@dimen/text_chapterHead"
@@ -21,52 +21,49 @@
         android:id="@+id/btn_add_photo"
         android:layout_width="match_parent"
         android:layout_height="@dimen/chapterItemHeight"
-        android:layout_marginRight="@dimen/marginRight"
         android:layout_marginLeft="@dimen/marginLeft"
-        android:drawablePadding="@dimen/paddingLeft"
+        android:layout_marginRight="@dimen/marginRight"
+        android:drawableStart="@drawable/ic_insert_photo"
         android:drawableLeft="@drawable/ic_insert_photo"
+        android:drawablePadding="@dimen/paddingStart"
         android:gravity="start|center_vertical"
         android:text="@string/bottom_sheet_option_pic_photo"
         android:textSize="@dimen/text_chapterItem"
-        android:drawableStart="@drawable/ic_insert_photo"
-        android:onClick="onItemClick"
         tools:ignore="RtlHardcoded" />
 
     <TextView
         android:id="@+id/btn_pick_category"
         android:layout_width="match_parent"
         android:layout_height="@dimen/chapterItemHeight"
-        android:layout_marginRight="@dimen/marginRight"
         android:layout_marginLeft="@dimen/marginLeft"
-        android:drawablePadding="@dimen/paddingLeft"
+        android:layout_marginRight="@dimen/marginRight"
+        android:drawableStart="@drawable/ic_library_add"
         android:drawableLeft="@drawable/ic_library_add"
+        android:drawablePadding="@dimen/paddingStart"
         android:gravity="start|center_vertical"
         android:text="@string/bottom_sheet_option_add_category"
         android:textSize="@dimen/text_chapterItem"
-        android:drawableStart="@drawable/ic_library_add"
-        android:onClick="onItemClick"
         tools:ignore="RtlHardcoded" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="@dimen/chapterDivHeight"
-        android:layout_marginBottom="@dimen/marginBottom"
         android:layout_marginTop="@dimen/marginTop"
+        android:layout_marginBottom="@dimen/marginBottom"
         android:background="@color/background" />
 
     <TextView
         android:id="@+id/btn_add_one_more"
         android:layout_width="match_parent"
         android:layout_height="@dimen/chapterItemHeight"
-        android:layout_marginRight="@dimen/marginRight"
         android:layout_marginLeft="@dimen/marginLeft"
-        android:drawablePadding="@dimen/paddingLeft"
+        android:layout_marginRight="@dimen/marginRight"
+        android:drawableStart="@drawable/ic_add_one_more"
         android:drawableLeft="@drawable/ic_add_one_more"
+        android:drawablePadding="@dimen/paddingStart"
         android:gravity="start|center_vertical"
         android:text="@string/bottom_sheet_option_add_one_more"
         android:textSize="@dimen/text_chapterItem"
-        android:drawableStart="@drawable/ic_add_one_more"
-        android:onClick="onItemClick"
         tools:ignore="RtlHardcoded" />
 
 </LinearLayout>

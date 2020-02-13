@@ -3,6 +3,7 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
-    <color name="selectableItemBackgroundBorderless">#3200BCD4</color>
+    <color name="itemSelectedBackgroundColor">#3200BCD4</color>
+    <color name="multipleSelectionBackgroundColor">#1F000000</color>
     <color name="colorBackgroundFloating">@android:color/darker_gray</color>
 </resources>

@@ -1,182 +1,115 @@
 package com.silicium.otusfilmcatalog.logic.view;
 
-import android.animation.Animator;
-import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
-import com.silicium.otusfilmcatalog.R;
 import com.silicium.otusfilmcatalog.logic.controller.FilmDescriptionStorage;
 import com.silicium.otusfilmcatalog.logic.model.FilmDescription;
 import com.silicium.otusfilmcatalog.logic.model.FilmDescriptionFactory;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class FilmViewWrapper {
 
-    private FilmDescriptionStorage storageInstance = FilmDescriptionStorage.getInstance();
-
     //region  singleton
+    @Nullable
     private static volatile FilmViewWrapper instance = null;
-    public static FilmViewWrapper getInstance()
-    {
+    @NonNull
+    private final FilmDescriptionStorage storageInstance = FilmDescriptionStorage.getInstance();
+
+    private FilmViewWrapper() {
+        super();
+    }
+
+    @NonNull
+    public static FilmViewWrapper getInstance() {
         if (instance == null)
             synchronized (FilmViewWrapper.class) {
                 if (instance == null)
                     instance = new FilmViewWrapper();
             }
+        //noinspection ConstantConditions
         return instance;
-    }
-
-    private FilmViewWrapper() {
-        super();
     }
     //endregion
 
     ///region API
-    public FilmDescription GetFilmByID(String ID)
-    {
-        return storageInstance.GetFilmByID(ID);
+    @NonNull
+    public FilmDescription getFilmByID(@NonNull String ID) {
+        return storageInstance.getFilmByID(ID);
     }
+
     /**
      * Присутсвует ли заданный ID в списке фильмов ?
+     *
      * @param ID идентификатор фильма
      * @return "истина", если пристусвует и "ложь", если нет
      */
-    public boolean containsID(String ID)
-    {
+    public boolean containsID(@NonNull String ID) {
         return storageInstance.containsID(ID);
     }
 
     /**
      * Получение представления с описанием фильма для отдельного экрана
-     * @param film Данные из БД о фильме
+     *
+     * @param film   Данные из БД о фильме
      * @param parent родитель
      * @return представление с картинкой и описанием
      */
-    public View GetFilmViewDetails(FilmDescription film, final Context parent)
-    {
+    @NonNull
+    public View getFilmViewDetails(@NonNull FilmDescription film, final @Nullable Context parent) {
         LinearLayout ret = new LinearLayout(parent);
         ret.setOrientation(LinearLayout.VERTICAL);
         ret.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
 
         ret.setTag(film.ID);
-        ret.addView(GetGenreChips(film, parent));
-        ret.addView(GetPicView(film, parent)); // TODO: сделать отдельные большие картинки
-        ret.addView(GetDescView(film, parent));
+        ret.addView(getGenreChips(film, parent));
+        ret.addView(getPicView(film, parent)); // TODO: сделать отдельные большие картинки, API теперь есть
+        ret.addView(getDescView(film, parent));
         return ret;
     }
 
-    /**
-     * Список представлений с фильмами
-     * @param parent родительский элемент
-     * @return Список View
-     */
-    public List<View> GetFilmViews(Context parent, View.OnClickListener detailClickListener)
-    {
-        List<View> views = new ArrayList<>();
-        for (FilmDescription film: storageInstance.getFilms()){
-            views.add(GetFilmView(film, parent, detailClickListener));
-        }
-        return views;
-    }
-
-    public String GetFilmUrl(FilmDescription film)
-    {
-        return String.format("<a href=\"%s\">%s</a>",film.Url, film.Name);
-    }
-
-    /**
-     * Получение представления с описанием фильма для списка
-     * @param film Данные из БД о фильме
-     * @param parent родитель
-     * @param detailClickListener действие по нажатии кнопки "детали"
-     * @return представление с картинкой и описанием
-     */
-    private View GetFilmView(FilmDescription film, final Context parent, View.OnClickListener detailClickListener)
-    {
-        LinearLayout ret = new LinearLayout(parent);
-        ret.setOrientation(LinearLayout.HORIZONTAL);
-        ret.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-
-        ret.setTag(film.ID);
-
-        final Button btnDetail = new Button(parent);
-        btnDetail.setTag(film.ID);
-        btnDetail.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT, 0.1F));
-        btnDetail.setText(R.string.filmDetailBtnText);
-        btnDetail.setRotation(-90F);
-        btnDetail.setOnClickListener(detailClickListener);
-
-        View pic = GetPicView(film, parent);
-        pic.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View v) {
-                ObjectAnimator fadeOut = ObjectAnimator.ofFloat(v, View.ALPHA,1, 0);
-                fadeOut.setDuration(parent.getResources().getInteger(R.integer.smooth_transistion_time_ms));
-                fadeOut.addListener(new Animator.AnimatorListener() {
-                    @Override
-                    public void onAnimationStart(Animator animator) {
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animator animator) {
-                        btnDetail.performClick();
-                        ObjectAnimator.ofFloat(v, View.ALPHA,0,1).start();
-                    }
-
-                    @Override
-                    public void onAnimationCancel(Animator animator) {
-                    }
-
-                    @Override
-                    public void onAnimationRepeat(Animator animator) {
-                    }
-                });
-                fadeOut.start();
-            }});
-
-        ret.addView(pic); //TODO: Принимать картинки разного размера и приводить к одному
-        ret.addView(GetDescView(film, parent));
-        ret.addView(btnDetail);
-        return ret;
+    @NonNull
+    public String getFilmUrl(@NonNull FilmDescription film) {
+        return String.format("<a href=\"%s\">%s</a>", film.Url, film.Name);
     }
     //endregion
 
     //region wrappers
-    private View GetGenreChips(FilmDescription film, Context parent) {
+    @NonNull
+    private View getGenreChips(@NonNull FilmDescription film, @Nullable Context parent) {
+        //noinspection ConstantConditions
         ChipGroup ret = new ChipGroup(parent); // TODO: добавиить отступы
         ret.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-        for (FilmDescription.FilmGenre filmGenre: film.Genre) {
+        for (FilmDescription.FilmGenre filmGenre : film.Genre) {
             Chip genre = new Chip(parent);
-            genre.setText(FilmDescriptionFactory.GetReadableGenre(filmGenre));
+            genre.setText(FilmDescriptionFactory.getReadableGenre(filmGenre));
             ret.addView(genre);
         }
         return ret;
     }
 
-    private ImageView GetPicView(FilmDescription film, Context parent)
-    {
+    @NonNull
+    private ImageView getPicView(@NonNull FilmDescription film, @Nullable Context parent) {
         ImageView pic = new ImageView(parent);
         pic.setLayoutParams(new LinearLayout.LayoutParams(200, 200));
-        pic.setPadding(10,10,10,10);
+        pic.setPadding(10, 10, 10, 10);
         pic.setImageBitmap(film.Cover);
 
         return pic;
     }
 
-    private TextView GetDescView(FilmDescription film, Context parent)
-    {
+    @NonNull
+    private TextView getDescView(@NonNull FilmDescription film, @Nullable Context parent) {
         TextView description = new TextView(parent);
         description.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, 200, 3.0F));
-        description.setPadding(10,10,10,10);
+        description.setPadding(10, 10, 10, 10);
         description.setText(film.Description);
 
         return description;
