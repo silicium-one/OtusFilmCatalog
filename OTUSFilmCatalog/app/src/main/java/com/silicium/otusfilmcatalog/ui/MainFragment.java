@@ -76,7 +76,7 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
         }
     });
     private final ItemTouchHelper swipeProcessingHelper = new ItemTouchHelper(swipeCallback);
-    private RecyclerView film_RecyclerView;
+    private RecyclerView film_recycler_view;
     private FloatingActionButton fab_del;
     private FloatingActionButton fab_manipulate_favorites;
     private BottomNavigationView nav_view;
@@ -163,7 +163,7 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
     private void favoritesListMode() {
         swipeCallback.setSwipeDeletionPossible(true);
         nav_view.getMenu().getItem(0).setChecked(true); //nav_view.setSelectedItemId(R.id.favorites_list); - бесконечная рекурсия
-        film_RecyclerView.post(new Runnable() {
+        film_recycler_view.post(new Runnable() {
             @SuppressLint("SyntheticAccessor")
             @Override
             public void run() {
@@ -180,7 +180,7 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
     private void fullListMode() {
         swipeCallback.setSwipeDeletionPossible(false);
         nav_view.getMenu().getItem(1).setChecked(true); //nav_view.setSelectedItemId(R.id.full_list); - бесконечная рекурсия
-        film_RecyclerView.post(new Runnable() {
+        film_recycler_view.post(new Runnable() {
             @SuppressLint("SyntheticAccessor")
             @Override
             public void run() {
@@ -308,14 +308,14 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
                     }
                 }, this);
 
-        film_RecyclerView = rootView.findViewById(R.id.film_RecyclerView);
+        film_recycler_view = rootView.findViewById(R.id.film_recycler_view);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(rootView.getContext(), RecyclerView.VERTICAL, false);
-        film_RecyclerView.setLayoutManager(linearLayoutManager);
-        film_RecyclerView.addItemDecoration(new DividerItemDecoration(rootView.getContext(), DividerItemDecoration.VERTICAL));
+        film_recycler_view.setLayoutManager(linearLayoutManager);
+        film_recycler_view.addItemDecoration(new DividerItemDecoration(rootView.getContext(), DividerItemDecoration.VERTICAL));
         RecyclerView.ItemAnimator itemAnimator = new SlideInUpAnimator(new OvershootInterpolator(1f));
         itemAnimator.setAddDuration(rootView.getResources().getInteger(R.integer.element_adding_animation_time_ms));
-        film_RecyclerView.setItemAnimator(itemAnimator);
-        swipeProcessingHelper.attachToRecyclerView(film_RecyclerView);
+        film_recycler_view.setItemAnimator(itemAnimator);
+        swipeProcessingHelper.attachToRecyclerView(film_recycler_view);
 
 
         boolean adapterCreationRequired = filmItemAdapter == null;
@@ -350,7 +350,7 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
                     });
         }
 
-        film_RecyclerView.setAdapter(filmItemAdapter);
+        film_recycler_view.setAdapter(filmItemAdapter);
 
         if (adapterCreationRequired) {
             if (isFavoritesOnly())

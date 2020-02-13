@@ -18,7 +18,7 @@
             android:orientation="vertical">
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/film_RecyclerView"
+                android:id="@+id/film_recycler_view"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 app:layout_constraintBottom_toTopOf="@+id/bottom_main_navigation"
