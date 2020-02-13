@@ -175,7 +175,8 @@ public class MainFragment extends FragmentWithCallback implements IOnBackPressed
     private void fullListMode() {
         swipeCallback.setSwipeDeletionPossible(false);
         nav_view.getMenu().getItem(1).setChecked(true); //nav_view.setSelectedItemId(R.id.full_list); - бесконечная рекурсия
-        FilmDescriptionStorage.getInstance().getFilmsIDsNextPageAsync(new Consumer<Collection<String>>() {            @SuppressLint("SyntheticAccessor")
+        FilmDescriptionStorage.getInstance().getFilmsIDsNextPageAsync(new Consumer<Collection<String>>() {
+            @SuppressLint("SyntheticAccessor")
             @Override
             public void accept(Collection<String> filmIDs) {
                 filmItemAdapter.removeAllItems();
@@ -288,10 +289,10 @@ public class MainFragment extends FragmentWithCallback implements IOnBackPressed
                     }
                 }, this);
 
-        film_RecyclerView = view.findViewById(R.id.film_RecyclerView);
+        film_recycler_view = view.findViewById(R.id.film_recycler_view);
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(view.getContext(), RecyclerView.VERTICAL, false);
         film_recycler_view.setLayoutManager(linearLayoutManager);
-        film_recycler_view.addItemDecoration(new DividerItemDecoration(rootView.getContext(), DividerItemDecoration.VERTICAL));
+        film_recycler_view.addItemDecoration(new DividerItemDecoration(view.getContext(), DividerItemDecoration.VERTICAL));
         RecyclerView.ItemAnimator itemAnimator = new SlideInUpAnimator(new OvershootInterpolator(1f));
         itemAnimator.setAddDuration(view.getResources().getInteger(R.integer.element_adding_animation_time_ms));
         film_recycler_view.setItemAnimator(itemAnimator);
@@ -343,7 +344,7 @@ public class MainFragment extends FragmentWithCallback implements IOnBackPressed
 
         final SwipeRefreshLayout srl = view.findViewById(R.id.srl);
 
-        film_RecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        film_recycler_view.addOnScrollListener(new RecyclerView.OnScrollListener() {
             /**
              * Callback method to be invoked when RecyclerView's scroll state changes.
              *
