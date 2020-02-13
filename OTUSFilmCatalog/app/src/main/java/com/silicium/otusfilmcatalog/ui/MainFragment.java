@@ -25,8 +25,8 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.silicium.otusfilmcatalog.App;
 import com.silicium.otusfilmcatalog.R;
-import com.silicium.otusfilmcatalog.logic.controller.FilmDescriptionStorage;
 import com.silicium.otusfilmcatalog.logic.model.FragmentWithCallback;
 import com.silicium.otusfilmcatalog.logic.model.IItemTouchHelperAdapter;
 import com.silicium.otusfilmcatalog.logic.model.IOnBackPressedListener;
@@ -66,7 +66,7 @@ public class MainFragment extends FragmentWithCallback implements IOnBackPressed
         @Override
         public void onItemDismiss(int position) {
             if (isFavoritesOnly())
-                FilmDescriptionStorage.getInstance().getFilmByID(filmItemAdapter.getFilmIDByPos(position)).setFavorite(false);
+                App.getFilmDescriptionStorage().getFilmByID(filmItemAdapter.getFilmIDByPos(position)).setFavorite(false);
             filmItemAdapter.onItemDismiss(position);
         }
     });
@@ -164,7 +164,7 @@ public class MainFragment extends FragmentWithCallback implements IOnBackPressed
             public void run() {
                 filmItemAdapter.removeAllItems();
 
-                for (String item : FilmDescriptionStorage.getInstance().getFavoriteFilmsIDs(true))
+                for (String item : App.getFilmDescriptionStorage().getFavoriteFilmsIDs(true))
                     filmItemAdapter.addItem(item);
 
                 setSelectedFilmTag(getSelectedFilmTag());
@@ -175,7 +175,7 @@ public class MainFragment extends FragmentWithCallback implements IOnBackPressed
     private void fullListMode() {
         swipeCallback.setSwipeDeletionPossible(false);
         nav_view.getMenu().getItem(1).setChecked(true); //nav_view.setSelectedItemId(R.id.full_list); - бесконечная рекурсия
-        FilmDescriptionStorage.getInstance().getFilmsIDsNextPageAsync(new Consumer<Collection<String>>() {
+        App.getFilmDescriptionStorage().getFilmsIDsNextPageAsync(new Consumer<Collection<String>>() {
             @SuppressLint("SyntheticAccessor")
             @Override
             public void accept(Collection<String> filmIDs) {
@@ -243,7 +243,7 @@ public class MainFragment extends FragmentWithCallback implements IOnBackPressed
                 @SuppressLint("SyntheticAccessor") List<String> checkedIDs = filmItemAdapter.getCheckedIDs();
                 if (isFavoritesOnly()) {
                     for (String filmID : checkedIDs) {
-                        FilmDescriptionStorage.getInstance().getFilmByID(filmID).setFavorite(false);
+                        App.getFilmDescriptionStorage().getFilmByID(filmID).setFavorite(false);
                         filmItemAdapter.removeItemByID(filmID);
                     }
 
@@ -252,18 +252,18 @@ public class MainFragment extends FragmentWithCallback implements IOnBackPressed
                 } else {
                     List<String> favoriteIDs = new ArrayList<>();
                     for (String filmID : checkedIDs) {
-                        if (FilmDescriptionStorage.getInstance().getFilmByID(filmID).isFavorite())
+                        if (App.getFilmDescriptionStorage().getFilmByID(filmID).isFavorite())
                             favoriteIDs.add(filmID);
                     }
 
                     if (favoriteIDs.size() == 0) { // в выбранных элементах избранных нет, надо добавить выбранные элементы в избранное
                         for (String filmID : checkedIDs) {
-                            FilmDescriptionStorage.getInstance().getFilmByID(filmID).setFavorite(true);
+                            App.getFilmDescriptionStorage().getFilmByID(filmID).setFavorite(true);
                             filmItemAdapter.notifyItemChanged(filmItemAdapter.getPosByID(filmID));
                         }
                     } else { // надо удалить элементы из избранного
                         for (String filmID : favoriteIDs) {
-                            FilmDescriptionStorage.getInstance().getFilmByID(filmID).setFavorite(false);
+                            App.getFilmDescriptionStorage().getFilmByID(filmID).setFavorite(false);
                             filmItemAdapter.notifyItemChanged(filmItemAdapter.getPosByID(filmID));
                         }
                     }
@@ -308,7 +308,7 @@ public class MainFragment extends FragmentWithCallback implements IOnBackPressed
                         @Override
                         public void onCheckedChanged(@NonNull CompoundButton buttonView, boolean isChecked) {
                             String filmID = buttonView.getTag().toString();
-                            FilmDescriptionStorage.getInstance().getFilmByID(filmID).setFavorite(isChecked);
+                            App.getFilmDescriptionStorage().getFilmByID(filmID).setFavorite(isChecked);
                             if (!isChecked && isFavoritesOnly())
                                 filmItemAdapter.removeItemByID(filmID);
                         }
@@ -359,7 +359,7 @@ public class MainFragment extends FragmentWithCallback implements IOnBackPressed
                         return;
 
                     srl.setRefreshing(true);
-                    FilmDescriptionStorage.getInstance().getFilmsIDsNextPageAsync(new Consumer<Collection<String>>() {
+                    App.getFilmDescriptionStorage().getFilmsIDsNextPageAsync(new Consumer<Collection<String>>() {
                         @Override
                         public void accept(final Collection<String> filmIDs) {
                             view.postDelayed(new Runnable() { // ИБД

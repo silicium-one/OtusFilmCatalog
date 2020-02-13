@@ -9,8 +9,8 @@ import android.widget.CompoundButton;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.silicium.otusfilmcatalog.App;
 import com.silicium.otusfilmcatalog.R;
-import com.silicium.otusfilmcatalog.logic.controller.FilmDescriptionStorage;
 import com.silicium.otusfilmcatalog.logic.model.IItemTouchHelperAdapter;
 
 import org.jetbrains.annotations.Contract;
@@ -72,7 +72,7 @@ public class FilmItemAdapter extends androidx.recyclerview.widget.RecyclerView.A
     public void onBindViewHolder(@NonNull FilmItemViewHolder holder, final int position) {
         String currentTag = filmsItemsData.get(position).filmID;
         boolean isChecked = filmsItemsData.get(position).isChecked;
-        holder.bind(FilmDescriptionStorage.getInstance().getFilmByID(currentTag), currentTag.equals(selectedFilmTag), isMultiselectMode(), isChecked, favoriteStateChangedListener, detailBtnClickListener, itemLongClickListener, new CompoundButton.OnCheckedChangeListener() {
+        holder.bind(App.getFilmDescriptionStorage().getFilmByID(currentTag), currentTag.equals(selectedFilmTag), isMultiselectMode(), isChecked, favoriteStateChangedListener, detailBtnClickListener, itemLongClickListener, new CompoundButton.OnCheckedChangeListener() {
             @SuppressLint("SyntheticAccessor")
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
