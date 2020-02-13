@@ -21,7 +21,7 @@ public class FilmDescriptionStorage implements IFilmDescriptionStorage {
     @Nullable
     private static volatile FilmDescriptionStorage instance = null;
     @NonNull
-    private final Map<String, FilmDescription> Films = new HashMap<>();;
+    private final Map<String, FilmDescription> Films = new HashMap<>();
 
     @NonNull
     public static IFilmDescriptionStorage getInstance() {
@@ -43,9 +43,8 @@ public class FilmDescriptionStorage implements IFilmDescriptionStorage {
     @Override
     public void getFilmsIDsNextPageAsync(@NonNull Consumer<Collection<String>> callback) {
         Collection<String> ret = new ArrayList<>(getFilmsPerPage());
-        for (int i = 0; i < getFilmsPerPage(); i++)
-        {
-            switch (i%3) {
+        for (int i = 0; i < getFilmsPerPage(); i++) {
+            switch (i % 3) {
                 case 0:
                     FilmDescription film1 = FilmDescriptionFactory.getNewFilmDescription();
                     film1.Name = "Детство Шелдона";
@@ -151,6 +150,7 @@ public class FilmDescriptionStorage implements IFilmDescriptionStorage {
 
     /**
      * Содержится ли данный ID в базе
+     *
      * @param ID id фильма
      * @return ИСТИНА, если содержится
      */
@@ -160,6 +160,7 @@ public class FilmDescriptionStorage implements IFilmDescriptionStorage {
 
     /**
      * Получить описание фильма по ID
+     *
      * @param ID id фильма
      * @return данные, достаточные для вывода фильма на экран
      */
@@ -176,6 +177,7 @@ public class FilmDescriptionStorage implements IFilmDescriptionStorage {
     /**
      * Добавить фильм
      * Устарело, так как фильмы приходят с tmdb.org
+     *
      * @param film Фильм
      */
     @Deprecated
