@@ -345,13 +345,7 @@ public class MainFragment extends FragmentWithCallback implements IOnBackPressed
         final SwipeRefreshLayout srl = view.findViewById(R.id.srl);
 
         film_recycler_view.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            /**
-             * Callback method to be invoked when RecyclerView's scroll state changes.
-             *
-             * @param recyclerView The RecyclerView whose scroll state has changed.
-             * @param newState     The updated scroll state. One of {@link RecyclerView#SCROLL_STATE_IDLE},
-             *                     {@link RecyclerView#SCROLL_STATE_DRAGGING} or {@link RecyclerView#SCROLL_STATE_SETTLING}.
-             */
+
             @SuppressLint("SyntheticAccessor")
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
