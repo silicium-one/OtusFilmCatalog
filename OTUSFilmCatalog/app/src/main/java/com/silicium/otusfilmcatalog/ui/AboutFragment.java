@@ -22,9 +22,6 @@ import com.silicium.otusfilmcatalog.R;
 import com.silicium.otusfilmcatalog.logic.model.FragmentWithCallback;
 import com.silicium.otusfilmcatalog.ui.cuctomcomponents.UiComponents;
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class AboutFragment extends FragmentWithCallback implements NavigationView.OnNavigationItemSelectedListener {
 
     public final static String FRAGMENT_TAG = AboutFragment.class.getSimpleName();

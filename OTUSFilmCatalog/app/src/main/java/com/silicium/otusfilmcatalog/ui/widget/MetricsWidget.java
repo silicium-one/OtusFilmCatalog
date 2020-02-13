@@ -16,10 +16,6 @@ import com.silicium.otusfilmcatalog.logic.controller.MetricsViewsStorage;
 
 import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
 
-/**
- * Implementation of App Widget functionality.
- * App Widget Configuration implemented in {@link MetricsWidgetConfigureActivity MetricsWidgetConfigureActivity}
- */
 public class MetricsWidget extends AppWidgetProvider {
 
     private final static String WIDGET_CLICK = "MetricsWidget.widget_click";

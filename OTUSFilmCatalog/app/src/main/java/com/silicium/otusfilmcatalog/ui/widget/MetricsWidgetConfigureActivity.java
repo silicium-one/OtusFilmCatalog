@@ -15,9 +15,6 @@ import androidx.annotation.Nullable;
 import com.silicium.otusfilmcatalog.R;
 import com.silicium.otusfilmcatalog.logic.controller.MetricsViewsStorage;
 
-/**
- * The configuration screen for the {@link MetricsWidget MetricsWidget} AppWidget.
- */
 public class MetricsWidgetConfigureActivity extends Activity {
 
     private int mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
