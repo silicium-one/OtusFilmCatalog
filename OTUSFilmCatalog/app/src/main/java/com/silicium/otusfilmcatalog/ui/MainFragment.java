@@ -79,6 +79,7 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
     private RecyclerView film_RecyclerView;
     private FloatingActionButton fab_del;
     private FloatingActionButton fab_manipulate_favorites;
+    private BottomNavigationView nav_view;
     private boolean isMultiselectMode;
     private boolean doubleBackToExitPressedOnce = false;
 
@@ -161,6 +162,7 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
 
     private void favoritesListMode() {
         swipeCallback.setSwipeDeletionPossible(true);
+        nav_view.getMenu().getItem(0).setChecked(true); //nav_view.setSelectedItemId(R.id.favorites_list); - бесконечная рекурсия
         film_RecyclerView.post(new Runnable() {
             @SuppressLint("SyntheticAccessor")
             @Override
@@ -177,6 +179,7 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
 
     private void fullListMode() {
         swipeCallback.setSwipeDeletionPossible(false);
+        nav_view.getMenu().getItem(1).setChecked(true); //nav_view.setSelectedItemId(R.id.full_list); - бесконечная рекурсия
         film_RecyclerView.post(new Runnable() {
             @SuppressLint("SyntheticAccessor")
             @Override
@@ -204,8 +207,8 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
 
         rootView = view;
 
-        final BottomNavigationView bnv = view.findViewById(R.id.bottom_main_navigation);
-        bnv.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+        nav_view = view.findViewById(R.id.bottom_main_navigation);
+        nav_view.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @SuppressLint("SyntheticAccessor")
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
