@@ -8,6 +8,7 @@ import androidx.core.util.Consumer;
 
 import com.silicium.otusfilmcatalog.App;
 import com.silicium.otusfilmcatalog.R;
+import com.silicium.otusfilmcatalog.logic.model.ErrorResponse;
 import com.silicium.otusfilmcatalog.logic.model.FilmDescription;
 import com.silicium.otusfilmcatalog.logic.model.FilmDescriptionFactory;
 import com.silicium.otusfilmcatalog.logic.model.IFilmDescriptionStorage;
@@ -38,13 +39,24 @@ public class FilmDescriptionStorage implements IFilmDescriptionStorage {
     }
 
     /**
-     * Список ID фильмов. Может вернуть пустую коллекцию, если страница задана неверно или нет связи с интернетом
-     * Также может вернуть количество фильмов, отличное от {@link IFilmDescriptionStorage#getFilmsPerPage()}
+     * Список ID фильмов. Может вернуть пустую коллекцию. Также может вернуть количество фильмов,
+     * отличное от {@link IFilmDescriptionStorage#getFilmsPerPage()}.
      *
-     * @param callback - вызвать, когда будет закончено получение данных с списком полученных ключей в качестве аргумента
+     * @param callback      - будет вызвано, когда будет закончено получение данных с списком полученных ключей в качестве аргумента
+     * @param errorResponse - будет вызвано, если возникли ошибки в получении фильмов с {@link ErrorResponse} в качестве аргумента
+     *
+     * Вызвано будет что-то одно
      */
     @Override
-    public void getFilmsIDsNextPageAsync(@NonNull Consumer<Collection<String>> callback) {
+    public void getFilmsIDsNextPageAsync(@NonNull Consumer<Collection<String>> callback, @Nullable Consumer<ErrorResponse> errorResponse) {
+        int total = Films.size();
+        if (total >= getFilmsPerPage() * getTotalPages()) {
+            if (errorResponse != null)
+                errorResponse.accept(new ErrorResponse(R.string.limitExceed));
+
+            return;
+        }
+
         Collection<String> ret = new ArrayList<>(getFilmsPerPage());
         for (int i = 0; i < getFilmsPerPage(); i++) {
             switch (i % 3) {
@@ -130,15 +142,11 @@ public class FilmDescriptionStorage implements IFilmDescriptionStorage {
     /**
      * Количество страниц с фильмами
      *
-     * @return сколько всего страниц с фильмами в базе
+     * @return сколько всего страниц с фильмами может содержаться в базе
      */
     @Override
     public int getTotalPages() {
-        float ret = Films.size() / getFilmsPerPage();
-        if (ret == (int) ret)
-            return (int) ret;
-        else
-            return (int) ret + 1;
+        return 5;
     }
 
     /**

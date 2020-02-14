@@ -27,6 +27,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.silicium.otusfilmcatalog.App;
 import com.silicium.otusfilmcatalog.R;
+import com.silicium.otusfilmcatalog.logic.model.ErrorResponse;
 import com.silicium.otusfilmcatalog.logic.model.FragmentWithCallback;
 import com.silicium.otusfilmcatalog.logic.model.IItemTouchHelperAdapter;
 import com.silicium.otusfilmcatalog.logic.model.IOnBackPressedListener;
@@ -46,6 +47,8 @@ import java.util.Collection;
 import java.util.List;
 
 import jp.wasabeef.recyclerview.animators.SlideInUpAnimator;
+
+import static androidx.recyclerview.widget.RecyclerView.SCROLL_STATE_SETTLING;
 
 public class MainFragment extends FragmentWithCallback implements IOnBackPressedListener {
     public final static String FRAGMENT_TAG = MainFragment.class.getSimpleName();
@@ -185,6 +188,11 @@ public class MainFragment extends FragmentWithCallback implements IOnBackPressed
                     filmItemAdapter.addItem(item);
 
                 setSelectedFilmTag(getSelectedFilmTag());
+            }
+        }, new Consumer<ErrorResponse>() {
+            @Override
+            public void accept(ErrorResponse errorResponse) {
+                Toast.makeText(getContext(), errorResponse.message, Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -351,24 +359,26 @@ public class MainFragment extends FragmentWithCallback implements IOnBackPressed
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
 
+                if (srl.isRefreshing())
+                    return;
+
                 if (isFavoritesOnly())
                     return;
 
-                if (linearLayoutManager.findLastVisibleItemPosition() == filmItemAdapter.getItemCount() - 1) {
-                    if (srl.isRefreshing())
-                        return;
+                if (newState == SCROLL_STATE_SETTLING && linearLayoutManager.findLastVisibleItemPosition() == filmItemAdapter.getItemCount() - 1) {
 
                     srl.setRefreshing(true);
                     App.getFilmDescriptionStorage().getFilmsIDsNextPageAsync(new Consumer<Collection<String>>() {
                         @Override
                         public void accept(final Collection<String> filmIDs) {
-                            view.postDelayed(new Runnable() { // ИБД
-                                @Override
-                                public void run() {
-                                    filmItemAdapter.addRange(filmIDs);
-                                    srl.setRefreshing(false);
-                                }
-                            }, 333);
+                            filmItemAdapter.addRange(filmIDs);
+                            srl.setRefreshing(false);
+                        }
+                    }, new Consumer<ErrorResponse>() {
+                        @Override
+                        public void accept(ErrorResponse errorResponse) {
+                            Toast.makeText(getContext(), errorResponse.message, Toast.LENGTH_SHORT).show();
+                            srl.setRefreshing(false);
                         }
                     });
                 }

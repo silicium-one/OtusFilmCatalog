@@ -1,6 +1,7 @@
 package com.silicium.otusfilmcatalog.logic.model;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.util.Consumer;
 
 import java.util.Collection;
@@ -22,12 +23,15 @@ public interface IFilmDescriptionStorage {
     int getFilmsPerPage();
 
     /**
-     * Список ID фильмов. Может вернуть пустую коллекцию, если страница задана неверно или нет связи с интернетом
-     * Также может вернуть количество фильмов, отличное от {@link IFilmDescriptionStorage#getFilmsPerPage()}
+     * Список ID фильмов. Может вернуть пустую коллекцию. Также может вернуть количество фильмов,
+     * отличное от {@link IFilmDescriptionStorage#getFilmsPerPage()}.
      *
-     * @param callback - вызвать, когда будет закончено получение данных с списком полученных ключей в качестве аргумента
+     * @param callback      - будет вызвано, когда будет закончено получение данных с списком полученных ключей в качестве аргумента
+     * @param errorResponse - будет вызвано, если возникли ошибки в получении фильмов с {@link ErrorResponse} в качестве аргумента
+     * <p>
+     * Вызвано будет что-то одно
      */
-    void getFilmsIDsNextPageAsync(@NonNull Consumer<Collection<String>> callback);
+    void getFilmsIDsNextPageAsync(@NonNull Consumer<Collection<String>> callback, @Nullable Consumer<ErrorResponse> errorResponse);
 
     /**
      * Список ID фильмов из избранного списка
@@ -49,6 +53,7 @@ public interface IFilmDescriptionStorage {
 
     /**
      * Содержится ли данный ID в базе
+     *
      * @param ID id фильма
      * @return ИСТИНА, если содержится
      */
@@ -56,6 +61,7 @@ public interface IFilmDescriptionStorage {
 
     /**
      * Получить описание фильма по ID
+     *
      * @param ID id фильма
      * @return данные, достаточные для вывода фильма на экран
      */
@@ -65,6 +71,7 @@ public interface IFilmDescriptionStorage {
     /**
      * Добавить фильм
      * Устарело, так как фильмы приходят с tmdb.org
+     *
      * @param film Фильм
      */
     @Deprecated
