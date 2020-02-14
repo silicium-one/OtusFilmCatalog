@@ -5,7 +5,7 @@ import android.content.res.Resources;
 
 import androidx.annotation.NonNull;
 
-import com.silicium.otusfilmcatalog.logic.controller.FilmDescriptionStorage;
+import com.silicium.otusfilmcatalog.logic.controller.FilmDescriptionFromTMDBFetcher;
 import com.silicium.otusfilmcatalog.logic.model.IFilmDescriptionStorage;
 
 import org.jetbrains.annotations.Contract;
@@ -39,6 +39,7 @@ public class App extends Application {
 
         resources = getResources();
         application = this;
-        storage = FilmDescriptionStorage.getInstance();
+        storage = FilmDescriptionFromTMDBFetcher.getInstance();
+        //storage = FilmDescriptionStorage.getInstance();
     }
 }

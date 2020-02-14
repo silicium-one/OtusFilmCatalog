@@ -2,5 +2,8 @@
     <string name="noFilmByIDErr">ID фильма не найден в базе</string>
 
     <string name="limitExceed">Достигнут предел</string>
+    <string name="connectFailure">Ошибка связи с themoviedb.org</string>
+    <string name="httpRequestFail">Ошибка HTTP</string>
+    <string name="httpResponseEmptyBody">HTTP запрос вернул пустое тело</string>
 
 </resources>
