@@ -45,15 +45,6 @@ public class FilmDescriptionStorage implements IFilmDescriptionStorage {
         return instance;
     }
 
-    /**
-     * Список ID фильмов. Может вернуть пустую коллекцию. Также может вернуть количество фильмов,
-     * отличное от {@link IFilmDescriptionStorage#getFilmsPerPage()}.
-     *
-     * @param callback      - будет вызвано, когда будет закончено получение данных с списком полученных ключей в качестве аргумента
-     * @param errorResponse - будет вызвано, если возникли ошибки в получении фильмов с {@link ErrorResponse} в качестве аргумента
-     *
-     * Вызвано будет что-то одно
-     */
     @Override
     public void getFilmsIDsNextPageAsync(@NonNull Consumer<Collection<String>> callback, @Nullable Consumer<ErrorResponse> errorResponse) {
         int total = Films.size();
@@ -110,13 +101,6 @@ public class FilmDescriptionStorage implements IFilmDescriptionStorage {
         callback.accept(ret);
     }
 
-    /**
-     * Список ID фильмов из избранного списка
-     * ВАЖНО: список ключей хранится отдельным списком, поэтому он будет актуализироваться только при обращении с флагом ИСТИНА
-     *
-     * @param refreshActual ИСТИНА, если нужно обновить список сообразно списку имеющихся в базе фильмов (МЕДЛЕННО!)
-     * @return список ключей из списка "избранное"
-     */
     @NonNull
     @Override
     public Collection<String> getFavoriteFilmsIDs(boolean refreshActual) {
@@ -131,11 +115,6 @@ public class FilmDescriptionStorage implements IFilmDescriptionStorage {
         return ret;
     }
 
-    /**
-     * Список ID фильмов из избранного списка без обновления актуальности
-     *
-     * @return список ключей из списка "избранное"
-     */
     @NonNull
     @Override
     public Collection<String> getFavoriteFilmsIDs() {
@@ -146,42 +125,20 @@ public class FilmDescriptionStorage implements IFilmDescriptionStorage {
         return ret;
     }
 
-    /**
-     * Количество страниц с фильмами
-     *
-     * @return сколько всего страниц с фильмами может содержаться в базе
-     */
     @Override
     public int getTotalPages() {
         return 5;
     }
 
-    /**
-     * Количество фильмов на одной странице (больше относится к списками из интернета, чем из базы)
-     *
-     * @return сколько фильмов в одном запросе
-     */
     @Override
     public int getFilmsPerPage() {
         return 20;
     }
 
-    /**
-     * Содержится ли данный ID в базе
-     *
-     * @param ID id фильма
-     * @return ИСТИНА, если содержится
-     */
     public boolean containsID(@NonNull String ID) {
         return Films.containsKey(ID);
     }
 
-    /**
-     * Получить описание фильма по ID
-     *
-     * @param ID id фильма
-     * @return данные, достаточные для вывода фильма на экран
-     */
     @NonNull
     public FilmDescription getFilmByID(@NonNull String ID) {
         try {
@@ -192,12 +149,7 @@ public class FilmDescriptionStorage implements IFilmDescriptionStorage {
         }
     }
 
-    /**
-     * Добавить фильм
-     * Устарело, так как фильмы приходят с tmdb.org
-     *
-     * @param film Фильм
-     */
+    @Override
     @Deprecated
     public void addFilm(@NonNull FilmDescription film) { //TODO: подумать о том, что бы максимально вынести генерацию метрик в FilmDescription
         Films.put(film.ID, film);
@@ -206,12 +158,6 @@ public class FilmDescriptionStorage implements IFilmDescriptionStorage {
             MetricsStorage.getMetricNotifier().increment(MetricsStorage.CARTOON_TAG);
     }
 
-    /**
-     * Получение человекопонятных названий жанра
-     *
-     * @param genreID идентификатор жанра
-     * @return человекочитаемый жанр или genreID.toString(), если жанр не обнаружен
-     */
     @NonNull
     @Override
     public String getReadableGenre(int genreID) {

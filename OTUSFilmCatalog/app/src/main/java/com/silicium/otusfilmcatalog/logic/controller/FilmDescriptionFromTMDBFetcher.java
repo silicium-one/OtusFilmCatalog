@@ -100,35 +100,16 @@ public class FilmDescriptionFromTMDBFetcher implements IFilmDescriptionStorage {
         return instance;
     }
 
-    /**
-     * Количество страниц с фильмами
-     *
-     * @return сколько всего страниц с фильмами в базе
-     */
     @Override
     public int getTotalPages() {
         return 5;
     }
 
-    /**
-     * Количество фильмов на одной странице (больше относится к списками из интернета, чем из базы)
-     *
-     * @return сколько фильмов в одном запросе
-     */
     @Override
     public int getFilmsPerPage() {
         return 20;
     }
 
-    /**
-     * Список ID фильмов. Может вернуть пустую коллекцию. Также может вернуть количество фильмов,
-     * отличное от {@link IFilmDescriptionStorage#getFilmsPerPage()}.
-     *
-     * @param callback      - будет вызвано, когда будет закончено получение данных с списком полученных ключей в качестве аргумента
-     * @param errorResponse - будет вызвано, если возникли ошибки в получении фильмов с {@link ErrorResponse} в качестве аргумента
-     *
-     * Вызвано будет что-то одно
-     */
     @Override
     public void getFilmsIDsNextPageAsync(@NonNull final Consumer<Collection<String>> callback, @Nullable final Consumer<ErrorResponse> errorResponse) {
         int total = Films.size();
@@ -173,47 +154,23 @@ public class FilmDescriptionFromTMDBFetcher implements IFilmDescriptionStorage {
         });
     }
 
-    /**
-     * Список ID фильмов из избранного списка
-     * ВАЖНО: список ключей хранится отдельным списком, поэтому он будет актуализироваться только при обращении с флагом ИСТИНА
-     *
-     * @param refreshActual ИСТИНА, если нужно обновить список сообразно списку имеющихся в базе фильмов (МЕДЛЕННО!)
-     * @return список ключей из списка "избранное"
-     */
     @NonNull
     @Override
     public Collection<String> getFavoriteFilmsIDs(boolean refreshActual) {
         return new ArrayList<>();
     }
 
-    /**
-     * Список ID фильмов из избранного списка без обновления актуальности
-     *
-     * @return список ключей из списка "избранное"
-     */
     @NonNull
     @Override
     public Collection<String> getFavoriteFilmsIDs() {
         return new ArrayList<>();
     }
 
-    /**
-     * Содержится ли данный ID в базе
-     *
-     * @param ID id фильма
-     * @return ИСТИНА, если содержится
-     */
     @Override
     public boolean containsID(@NonNull String ID) {
         return Films.containsKey(ID);
     }
 
-    /**
-     * Получить описание фильма по ID
-     *
-     * @param ID id фильма
-     * @return данные, достаточные для вывода фильма на экран
-     */
     @NonNull
     @Override
     public FilmDescription getFilmByID(@NonNull String ID) {
@@ -225,13 +182,8 @@ public class FilmDescriptionFromTMDBFetcher implements IFilmDescriptionStorage {
         }
     }
 
-    /**
-     * Добавить фильм
-     * Устарело, так как фильмы приходят с tmdb.org
-     *
-     * @param film Фильм
-     */
     @Override
+    @Deprecated
     public void addFilm(@NonNull FilmDescription film) {
         Films.put(film.ID, film);
         MetricsStorage.getMetricNotifier().increment(MetricsStorage.TOTAL_TAG);
@@ -239,11 +191,6 @@ public class FilmDescriptionFromTMDBFetcher implements IFilmDescriptionStorage {
             MetricsStorage.getMetricNotifier().increment(MetricsStorage.CARTOON_TAG);
     }
 
-    /**
-     * Получение человекопонятных названий жанра
-     * @param genreID идентификатор жанра
-     * @return человекочитаемый жанр или genreID.toString(), если жанр не обнаружен
-     */
     @NonNull
     @Override
     public String getReadableGenre(int genreID) {
