@@ -76,4 +76,12 @@ public interface IFilmDescriptionStorage {
      */
     @Deprecated
     void addFilm(@NonNull FilmDescription film);
+
+    /**
+     * Получение человекопонятных названий жанра
+     * @param genreID идентификатор жанра
+     * @return человекочитаемый жанр или genreID.toString(), если жанр не обнаружен
+     */
+    @NonNull
+    String getReadableGenre(int genreID);
 }

@@ -15,7 +15,7 @@ public class FilmDescription {
 
     @NonNull
     public final String ID;
-    public final Set<FilmGenre> Genre = new HashSet<>();
+    public final Set<Integer> Genre = new HashSet<>();
     @NonNull
     private final IMetricNotifier metricNotifier;
     @NonNull
@@ -46,12 +46,6 @@ public class FilmDescription {
             else
                 metricNotifier.decrement(metricNotifier.FAVORITES_TAG);
         }
-    }
-
-    public enum FilmGenre {
-        comedy,
-        series,
-        cartoon,
     }
 }
 

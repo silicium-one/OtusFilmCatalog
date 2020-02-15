@@ -19,6 +19,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class FilmDescriptionStorage implements IFilmDescriptionStorage {
+
+    public enum FilmGenre {
+        comedy,
+        series,
+        cartoon,
+    }
+
     @Nullable
     private static volatile IFilmDescriptionStorage instance = null;
     @NonNull
@@ -67,8 +74,8 @@ public class FilmDescriptionStorage implements IFilmDescriptionStorage {
                     film1.Url = "https://www.kinopoisk.ru/film/1040419/";
                     film1.Cover = BitmapFactory.decodeResource(App.getAppResources(), R.drawable.film1);
                     film1.CoverPreview = BitmapFactory.decodeResource(App.getAppResources(), R.drawable.film1);
-                    film1.Genre.add(FilmDescription.FilmGenre.comedy);
-                    film1.Genre.add(FilmDescription.FilmGenre.series);
+                    film1.Genre.add(FilmGenre.comedy.ordinal());
+                    film1.Genre.add(FilmGenre.series.ordinal());
                     ret.add(film1.ID);
                     addFilm(film1);
                     break;
@@ -79,8 +86,8 @@ public class FilmDescriptionStorage implements IFilmDescriptionStorage {
                     film2.Url = "https://www.kinopoisk.ru/film/306084/";
                     film2.Cover = BitmapFactory.decodeResource(App.getAppResources(), R.drawable.film2);
                     film2.CoverPreview = BitmapFactory.decodeResource(App.getAppResources(), R.drawable.film2);
-                    film2.Genre.add(FilmDescription.FilmGenre.comedy);
-                    film2.Genre.add(FilmDescription.FilmGenre.series);
+                    film2.Genre.add(FilmGenre.comedy.ordinal());
+                    film2.Genre.add(FilmGenre.series.ordinal());
                     ret.add(film2.ID);
                     addFilm(film2);
                     break;
@@ -91,9 +98,9 @@ public class FilmDescriptionStorage implements IFilmDescriptionStorage {
                     film3.Url = "https://www.kinopoisk.ru/film/33821/";
                     film3.Cover = BitmapFactory.decodeResource(App.getAppResources(), R.drawable.film3);
                     film3.CoverPreview = BitmapFactory.decodeResource(App.getAppResources(), R.drawable.film3);
-                    film3.Genre.add(FilmDescription.FilmGenre.comedy);
-                    film3.Genre.add(FilmDescription.FilmGenre.series);
-                    film3.Genre.add(FilmDescription.FilmGenre.cartoon);
+                    film3.Genre.add(FilmGenre.comedy.ordinal());
+                    film3.Genre.add(FilmGenre.series.ordinal());
+                    film3.Genre.add(FilmGenre.cartoon.ordinal());
                     ret.add(film3.ID);
                     addFilm(film3);
                     break;
@@ -195,8 +202,23 @@ public class FilmDescriptionStorage implements IFilmDescriptionStorage {
     public void addFilm(@NonNull FilmDescription film) { //TODO: подумать о том, что бы максимально вынести генерацию метрик в FilmDescription
         Films.put(film.ID, film);
         MetricsStorage.getMetricNotifier().increment(MetricsStorage.TOTAL_TAG);
-        if (film.Genre.contains(FilmDescription.FilmGenre.cartoon))
+        if (film.Genre.contains(FilmGenre.cartoon.ordinal()))
             MetricsStorage.getMetricNotifier().increment(MetricsStorage.CARTOON_TAG);
+    }
+
+    /**
+     * Получение человекопонятных названий жанра
+     *
+     * @param genreID идентификатор жанра
+     * @return человекочитаемый жанр или genreID.toString(), если жанр не обнаружен
+     */
+    @NonNull
+    @Override
+    public String getReadableGenre(int genreID) {
+        if (genreID == FilmGenre.comedy.ordinal()) return "Комедия";
+        else if (genreID == FilmGenre.series.ordinal()) return "Сериал";
+        else if (genreID == FilmGenre.cartoon.ordinal()) return "Мультфильм";
+        else return Integer.toString(genreID);
     }
 
     /**

@@ -13,7 +13,6 @@ import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.silicium.otusfilmcatalog.App;
 import com.silicium.otusfilmcatalog.logic.model.FilmDescription;
-import com.silicium.otusfilmcatalog.logic.model.FilmDescriptionFactory;
 import com.silicium.otusfilmcatalog.logic.model.IFilmDescriptionStorage;
 
 public class FilmViewWrapper {
@@ -88,9 +87,9 @@ public class FilmViewWrapper {
         //noinspection ConstantConditions
         ChipGroup ret = new ChipGroup(parent); // TODO: добавиить отступы
         ret.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-        for (FilmDescription.FilmGenre filmGenre : film.Genre) {
+        for (int filmGenreID : film.Genre) {
             Chip genre = new Chip(parent);
-            genre.setText(FilmDescriptionFactory.getReadableGenre(filmGenre));
+            genre.setText(App.getFilmDescriptionStorage().getReadableGenre(filmGenreID));
             ret.addView(genre);
         }
         return ret;

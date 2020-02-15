@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Map;
 
 import okhttp3.Interceptor;
@@ -33,6 +34,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * ТОП 100 с themoviedb.org
  */
 public class FilmDescriptionFromTMDBFetcher implements IFilmDescriptionStorage {
+    private Map<Integer,String> readableGenres = new Hashtable<>();
     @Nullable
     private static volatile IFilmDescriptionStorage instance = null;
     @NonNull
@@ -65,6 +67,26 @@ public class FilmDescriptionFromTMDBFetcher implements IFilmDescriptionStorage {
                 .build();
 
         service = retrofit.create(ITMDBDiscoverMoviesService.class);
+
+        readableGenres.put(28,"боевик");
+        readableGenres.put(12,"приключения");
+        readableGenres.put(16,"мультфильм");
+        readableGenres.put(35,"комедия");
+        readableGenres.put(80,"криминал");
+        readableGenres.put(99,"документальный");
+        readableGenres.put(18,"драма");
+        readableGenres.put(10751,"семейный");
+        readableGenres.put(14,"фэнтези");
+        readableGenres.put(36,"история");
+        readableGenres.put(27,"ужасы");
+        readableGenres.put(10402,"музыка");
+        readableGenres.put(9648,"детектив");
+        readableGenres.put(10749,"мелодрама");
+        readableGenres.put(878,"фантастика");
+        readableGenres.put(10770,"телевизионный фильм");
+        readableGenres.put(53,"триллер");
+        readableGenres.put(10752,"военный");
+        readableGenres.put(37,"вестерн");
     }
 
     @NonNull
@@ -213,7 +235,19 @@ public class FilmDescriptionFromTMDBFetcher implements IFilmDescriptionStorage {
     public void addFilm(@NonNull FilmDescription film) {
         Films.put(film.ID, film);
         MetricsStorage.getMetricNotifier().increment(MetricsStorage.TOTAL_TAG);
-        if (film.Genre.contains(FilmDescription.FilmGenre.cartoon))
+        if (film.Genre.contains(16))
             MetricsStorage.getMetricNotifier().increment(MetricsStorage.CARTOON_TAG);
+    }
+
+    /**
+     * Получение человекопонятных названий жанра
+     * @param genreID идентификатор жанра
+     * @return человекочитаемый жанр или genreID.toString(), если жанр не обнаружен
+     */
+    @NonNull
+    @Override
+    public String getReadableGenre(int genreID) {
+        String ret = readableGenres.containsKey(genreID) ? readableGenres.get(genreID) : Integer.toString(genreID);
+        return ret == null ? "" : ret;
     }
 }

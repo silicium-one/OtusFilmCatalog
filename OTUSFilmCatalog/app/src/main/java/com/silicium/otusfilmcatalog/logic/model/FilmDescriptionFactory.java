@@ -17,6 +17,7 @@ public class FilmDescriptionFactory {
         ret.Name = movieDescriptionJson.title;
         ret.Description = movieDescriptionJson.overview;
         ret.Url = String.format(Locale.getDefault(), "https://www.themoviedb.org/movie/%d?language=ru-RU", movieDescriptionJson.id);
+        ret.Genre.addAll(movieDescriptionJson.genreIds);
 
         return ret;
     }
@@ -36,20 +37,5 @@ public class FilmDescriptionFactory {
     @NonNull
     public static FilmDescription getStubFilmDescription() {
         return getFilmDescription("");
-    }
-
-    //todo: добавить работу с разными локалями
-    @NonNull
-    public static String getReadableGenre(@NonNull FilmDescription.FilmGenre genre) {
-        switch (genre) {
-            case comedy:
-                return "Комедия";
-            case series:
-                return "Сериал";
-            case cartoon:
-                return "Мультфильм";
-            default:
-                throw new UnsupportedOperationException("Неизвестный жанр");
-        }
     }
 }
