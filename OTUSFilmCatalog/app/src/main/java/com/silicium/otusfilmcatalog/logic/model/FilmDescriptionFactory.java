@@ -77,8 +77,8 @@ public class FilmDescriptionFactory {
         ret.url = String.format(Locale.getDefault(), "https://www.themoviedb.org/movie/%d?language=ru-RU", movieDescriptionJson.id);
         ret.genres.addAll(movieDescriptionJson.genreIds);
 
-        final String coverUrl = "http://image.tmdb.org/t/p/w300" + movieDescriptionJson.posterPath;
-        final String previewUrl = "http://image.tmdb.org/t/p/w45" + movieDescriptionJson.posterPath;
+        final String coverUrl = "https://image.tmdb.org/t/p/w780" + movieDescriptionJson.posterPath;
+        final String previewUrl = "https://image.tmdb.org/t/p/w45" + movieDescriptionJson.posterPath;
 
         Glide.with(App.getApplication().getApplicationContext()).asBitmap()
                 .load(previewUrl)
