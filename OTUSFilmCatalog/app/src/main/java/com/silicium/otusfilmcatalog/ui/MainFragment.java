@@ -162,49 +162,64 @@ public class MainFragment extends FragmentWithCallback implements IOnBackPressed
     private void favoritesListMode() {
         swipeCallback.setSwipeDeletionPossible(true);
         nav_view.getMenu().getItem(0).setChecked(true); //nav_view.setSelectedItemId(R.id.favorites_list); - бесконечная рекурсия
-        film_recycler_view.post(new Runnable() {
-            @SuppressLint("SyntheticAccessor")
-            @Override
-            public void run() {
-                fillAdpater(App.getFilmDescriptionStorage().getFavoriteFilmsIDs(true));
-            }
-        });
+        filmItemAdapter.removeAllItems();
+
+        addItemsToAdapter(App.getFilmDescriptionStorage().getFavoriteFilmsIDs(true));
     }
 
     private void fullListMode() {
         swipeCallback.setSwipeDeletionPossible(false);
         nav_view.getMenu().getItem(1).setChecked(true); //nav_view.setSelectedItemId(R.id.full_list); - бесконечная рекурсия
+        filmItemAdapter.removeAllItems();
 
         Collection<String> filmsInDB = App.getFilmDescriptionStorage().getFilmsIDs();
         if (filmsInDB.isEmpty()) {
-            srl.setRefreshing(true);
-            App.getFilmDescriptionStorage().getFilmsIDsNextPageAsync(new Consumer<Collection<String>>() {
-                @SuppressLint("SyntheticAccessor")
-                @Override
-                public void accept(Collection<String> filmIDs) {
-                    srl.setRefreshing(false);
-                    fillAdpater(filmIDs);
-                }
-            }, new Consumer<ErrorResponse>() {
-                @SuppressLint("SyntheticAccessor")
-                @Override
-                public void accept(ErrorResponse errorResponse) {
-                    srl.setRefreshing(false);
-                    Toast.makeText(getContext(), errorResponse.message, Toast.LENGTH_SHORT).show();
-                }
-            });
+            fetchNextPageToAdapter();
         } else {
-            fillAdpater(filmsInDB);
+            addItemsToAdapter(filmsInDB);
         }
     }
 
-    private void fillAdpater(@NonNull Collection<String> filmIDs) {
-        filmItemAdapter.removeAllItems();
+    private void fetchNextPageToAdapter() {
+        srl.setRefreshing(true);
+        App.getFilmDescriptionStorage().getFilmsIDsNextPageAsync(new Consumer<Collection<String>>() {
+            @SuppressLint("SyntheticAccessor")
+            @Override
+            public void accept(final Collection<String> filmIDs) {
+                requireActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        srl.setRefreshing(false);
+                        addItemsToAdapter(filmIDs);
+                    }
+                });
+            }
+        }, new Consumer<ErrorResponse>() {
+            @SuppressLint("SyntheticAccessor")
+            @Override
+            public void accept(final ErrorResponse errorResponse) {
+                requireActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        srl.setRefreshing(false);
+                        Toast.makeText(getContext(), errorResponse.message, Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
+    }
 
-        for (String item : filmIDs)
-            filmItemAdapter.addItem(item);
+    private void addItemsToAdapter(@NonNull final Collection<String> filmIDs) {
+        film_recycler_view.post(new Runnable() {
+            @SuppressLint("SyntheticAccessor")
+            @Override
+            public void run() {
+                for (String item : filmIDs)
+                    filmItemAdapter.addItem(item);
 
-        setSelectedFilmTag(getSelectedFilmTag());
+                setSelectedFilmTag(getSelectedFilmTag());
+            }
+        });
     }
 
     @Nullable
@@ -376,21 +391,7 @@ public class MainFragment extends FragmentWithCallback implements IOnBackPressed
                     return;
 
                 if (newState == SCROLL_STATE_SETTLING && linearLayoutManager.findLastVisibleItemPosition() == filmItemAdapter.getItemCount() - 1) {
-
-                    srl.setRefreshing(true);
-                    App.getFilmDescriptionStorage().getFilmsIDsNextPageAsync(new Consumer<Collection<String>>() {
-                        @Override
-                        public void accept(final Collection<String> filmIDs) {
-                            filmItemAdapter.addRange(filmIDs);
-                            srl.setRefreshing(false);
-                        }
-                    }, new Consumer<ErrorResponse>() {
-                        @Override
-                        public void accept(ErrorResponse errorResponse) {
-                            Toast.makeText(getContext(), errorResponse.message, Toast.LENGTH_SHORT).show();
-                            srl.setRefreshing(false);
-                        }
-                    });
+                    fetchNextPageToAdapter();
                 }
             }
         });

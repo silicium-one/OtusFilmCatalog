@@ -5,5 +5,6 @@
     <string name="connectFailure">Ошибка связи с themoviedb.org</string>
     <string name="httpRequestFail">Ошибка HTTP</string>
     <string name="httpResponseEmptyBody">HTTP запрос вернул пустое тело</string>
+    <string name="interruptedExceptionError">Операция прервана</string>
 
 </resources>
