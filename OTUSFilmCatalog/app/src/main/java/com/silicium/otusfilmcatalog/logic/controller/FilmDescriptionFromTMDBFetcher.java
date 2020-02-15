@@ -17,9 +17,9 @@ import com.silicium.otusfilmcatalog.logic.utils.SharedPreferencesAPI;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -40,7 +40,7 @@ public class FilmDescriptionFromTMDBFetcher implements IFilmDescriptionStorage {
     @Nullable
     private static volatile IFilmDescriptionStorage instance = null;
     @NonNull
-    private final Map<String, FilmDescription> Films = new HashMap<>();
+    private final Map<String, FilmDescription> Films = new LinkedHashMap<>();
     @NonNull
     private final ITMDBDiscoverMoviesService service;
     private Map<Integer, String> readableGenres = new Hashtable<>();
