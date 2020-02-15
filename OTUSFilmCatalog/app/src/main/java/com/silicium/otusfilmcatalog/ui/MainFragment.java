@@ -166,12 +166,7 @@ public class MainFragment extends FragmentWithCallback implements IOnBackPressed
             @SuppressLint("SyntheticAccessor")
             @Override
             public void run() {
-                filmItemAdapter.removeAllItems();
-
-                for (String item : App.getFilmDescriptionStorage().getFavoriteFilmsIDs(true))
-                    filmItemAdapter.addItem(item);
-
-                setSelectedFilmTag(getSelectedFilmTag());
+                fillAdpater(App.getFilmDescriptionStorage().getFavoriteFilmsIDs(true));
             }
         });
     }
@@ -179,27 +174,37 @@ public class MainFragment extends FragmentWithCallback implements IOnBackPressed
     private void fullListMode() {
         swipeCallback.setSwipeDeletionPossible(false);
         nav_view.getMenu().getItem(1).setChecked(true); //nav_view.setSelectedItemId(R.id.full_list); - бесконечная рекурсия
-        srl.setRefreshing(true);
-        App.getFilmDescriptionStorage().getFilmsIDsNextPageAsync(new Consumer<Collection<String>>() {
-            @SuppressLint("SyntheticAccessor")
-            @Override
-            public void accept(Collection<String> filmIDs) {
-                srl.setRefreshing(false);
-                filmItemAdapter.removeAllItems();
 
-                for (String item : filmIDs)
-                    filmItemAdapter.addItem(item);
+        Collection<String> filmsInDB = App.getFilmDescriptionStorage().getFilmsIDs();
+        if (filmsInDB.isEmpty()) {
+            srl.setRefreshing(true);
+            App.getFilmDescriptionStorage().getFilmsIDsNextPageAsync(new Consumer<Collection<String>>() {
+                @SuppressLint("SyntheticAccessor")
+                @Override
+                public void accept(Collection<String> filmIDs) {
+                    srl.setRefreshing(false);
+                    fillAdpater(filmIDs);
+                }
+            }, new Consumer<ErrorResponse>() {
+                @SuppressLint("SyntheticAccessor")
+                @Override
+                public void accept(ErrorResponse errorResponse) {
+                    srl.setRefreshing(false);
+                    Toast.makeText(getContext(), errorResponse.message, Toast.LENGTH_SHORT).show();
+                }
+            });
+        } else {
+            fillAdpater(filmsInDB);
+        }
+    }
 
-                setSelectedFilmTag(getSelectedFilmTag());
-            }
-        }, new Consumer<ErrorResponse>() {
-            @SuppressLint("SyntheticAccessor")
-            @Override
-            public void accept(ErrorResponse errorResponse) {
-                srl.setRefreshing(false);
-                Toast.makeText(getContext(), errorResponse.message, Toast.LENGTH_SHORT).show();
-            }
-        });
+    private void fillAdpater(@NonNull Collection<String> filmIDs) {
+        filmItemAdapter.removeAllItems();
+
+        for (String item : filmIDs)
+            filmItemAdapter.addItem(item);
+
+        setSelectedFilmTag(getSelectedFilmTag());
     }
 
     @Nullable
