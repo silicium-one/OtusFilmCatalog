@@ -12,13 +12,16 @@ import com.silicium.otusfilmcatalog.logic.model.FilmDescriptionFactory;
 import com.silicium.otusfilmcatalog.logic.model.IFilmDescriptionStorage;
 import com.silicium.otusfilmcatalog.logic.model.ITMDBDiscoverMoviesService;
 import com.silicium.otusfilmcatalog.logic.model.MovieDescriptionJson;
+import com.silicium.otusfilmcatalog.logic.utils.SharedPreferencesAPI;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Map;
+import java.util.Set;
 
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
@@ -68,6 +71,7 @@ public class FilmDescriptionFromTMDBFetcher implements IFilmDescriptionStorage {
 
         service = retrofit.create(ITMDBDiscoverMoviesService.class);
 
+        // Обновляется редко, незачем каждый раз дёргать https://api.themoviedb.org/3/genre/movie/list?&language=ru
         readableGenres.put(28, "боевик");
         readableGenres.put(12, "приключения");
         readableGenres.put(16, "мультфильм");
@@ -136,9 +140,13 @@ public class FilmDescriptionFromTMDBFetcher implements IFilmDescriptionStorage {
                     return;
                 }
 
+                Collection<String> favoriteCandidates = getFavoriteFilmsIDs();
                 Collection<String> ret = new ArrayList<>();
                 for (MovieDescriptionJson movie : response.body().results) {
                     FilmDescription filmDescription = FilmDescriptionFactory.getFilmDescriptionFromTMDBJson(movie);
+                    if (favoriteCandidates.contains(filmDescription.ID))
+                        filmDescription.setFavorite(true);
+
                     ret.add(filmDescription.ID);
                     addFilm(filmDescription);
                 }
@@ -163,13 +171,22 @@ public class FilmDescriptionFromTMDBFetcher implements IFilmDescriptionStorage {
     @NonNull
     @Override
     public Collection<String> getFavoriteFilmsIDs(boolean refreshActual) {
-        return new ArrayList<>();
+        if (!refreshActual)
+            return getFavoriteFilmsIDs();
+
+        Set<String> ret = new HashSet<>();
+        for (FilmDescription film : Films.values())
+            if (film.isFavorite())
+                ret.add(film.ID);
+
+        SharedPreferencesAPI.saveStringsSet("filmFavorites", ret);
+        return ret;
     }
 
     @NonNull
     @Override
     public Collection<String> getFavoriteFilmsIDs() {
-        return new ArrayList<>();
+        return SharedPreferencesAPI.loadStringsSet("filmFavorites");
     }
 
     @Override
