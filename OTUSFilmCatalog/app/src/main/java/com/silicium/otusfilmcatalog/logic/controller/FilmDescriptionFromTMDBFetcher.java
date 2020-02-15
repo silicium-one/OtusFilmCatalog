@@ -235,7 +235,7 @@ public class FilmDescriptionFromTMDBFetcher implements IFilmDescriptionStorage {
     public void addFilm(@NonNull FilmDescription film) {
         Films.put(film.ID, film);
         MetricsStorage.getMetricNotifier().increment(MetricsStorage.TOTAL_TAG);
-        if (film.Genre.contains(16))
+        if (film.genres.contains(16))
             MetricsStorage.getMetricNotifier().increment(MetricsStorage.CARTOON_TAG);
     }
 

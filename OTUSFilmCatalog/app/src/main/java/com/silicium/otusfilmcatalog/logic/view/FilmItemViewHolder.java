@@ -52,9 +52,9 @@ class FilmItemViewHolder extends RecyclerView.ViewHolder {
         itemView.setOnLongClickListener(null);
         item_selected_CheckBox.setOnCheckedChangeListener(null);
 
-        film_cover_preview_imageView.setImageBitmap(item.CoverPreview);
-        film_name_TextView.setText(item.Name);
-        film_description_TextView.setText(item.Description);
+        film_cover_preview_imageView.setImageBitmap(item.coverPreview);
+        film_name_TextView.setText(item.name);
+        film_description_TextView.setText(item.description);
         film_favorite_CheckBox.setChecked(item.isFavorite());
 
         film_favorite_CheckBox.setTag(item.ID);

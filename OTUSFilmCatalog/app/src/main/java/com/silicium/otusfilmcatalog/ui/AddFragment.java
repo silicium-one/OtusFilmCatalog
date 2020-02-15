@@ -107,8 +107,8 @@ public class AddFragment extends FragmentWithCallback implements IOnBackPressedL
         EditText film_description = rootLayout.findViewById(R.id.film_description);
 
         FilmDescription film = FilmDescriptionFactory.getNewFilmDescription();
-        film.Name = film_name.getText().toString();
-        film.Description = film_description.getText().toString();
+        film.name = film_name.getText().toString();
+        film.description = film_description.getText().toString();
 
         App.getFilmDescriptionStorage().addFilm(film);
     }

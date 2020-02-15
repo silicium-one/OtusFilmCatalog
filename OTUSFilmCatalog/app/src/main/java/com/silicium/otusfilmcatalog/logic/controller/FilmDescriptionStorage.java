@@ -69,38 +69,38 @@ public class FilmDescriptionStorage implements IFilmDescriptionStorage {
             switch (i % 3) {
                 case 0:
                     FilmDescription film1 = FilmDescriptionFactory.getNewFilmDescription();
-                    film1.Name = "Детство Шелдона";
-                    film1.Description = App.getAppResources().getString(R.string.film1);
-                    film1.Url = "https://www.kinopoisk.ru/film/1040419/";
-                    film1.Cover = BitmapFactory.decodeResource(App.getAppResources(), R.drawable.film1);
-                    film1.CoverPreview = BitmapFactory.decodeResource(App.getAppResources(), R.drawable.film1);
-                    film1.Genre.add(FilmGenre.comedy.ordinal());
-                    film1.Genre.add(FilmGenre.series.ordinal());
+                    film1.name = "Детство Шелдона";
+                    film1.description = App.getAppResources().getString(R.string.film1);
+                    film1.url = "https://www.kinopoisk.ru/film/1040419/";
+                    film1.cover = BitmapFactory.decodeResource(App.getAppResources(), R.drawable.film1);
+                    film1.coverPreview = BitmapFactory.decodeResource(App.getAppResources(), R.drawable.film1);
+                    film1.genres.add(FilmGenre.comedy.ordinal());
+                    film1.genres.add(FilmGenre.series.ordinal());
                     ret.add(film1.ID);
                     addFilm(film1);
                     break;
                 case 1:
                     FilmDescription film2 = FilmDescriptionFactory.getNewFilmDescription();
-                    film2.Name = "Теория большого взрыва";
-                    film2.Description = App.getAppResources().getString(R.string.film2);
-                    film2.Url = "https://www.kinopoisk.ru/film/306084/";
-                    film2.Cover = BitmapFactory.decodeResource(App.getAppResources(), R.drawable.film2);
-                    film2.CoverPreview = BitmapFactory.decodeResource(App.getAppResources(), R.drawable.film2);
-                    film2.Genre.add(FilmGenre.comedy.ordinal());
-                    film2.Genre.add(FilmGenre.series.ordinal());
+                    film2.name = "Теория большого взрыва";
+                    film2.description = App.getAppResources().getString(R.string.film2);
+                    film2.url = "https://www.kinopoisk.ru/film/306084/";
+                    film2.cover = BitmapFactory.decodeResource(App.getAppResources(), R.drawable.film2);
+                    film2.coverPreview = BitmapFactory.decodeResource(App.getAppResources(), R.drawable.film2);
+                    film2.genres.add(FilmGenre.comedy.ordinal());
+                    film2.genres.add(FilmGenre.series.ordinal());
                     ret.add(film2.ID);
                     addFilm(film2);
                     break;
                 case 2:
                     FilmDescription film3 = FilmDescriptionFactory.getNewFilmDescription();
-                    film3.Name = "Кролик Багз или Дорожный Бегун";
-                    film3.Description = App.getAppResources().getString(R.string.film3);
-                    film3.Url = "https://www.kinopoisk.ru/film/33821/";
-                    film3.Cover = BitmapFactory.decodeResource(App.getAppResources(), R.drawable.film3);
-                    film3.CoverPreview = BitmapFactory.decodeResource(App.getAppResources(), R.drawable.film3);
-                    film3.Genre.add(FilmGenre.comedy.ordinal());
-                    film3.Genre.add(FilmGenre.series.ordinal());
-                    film3.Genre.add(FilmGenre.cartoon.ordinal());
+                    film3.name = "Кролик Багз или Дорожный Бегун";
+                    film3.description = App.getAppResources().getString(R.string.film3);
+                    film3.url = "https://www.kinopoisk.ru/film/33821/";
+                    film3.cover = BitmapFactory.decodeResource(App.getAppResources(), R.drawable.film3);
+                    film3.coverPreview = BitmapFactory.decodeResource(App.getAppResources(), R.drawable.film3);
+                    film3.genres.add(FilmGenre.comedy.ordinal());
+                    film3.genres.add(FilmGenre.series.ordinal());
+                    film3.genres.add(FilmGenre.cartoon.ordinal());
                     ret.add(film3.ID);
                     addFilm(film3);
                     break;
@@ -202,7 +202,7 @@ public class FilmDescriptionStorage implements IFilmDescriptionStorage {
     public void addFilm(@NonNull FilmDescription film) { //TODO: подумать о том, что бы максимально вынести генерацию метрик в FilmDescription
         Films.put(film.ID, film);
         MetricsStorage.getMetricNotifier().increment(MetricsStorage.TOTAL_TAG);
-        if (film.Genre.contains(FilmGenre.cartoon.ordinal()))
+        if (film.genres.contains(FilmGenre.cartoon.ordinal()))
             MetricsStorage.getMetricNotifier().increment(MetricsStorage.CARTOON_TAG);
     }
 

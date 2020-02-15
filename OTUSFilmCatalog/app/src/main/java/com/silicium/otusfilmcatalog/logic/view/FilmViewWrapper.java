@@ -77,7 +77,7 @@ public class FilmViewWrapper {
 
     @NonNull
     public String getFilmUrl(@NonNull FilmDescription film) {
-        return String.format("<a href=\"%s\">%s</a>", film.Url, film.Name);
+        return String.format("<a href=\"%s\">%s</a>", film.url, film.name);
     }
     //endregion
 
@@ -87,7 +87,7 @@ public class FilmViewWrapper {
         //noinspection ConstantConditions
         ChipGroup ret = new ChipGroup(parent); // TODO: добавиить отступы
         ret.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-        for (int filmGenreID : film.Genre) {
+        for (int filmGenreID : film.genres) {
             Chip genre = new Chip(parent);
             genre.setText(App.getFilmDescriptionStorage().getReadableGenre(filmGenreID));
             ret.addView(genre);
@@ -100,7 +100,7 @@ public class FilmViewWrapper {
         ImageView pic = new ImageView(parent);
         pic.setLayoutParams(new LinearLayout.LayoutParams(200, 200));
         pic.setPadding(10, 10, 10, 10);
-        pic.setImageBitmap(film.Cover);
+        pic.setImageBitmap(film.cover);
 
         return pic;
     }
@@ -110,7 +110,7 @@ public class FilmViewWrapper {
         TextView description = new TextView(parent);
         description.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, 200, 3.0F));
         description.setPadding(10, 10, 10, 10);
-        description.setText(film.Description);
+        description.setText(film.description);
 
         return description;
     }

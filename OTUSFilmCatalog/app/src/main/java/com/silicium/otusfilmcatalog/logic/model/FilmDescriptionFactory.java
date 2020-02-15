@@ -14,10 +14,10 @@ public class FilmDescriptionFactory {
     public static FilmDescription getFilmDescriptionFromTMDBJson(@NonNull MovieDescriptionJson movieDescriptionJson) {
         FilmDescription ret = getFilmDescription(Integer.toString(movieDescriptionJson.id));
 
-        ret.Name = movieDescriptionJson.title;
-        ret.Description = movieDescriptionJson.overview;
-        ret.Url = String.format(Locale.getDefault(), "https://www.themoviedb.org/movie/%d?language=ru-RU", movieDescriptionJson.id);
-        ret.Genre.addAll(movieDescriptionJson.genreIds);
+        ret.name = movieDescriptionJson.title;
+        ret.description = movieDescriptionJson.overview;
+        ret.url = String.format(Locale.getDefault(), "https://www.themoviedb.org/movie/%d?language=ru-RU", movieDescriptionJson.id);
+        ret.genres.addAll(movieDescriptionJson.genreIds);
 
         return ret;
     }
