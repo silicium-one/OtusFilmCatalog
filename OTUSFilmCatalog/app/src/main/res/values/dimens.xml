@@ -36,8 +36,8 @@ http://developer.android.com/guide/topics/appwidgets/index.html#CreatingLayout
     -->
     <dimen name="widget_padding">4dp</dimen>
     <dimen name="widget_text_margin">2dp</dimen>
-    <dimen name="widget_text_header_size">16sp</dimen>
-    <dimen name="widget_text_column_header_size">14sp</dimen>
+    <dimen name="widget_text_header_size">14sp</dimen>
+    <dimen name="widget_text_column_header_size">12sp</dimen>
     <dimen name="widget_text_column_value_size">30sp</dimen>
 
     <!-- item_films -->
