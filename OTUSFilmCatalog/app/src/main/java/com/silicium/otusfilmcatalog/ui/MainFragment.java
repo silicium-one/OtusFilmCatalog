@@ -78,6 +78,7 @@ public class MainFragment extends FragmentWithCallback implements IOnBackPressed
     private FloatingActionButton fab_del;
     private FloatingActionButton fab_manipulate_favorites;
     private BottomNavigationView nav_view;
+    private SwipeRefreshLayout srl;
     private boolean isMultiselectMode;
     private boolean doubleBackToExitPressedOnce = false;
 
@@ -178,10 +179,12 @@ public class MainFragment extends FragmentWithCallback implements IOnBackPressed
     private void fullListMode() {
         swipeCallback.setSwipeDeletionPossible(false);
         nav_view.getMenu().getItem(1).setChecked(true); //nav_view.setSelectedItemId(R.id.full_list); - бесконечная рекурсия
+        srl.setRefreshing(true);
         App.getFilmDescriptionStorage().getFilmsIDsNextPageAsync(new Consumer<Collection<String>>() {
             @SuppressLint("SyntheticAccessor")
             @Override
             public void accept(Collection<String> filmIDs) {
+                srl.setRefreshing(false);
                 filmItemAdapter.removeAllItems();
 
                 for (String item : filmIDs)
@@ -190,8 +193,10 @@ public class MainFragment extends FragmentWithCallback implements IOnBackPressed
                 setSelectedFilmTag(getSelectedFilmTag());
             }
         }, new Consumer<ErrorResponse>() {
+            @SuppressLint("SyntheticAccessor")
             @Override
             public void accept(ErrorResponse errorResponse) {
+                srl.setRefreshing(false);
                 Toast.makeText(getContext(), errorResponse.message, Toast.LENGTH_SHORT).show();
             }
         });
@@ -341,6 +346,8 @@ public class MainFragment extends FragmentWithCallback implements IOnBackPressed
 
         film_recycler_view.setAdapter(filmItemAdapter);
 
+        srl = view.findViewById(R.id.srl);
+
         if (adapterCreationRequired) {
             if (isFavoritesOnly())
                 favoritesListMode();
@@ -349,8 +356,6 @@ public class MainFragment extends FragmentWithCallback implements IOnBackPressed
         }
 
         setMultiselectProcessingMode(isMultiselectMode);
-
-        final SwipeRefreshLayout srl = view.findViewById(R.id.srl);
 
         film_recycler_view.addOnScrollListener(new RecyclerView.OnScrollListener() {
 
