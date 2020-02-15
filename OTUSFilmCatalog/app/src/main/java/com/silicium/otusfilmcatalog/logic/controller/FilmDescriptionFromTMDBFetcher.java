@@ -34,13 +34,13 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * ТОП 100 с themoviedb.org
  */
 public class FilmDescriptionFromTMDBFetcher implements IFilmDescriptionStorage {
-    private Map<Integer,String> readableGenres = new Hashtable<>();
     @Nullable
     private static volatile IFilmDescriptionStorage instance = null;
     @NonNull
     private final Map<String, FilmDescription> Films = new HashMap<>();
     @NonNull
     private final ITMDBDiscoverMoviesService service;
+    private Map<Integer, String> readableGenres = new Hashtable<>();
 
     private FilmDescriptionFromTMDBFetcher() {
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
@@ -68,25 +68,25 @@ public class FilmDescriptionFromTMDBFetcher implements IFilmDescriptionStorage {
 
         service = retrofit.create(ITMDBDiscoverMoviesService.class);
 
-        readableGenres.put(28,"боевик");
-        readableGenres.put(12,"приключения");
-        readableGenres.put(16,"мультфильм");
-        readableGenres.put(35,"комедия");
-        readableGenres.put(80,"криминал");
-        readableGenres.put(99,"документальный");
-        readableGenres.put(18,"драма");
-        readableGenres.put(10751,"семейный");
-        readableGenres.put(14,"фэнтези");
-        readableGenres.put(36,"история");
-        readableGenres.put(27,"ужасы");
-        readableGenres.put(10402,"музыка");
-        readableGenres.put(9648,"детектив");
-        readableGenres.put(10749,"мелодрама");
-        readableGenres.put(878,"фантастика");
-        readableGenres.put(10770,"телевизионный фильм");
-        readableGenres.put(53,"триллер");
-        readableGenres.put(10752,"военный");
-        readableGenres.put(37,"вестерн");
+        readableGenres.put(28, "боевик");
+        readableGenres.put(12, "приключения");
+        readableGenres.put(16, "мультфильм");
+        readableGenres.put(35, "комедия");
+        readableGenres.put(80, "криминал");
+        readableGenres.put(99, "документальный");
+        readableGenres.put(18, "драма");
+        readableGenres.put(10751, "семейный");
+        readableGenres.put(14, "фэнтези");
+        readableGenres.put(36, "история");
+        readableGenres.put(27, "ужасы");
+        readableGenres.put(10402, "музыка");
+        readableGenres.put(9648, "детектив");
+        readableGenres.put(10749, "мелодрама");
+        readableGenres.put(878, "фантастика");
+        readableGenres.put(10770, "телевизионный фильм");
+        readableGenres.put(53, "триллер");
+        readableGenres.put(10752, "военный");
+        readableGenres.put(37, "вестерн");
     }
 
     @NonNull
@@ -130,7 +130,7 @@ public class FilmDescriptionFromTMDBFetcher implements IFilmDescriptionStorage {
                     return;
                 }
 
-                if (response.body() == null)  {
+                if (response.body() == null) {
                     if (errorResponse != null)
                         errorResponse.accept(new ErrorResponse(R.string.httpResponseEmptyBody));
                     return;
@@ -152,6 +152,12 @@ public class FilmDescriptionFromTMDBFetcher implements IFilmDescriptionStorage {
                     errorResponse.accept(new ErrorResponse(R.string.connectFailure, t));
             }
         });
+    }
+
+    @NonNull
+    @Override
+    public Collection<String> getFilmsIDs() {
+        return Films.keySet();
     }
 
     @NonNull

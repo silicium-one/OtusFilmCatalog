@@ -34,6 +34,14 @@ public interface IFilmDescriptionStorage {
     void getFilmsIDsNextPageAsync(@NonNull Consumer<Collection<String>> callback, @Nullable Consumer<ErrorResponse> errorResponse);
 
     /**
+     * Список ID фильмов
+     *
+     * @return список ключей доступных в базе фильмов
+     */
+    @NonNull
+    Collection<String> getFilmsIDs();
+
+    /**
      * Список ID фильмов из избранного списка
      * ВАЖНО: список ключей хранится отдельным списком, поэтому он будет актуализироваться только при обращении с флагом ИСТИНА
      *
@@ -79,6 +87,7 @@ public interface IFilmDescriptionStorage {
 
     /**
      * Получение человекопонятных названий жанра
+     *
      * @param genreID идентификатор жанра
      * @return человекочитаемый жанр или genreID.toString(), если жанр не обнаружен
      */

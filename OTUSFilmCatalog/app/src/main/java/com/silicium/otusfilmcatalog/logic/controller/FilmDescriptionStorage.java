@@ -20,17 +20,10 @@ import java.util.Map;
 
 public class FilmDescriptionStorage implements IFilmDescriptionStorage {
 
-    public enum FilmGenre {
-        comedy,
-        series,
-        cartoon,
-    }
-
     @Nullable
     private static volatile IFilmDescriptionStorage instance = null;
     @NonNull
     private final Map<String, FilmDescription> Films = new HashMap<>();
-
     private FilmDescriptionStorage() {
     }
 
@@ -99,6 +92,12 @@ public class FilmDescriptionStorage implements IFilmDescriptionStorage {
         }
 
         callback.accept(ret);
+    }
+
+    @NonNull
+    @Override
+    public Collection<String> getFilmsIDs() {
+        return Films.keySet();
     }
 
     @NonNull
@@ -175,6 +174,12 @@ public class FilmDescriptionStorage implements IFilmDescriptionStorage {
     @NonNull
     private Collection<FilmDescription> getFilms() {
         return Films.values();
+    }
+
+    public enum FilmGenre {
+        comedy,
+        series,
+        cartoon,
     }
 
 }
