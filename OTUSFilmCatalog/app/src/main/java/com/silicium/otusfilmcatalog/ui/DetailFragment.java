@@ -43,6 +43,7 @@ public class DetailFragment extends FragmentWithCallback implements IOnBackPress
     @SuppressWarnings({"FieldCanBeLocal", "unused"})
     private EditText film_comment;
     private View rootView;
+    private Toolbar toolbar;
     private DisappearingSnackCircularProgressBar snackProgressBar;
     private boolean doubleBackToExitPressedOnce = false;
 
@@ -141,7 +142,13 @@ public class DetailFragment extends FragmentWithCallback implements IOnBackPress
                     }
                 }, this);
 
-        Toolbar toolbar = view.findViewById(R.id.fragment_detail_toolbar);
+        toolbar = requireActivity().findViewById(R.id.toolbar);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
         toolbar.inflateMenu(R.menu.fragment_detail_menu);
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @SuppressLint("SyntheticAccessor")
@@ -154,6 +161,13 @@ public class DetailFragment extends FragmentWithCallback implements IOnBackPress
                 return false;
             }
         });
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        toolbar.getMenu().clear(); // убираем кнопок "поделиться" из панели инструментов
     }
 
     private void onShareBtnClick() {
