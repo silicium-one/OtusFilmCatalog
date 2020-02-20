@@ -19,7 +19,7 @@ public class FilmDescriptionFactory {
         ret.url = String.format(Locale.getDefault(), "https://www.themoviedb.org/movie/%d?language=ru-RU", movieDescriptionJson.id);
         ret.genres.addAll(movieDescriptionJson.genreIds);
 
-        ret.coverUrl = "http://image.tmdb.org/t/p/w1280" + movieDescriptionJson.posterPath;
+        ret.coverUrl = "http://image.tmdb.org/t/p/w1280" + movieDescriptionJson.backdropPath;
         ret.coverPreviewUrl = "http://image.tmdb.org/t/p/w300" + movieDescriptionJson.posterPath;
 
         return ret;

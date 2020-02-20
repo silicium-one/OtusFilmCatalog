@@ -17,7 +17,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
@@ -97,11 +99,28 @@ public class DetailFragment extends FragmentWithCallback implements IOnBackPress
             chipGroup.addView(genre);
         }
 
-        ImageView pic = view.findViewById(R.id.cover_ImageView);
-        pic.setImageBitmap(film.cover);
+        ImageView cover_ImageView = view.findViewById(R.id.cover_ImageView);
+        cover_ImageView.setImageBitmap(film.cover);
 
         TextView description = view.findViewById(R.id.film_description_TextView);
         description.setText(film.description);
+
+        if (film.coverUrl.isEmpty()) {
+            cover_ImageView.setImageBitmap(film.cover);
+        } else {
+            //todo: добавить поддержку темы, размеры получать из film_cover_preview_imageView
+            CircularProgressDrawable circularProgressDrawable = new CircularProgressDrawable(view.getContext());
+            circularProgressDrawable.setStrokeWidth(5f);
+            circularProgressDrawable.setCenterRadius(30f);
+            circularProgressDrawable.start();
+
+            Glide.with(view.getContext()).asBitmap()
+                    .load(film.coverUrl)
+                    .fitCenter()
+                    .placeholder(circularProgressDrawable)
+                    .error(R.drawable.ic_error_outline)
+                    .into(cover_ImageView);
+        }
 
         final View more_header = rootView.findViewById(R.id.more_text_view);
         final int oldHeight = more_header.getLayoutParams().height;
