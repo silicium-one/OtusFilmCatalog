@@ -13,7 +13,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
 
+import com.bumptech.glide.Glide;
 import com.silicium.otusfilmcatalog.R;
 import com.silicium.otusfilmcatalog.logic.model.FilmDescription;
 
@@ -52,7 +54,23 @@ class FilmItemViewHolder extends RecyclerView.ViewHolder {
         itemView.setOnLongClickListener(null);
         item_selected_CheckBox.setOnCheckedChangeListener(null);
 
-        film_cover_preview_imageView.setImageBitmap(item.coverPreview);
+        if (item.coverPreviewUrl.isEmpty()) {
+            film_cover_preview_imageView.setImageBitmap(item.coverPreview);
+        } else {
+            //todo: добавить поддержку темы, размеры получать из film_cover_preview_imageView
+            CircularProgressDrawable circularProgressDrawable = new CircularProgressDrawable(itemView.getContext());
+            circularProgressDrawable.setStrokeWidth(5f);
+            circularProgressDrawable.setCenterRadius(30f);
+            circularProgressDrawable.start();
+
+            Glide.with(itemView.getContext()).asBitmap()
+                    .load(item.coverPreviewUrl)
+                    .centerCrop()
+                    .placeholder(circularProgressDrawable)
+                    .error(R.drawable.ic_error_outline)
+                    .into(film_cover_preview_imageView);
+        }
+
         film_name_TextView.setText(item.name);
         film_description_TextView.setText(item.description);
         film_favorite_CheckBox.setChecked(item.isFavorite());
