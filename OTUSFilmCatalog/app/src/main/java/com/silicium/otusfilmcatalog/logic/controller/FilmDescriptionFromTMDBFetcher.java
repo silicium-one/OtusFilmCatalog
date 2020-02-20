@@ -23,7 +23,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.Semaphore;
 
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
@@ -143,43 +142,18 @@ public class FilmDescriptionFromTMDBFetcher implements IFilmDescriptionStorage {
                 }
 
                 final List<MovieDescriptionJson> results = response.body().results;
-                final Semaphore awaitAllCallbacks = new Semaphore(results.size());
                 final Collection<String> favoriteCandidates = getFavoriteFilmsIDs();
                 final Collection<String> ret = new ArrayList<>();
-                try {
-                    awaitAllCallbacks.acquire(results.size());
-                } catch (InterruptedException ex) {
-                    if (errorResponse != null)
-                        errorResponse.accept(new ErrorResponse(R.string.interruptedExceptionError, ex));
-                }
                 for (final MovieDescriptionJson movie : results) {
-                    FilmDescriptionFactory.getFilmDescriptionFromTMDBJsonAsync(movie, new Consumer<FilmDescription>() {
-                        @Override
-                        public void accept(FilmDescription filmDescription) {
-                            if (favoriteCandidates.contains(filmDescription.ID))
-                                filmDescription.setFavorite(true);
+                    FilmDescription filmDescription = FilmDescriptionFactory.getFilmDescriptionFromTMDBJson(movie);
+                    if (favoriteCandidates.contains(filmDescription.ID))
+                        filmDescription.setFavorite(true);
 
-                            ret.add(filmDescription.ID);
-                            addFilm(filmDescription);
-                            awaitAllCallbacks.release();
-                        }
-                    });
+                    ret.add(filmDescription.ID);
+                    addFilm(filmDescription);
                 }
 
-                new Thread(
-                        new Runnable() {
-                            @Override
-                            public void run() {
-                                try {
-                                    awaitAllCallbacks.acquire(results.size());
-                                    callback.accept(ret);
-                                    awaitAllCallbacks.release();
-                                } catch (InterruptedException ex) {
-                                    if (errorResponse != null)
-                                        errorResponse.accept(new ErrorResponse(R.string.interruptedExceptionError, ex));
-                                }
-                            }
-                        }).start();
+                callback.accept(ret);
             }
 
             @Override

@@ -32,7 +32,13 @@ public class FilmDescription {
     public String url = "https://www.themoviedb.org/movie/0";
 
     @NonNull
+    public String coverUrl = "";
+
+    @NonNull
     public Bitmap cover = BitmapFactory.decodeResource(App.getAppResources(), R.drawable.film_no_image);
+
+    @NonNull
+    public String coverPreviewUrl = "";
 
     @NonNull
     public Bitmap coverPreview = BitmapFactory.decodeResource(App.getAppResources(), R.drawable.film_no_image);
@@ -58,5 +64,3 @@ public class FilmDescription {
         }
     }
 }
-
-
