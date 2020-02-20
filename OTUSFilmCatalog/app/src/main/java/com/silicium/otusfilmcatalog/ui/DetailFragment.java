@@ -92,21 +92,21 @@ public class DetailFragment extends FragmentWithCallback implements IOnBackPress
         film_comment = rootView.findViewById(R.id.film_comment);
         film = App.getFilmDescriptionStorage().getFilmByID(filmID);
 
-        ChipGroup chipGroup = view.findViewById(R.id.genre_chips_ChipGroup);
+        ChipGroup genre_chips_chip_group = view.findViewById(R.id.genre_chips_chip_group);
         for (int filmGenreID : film.genres) {
             Chip genre = new Chip(view.getContext());
             genre.setText(App.getFilmDescriptionStorage().getReadableGenre(filmGenreID));
-            chipGroup.addView(genre);
+            genre_chips_chip_group.addView(genre);
         }
 
-        ImageView cover_ImageView = view.findViewById(R.id.cover_ImageView);
-        cover_ImageView.setImageBitmap(film.cover);
+        ImageView cover_image_view = view.findViewById(R.id.cover_image_view);
+        cover_image_view.setImageBitmap(film.cover);
 
-        TextView description = view.findViewById(R.id.film_description_TextView);
-        description.setText(film.description);
+        TextView film_description_text_view = view.findViewById(R.id.film_description_text_view);
+        film_description_text_view.setText(film.description);
 
         if (film.coverUrl.isEmpty()) {
-            cover_ImageView.setImageBitmap(film.cover);
+            cover_image_view.setImageBitmap(film.cover);
         } else {
             //todo: добавить поддержку темы, размеры получать из film_cover_preview_imageView
             CircularProgressDrawable circularProgressDrawable = new CircularProgressDrawable(view.getContext());
@@ -119,7 +119,7 @@ public class DetailFragment extends FragmentWithCallback implements IOnBackPress
                     .fitCenter()
                     .placeholder(circularProgressDrawable)
                     .error(R.drawable.ic_error_outline)
-                    .into(cover_ImageView);
+                    .into(cover_image_view);
         }
 
         final View more_header = rootView.findViewById(R.id.more_text_view);

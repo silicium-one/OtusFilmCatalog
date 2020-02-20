@@ -12,26 +12,26 @@
         android:orientation="vertical">
 
         <com.google.android.material.chip.ChipGroup
-            android:id="@+id/genre_chips_ChipGroup"
+            android:id="@+id/genre_chips_chip_group"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/elementPadding" />
 
         <ImageView
-            android:id="@+id/cover_ImageView"
+            android:id="@+id/cover_image_view"
             android:layout_width="match_parent"
             android:layout_height="@dimen/fullImageHeight"
-            android:layout_below="@id/genre_chips_ChipGroup"
+            android:layout_below="@id/genre_chips_chip_group"
             android:layout_centerHorizontal="true"
             android:contentDescription="@string/film_cover_contentDescription"
             android:padding="@dimen/elementPadding"
             android:src="@drawable/film_no_image" />
 
         <TextView
-            android:id="@+id/film_description_TextView"
+            android:id="@+id/film_description_text_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/cover_ImageView"
+            android:layout_below="@id/cover_image_view"
             android:padding="@dimen/elementPadding"
             android:textIsSelectable="true"
             android:textSize="@dimen/text_body"
