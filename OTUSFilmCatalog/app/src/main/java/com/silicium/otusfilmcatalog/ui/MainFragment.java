@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.view.animation.OvershootInterpolator;
 import android.widget.CompoundButton;
 import android.widget.FrameLayout;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -21,7 +22,6 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -78,7 +78,7 @@ public class MainFragment extends FragmentWithCallback implements IOnBackPressed
     private FloatingActionButton fab_del;
     private FloatingActionButton fab_manipulate_favorites;
     private BottomNavigationView nav_view;
-    private SwipeRefreshLayout srl;
+    private ProgressBar progress_bar;
     private boolean isMultiselectMode;
     private boolean doubleBackToExitPressedOnce = false;
 
@@ -181,7 +181,7 @@ public class MainFragment extends FragmentWithCallback implements IOnBackPressed
     }
 
     private void fetchNextPageToAdapter() {
-        srl.setRefreshing(true);
+        progress_bar.setVisibility(View.VISIBLE);
         App.getFilmDescriptionStorage().getFilmsIDsNextPageAsync(new Consumer<Collection<String>>() {
             @SuppressLint("SyntheticAccessor")
             @Override
@@ -189,7 +189,7 @@ public class MainFragment extends FragmentWithCallback implements IOnBackPressed
                 requireActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        srl.setRefreshing(false);
+                        progress_bar.setVisibility(View.GONE);
                         addItemsToAdapter(filmIDs);
                     }
                 });
@@ -201,7 +201,7 @@ public class MainFragment extends FragmentWithCallback implements IOnBackPressed
                 requireActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        srl.setRefreshing(false);
+                        progress_bar.setVisibility(View.GONE);
                         Toast.makeText(getContext(), errorResponse.message, Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -366,7 +366,7 @@ public class MainFragment extends FragmentWithCallback implements IOnBackPressed
 
         film_recycler_view.setAdapter(filmItemAdapter);
 
-        srl = view.findViewById(R.id.srl);
+        progress_bar = view.findViewById(R.id.progress_bar);
 
         if (adapterCreationRequired) {
             if (isFavoritesOnly())
@@ -384,7 +384,7 @@ public class MainFragment extends FragmentWithCallback implements IOnBackPressed
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
 
-                if (srl.isRefreshing())
+                if (progress_bar.getVisibility() == View.VISIBLE)
                     return;
 
                 if (isFavoritesOnly())
