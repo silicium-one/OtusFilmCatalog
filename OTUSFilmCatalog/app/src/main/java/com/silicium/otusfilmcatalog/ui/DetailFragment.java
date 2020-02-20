@@ -10,7 +10,8 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,12 +19,14 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
+import com.silicium.otusfilmcatalog.App;
 import com.silicium.otusfilmcatalog.R;
 import com.silicium.otusfilmcatalog.logic.model.FilmDescription;
 import com.silicium.otusfilmcatalog.logic.model.FilmDescriptionFactory;
 import com.silicium.otusfilmcatalog.logic.model.FragmentWithCallback;
 import com.silicium.otusfilmcatalog.logic.model.IOnBackPressedListener;
-import com.silicium.otusfilmcatalog.logic.view.FilmViewWrapper;
 import com.silicium.otusfilmcatalog.ui.cuctomcomponents.DisappearingSnackCircularProgressBar;
 import com.tingyik90.snackprogressbar.SnackProgressBar;
 import com.tingyik90.snackprogressbar.SnackProgressBarLayout;
@@ -83,12 +86,22 @@ public class DetailFragment extends FragmentWithCallback implements IOnBackPress
 
         rootView = view;
 
-        final LinearLayout root = rootView.findViewById(R.id.film_root_layout);
         film_is_liked = rootView.findViewById(R.id.film_is_liked);
         film_comment = rootView.findViewById(R.id.film_comment);
-        FilmViewWrapper instance = FilmViewWrapper.getInstance();
-        film = instance.getFilmByID(filmID);
-        root.addView(instance.getFilmViewDetails(film, getContext()));
+        film = App.getFilmDescriptionStorage().getFilmByID(filmID);
+
+        ChipGroup chipGroup = view.findViewById(R.id.genre_chips_ChipGroup);
+        for (int filmGenreID : film.genres) {
+            Chip genre = new Chip(view.getContext());
+            genre.setText(App.getFilmDescriptionStorage().getReadableGenre(filmGenreID));
+            chipGroup.addView(genre);
+        }
+
+        ImageView pic = view.findViewById(R.id.cover_ImageView);
+        pic.setImageBitmap(film.cover);
+
+        TextView description = view.findViewById(R.id.film_description_TextView);
+        description.setText(film.description);
 
         final View more_header = rootView.findViewById(R.id.more_text_view);
         final int oldHeight = more_header.getLayoutParams().height;
@@ -171,7 +184,7 @@ public class DetailFragment extends FragmentWithCallback implements IOnBackPress
     }
 
     private void onShareBtnClick() {
-        String textMessage = getString(R.string.shareFilmMsg) + FilmViewWrapper.getInstance().getFilmUrl(film);
+        String textMessage = getString(R.string.shareFilmMsg) + String.format("<a href=\"%s\">%s</a>", film.url, film.name);
         Intent sendIntent = new Intent();
         sendIntent.setAction(Intent.ACTION_SEND);
         sendIntent.putExtra(Intent.EXTRA_TEXT, textMessage);

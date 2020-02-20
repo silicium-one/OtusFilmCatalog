@@ -32,7 +32,6 @@ import com.silicium.otusfilmcatalog.logic.model.FragmentWithCallback;
 import com.silicium.otusfilmcatalog.logic.model.IItemTouchHelperAdapter;
 import com.silicium.otusfilmcatalog.logic.model.IOnBackPressedListener;
 import com.silicium.otusfilmcatalog.logic.view.FilmItemAdapter;
-import com.silicium.otusfilmcatalog.logic.view.FilmViewWrapper;
 import com.silicium.otusfilmcatalog.ui.cuctomcomponents.DisappearingSnackCircularProgressBar;
 import com.silicium.otusfilmcatalog.ui.cuctomcomponents.SwipeProcessor;
 import com.silicium.otusfilmcatalog.ui.cuctomcomponents.UiComponents;
@@ -398,7 +397,7 @@ public class MainFragment extends FragmentWithCallback implements IOnBackPressed
     }
 
     private void gotoDetailFragment() {
-        if (FilmViewWrapper.getInstance().containsID(getSelectedFilmTag())) {
+        if (App.getFilmDescriptionStorage().containsID(getSelectedFilmTag())) {
             try {
                 gotoFragmentCallback.gotoDetailFragment(getSelectedFilmTag());
             } catch (NullPointerException e) {
