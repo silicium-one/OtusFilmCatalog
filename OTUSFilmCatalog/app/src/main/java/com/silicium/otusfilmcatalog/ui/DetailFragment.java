@@ -1,6 +1,7 @@
 package com.silicium.otusfilmcatalog.ui;
 
 import android.annotation.SuppressLint;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -23,9 +24,12 @@ import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.silicium.otusfilmcatalog.App;
 import com.silicium.otusfilmcatalog.R;
+import com.silicium.otusfilmcatalog.SharedQuantityCounter;
+import com.silicium.otusfilmcatalog.logic.controller.MetricsStorage;
 import com.silicium.otusfilmcatalog.logic.model.FilmDescription;
 import com.silicium.otusfilmcatalog.logic.model.FilmDescriptionFactory;
 import com.silicium.otusfilmcatalog.logic.model.FragmentWithCallback;
+import com.silicium.otusfilmcatalog.logic.model.IMetricNotifier;
 import com.silicium.otusfilmcatalog.logic.model.IOnBackPressedListener;
 import com.silicium.otusfilmcatalog.ui.cuctomcomponents.DisappearingSnackCircularProgressBar;
 import com.tingyik90.snackprogressbar.SnackProgressBar;
@@ -116,11 +120,11 @@ public class DetailFragment extends FragmentWithCallback implements IOnBackPress
                     .into(cover_image_view);
         }
 
-        ((TextView)view.findViewById(R.id.name_text_view)).setText(film.name);
-        ((TextView)view.findViewById(R.id.popularity_value_text_view)).setText(String.format(Locale.getDefault(),"%.3f", film.popularity));
-        ((TextView)view.findViewById(R.id.vote_average_value_text_view)).setText(String.format(Locale.getDefault(),"%.1f", film.voteAverage));
-        ((TextView)view.findViewById(R.id.vote_count_value_text_view)).setText(String.format(Locale.getDefault(),"%d", film.voteCount));
-        ((TextView)view.findViewById(R.id.release_date_value_text_view)).setText(film.releaseDate);
+        ((TextView) view.findViewById(R.id.name_text_view)).setText(film.name);
+        ((TextView) view.findViewById(R.id.popularity_value_text_view)).setText(String.format(Locale.getDefault(), "%.3f", film.popularity));
+        ((TextView) view.findViewById(R.id.vote_average_value_text_view)).setText(String.format(Locale.getDefault(), "%.1f", film.voteAverage));
+        ((TextView) view.findViewById(R.id.vote_count_value_text_view)).setText(String.format(Locale.getDefault(), "%d", film.voteCount));
+        ((TextView) view.findViewById(R.id.release_date_value_text_view)).setText(film.releaseDate);
 
         final View more_header = rootView.findViewById(R.id.more_text_view);
         final int oldHeight = more_header.getLayoutParams().height;
@@ -209,7 +213,16 @@ public class DetailFragment extends FragmentWithCallback implements IOnBackPress
         sendIntent.setType("text/html");
 
         String title = getResources().getString(R.string.shareFilmDlgTitle);
-        Intent chooser = Intent.createChooser(sendIntent, title);
+
+        Intent chooser;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP_MR1) {
+            Intent receiver = new Intent(getContext(), SharedQuantityCounter.class);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(), 0, receiver, PendingIntent.FLAG_UPDATE_CURRENT);
+            chooser = Intent.createChooser(sendIntent, title, pendingIntent.getIntentSender());
+        } else {
+            chooser = Intent.createChooser(sendIntent, title);
+            MetricsStorage.getMetricNotifier().increment(IMetricNotifier.SHARED_TAG);
+        }
 
         if (sendIntent.resolveActivity(rootView.getContext().getPackageManager()) != null) {
             startActivity(chooser);
