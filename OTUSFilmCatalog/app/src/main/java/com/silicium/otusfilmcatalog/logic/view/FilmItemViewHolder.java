@@ -20,27 +20,27 @@ import com.silicium.otusfilmcatalog.R;
 import com.silicium.otusfilmcatalog.logic.model.FilmDescription;
 
 class FilmItemViewHolder extends RecyclerView.ViewHolder {
-    private final ImageView film_cover_preview_imageView;
-    private final CheckBox item_selected_CheckBox;
-    private final TextView film_name_TextView;
-    private final TextView film_description_TextView;
-    private final CheckBox film_favorite_CheckBox;
-    private final Button film_detail_Button;
+    private final ImageView film_cover_preview_image_view;
+    private final CheckBox item_selected_check_box;
+    private final TextView film_name_text_view;
+    private final TextView film_description_text_view;
+    private final CheckBox film_favorite_check_box;
+    private final Button film_detail_button;
     private boolean isSelected = false;
 
     FilmItemViewHolder(@NonNull final View itemView) {
         super(itemView);
 
-        film_cover_preview_imageView = itemView.findViewById(R.id.film_cover_preview_imageView);
-        item_selected_CheckBox = itemView.findViewById(R.id.item_selected_CheckBox);
-        film_name_TextView = itemView.findViewById(R.id.film_name_TextView);
-        film_description_TextView = itemView.findViewById(R.id.film_description_TextView);
-        film_favorite_CheckBox = itemView.findViewById(R.id.film_favorite_CheckBox);
-        film_detail_Button = itemView.findViewById(R.id.film_detail_Button);
+        film_cover_preview_image_view = itemView.findViewById(R.id.film_cover_preview_image_view);
+        item_selected_check_box = itemView.findViewById(R.id.item_selected_check_box);
+        film_name_text_view = itemView.findViewById(R.id.film_name_text_view);
+        film_description_text_view = itemView.findViewById(R.id.film_description_text_view);
+        film_favorite_check_box = itemView.findViewById(R.id.film_favorite_check_box);
+        film_detail_button = itemView.findViewById(R.id.film_detail_button);
     }
 
     boolean isChecked() {
-        return item_selected_CheckBox.isChecked();
+        return item_selected_check_box.isChecked();
     }
 
     void bind(@NonNull FilmDescription item, boolean isSelected, boolean isMultiselectMode, boolean isChecked, CompoundButton.OnCheckedChangeListener favoriteStateChangedListener, View.OnClickListener detailBtnClickListener, View.OnLongClickListener itemLongClickListener, @Nullable final CompoundButton.OnCheckedChangeListener checkedStateChangedListener) {
@@ -49,15 +49,15 @@ class FilmItemViewHolder extends RecyclerView.ViewHolder {
         // В частности вызывает срабатывани IllegalStateException в FileItemAdapter.removeItemByID, если элемент ещё трясётся
         // и мы снимаем звёздочку с элемента, а потом сразу переключаемся к виду "Избранное"
 
-        film_favorite_CheckBox.setOnCheckedChangeListener(null);
-        film_detail_Button.setOnClickListener(null);
+        film_favorite_check_box.setOnCheckedChangeListener(null);
+        film_detail_button.setOnClickListener(null);
         itemView.setOnLongClickListener(null);
-        item_selected_CheckBox.setOnCheckedChangeListener(null);
+        item_selected_check_box.setOnCheckedChangeListener(null);
 
         if (item.coverPreviewUrl.isEmpty()) {
-            film_cover_preview_imageView.setImageBitmap(item.coverPreview);
+            film_cover_preview_image_view.setImageBitmap(item.coverPreview);
         } else {
-            //todo: добавить поддержку темы, размеры получать из film_cover_preview_imageView
+            //todo: добавить поддержку темы, размеры получать из film_cover_preview_image_view
             CircularProgressDrawable circularProgressDrawable = new CircularProgressDrawable(itemView.getContext());
             circularProgressDrawable.setStrokeWidth(5f);
             circularProgressDrawable.setCenterRadius(30f);
@@ -68,32 +68,32 @@ class FilmItemViewHolder extends RecyclerView.ViewHolder {
                     .centerCrop()
                     .placeholder(circularProgressDrawable)
                     .error(R.drawable.ic_error_outline)
-                    .into(film_cover_preview_imageView);
+                    .into(film_cover_preview_image_view);
         }
 
-        film_name_TextView.setText(item.name);
-        film_description_TextView.setText(item.description);
-        film_favorite_CheckBox.setChecked(item.isFavorite());
+        film_name_text_view.setText(item.name);
+        film_description_text_view.setText(item.description);
+        film_favorite_check_box.setChecked(item.isFavorite());
 
-        film_favorite_CheckBox.setTag(item.ID);
-        film_detail_Button.setTag(item.ID);
+        film_favorite_check_box.setTag(item.ID);
+        film_detail_button.setTag(item.ID);
         itemView.setTag(item.ID);
 
         this.isSelected = isSelected;
         if (isMultiselectMode) {
-            item_selected_CheckBox.setVisibility(View.VISIBLE);
-            item_selected_CheckBox.setChecked(isChecked);
+            item_selected_check_box.setVisibility(View.VISIBLE);
+            item_selected_check_box.setChecked(isChecked);
         } else {
-            item_selected_CheckBox.setVisibility(View.GONE);
-            item_selected_CheckBox.setChecked(false);
+            item_selected_check_box.setVisibility(View.GONE);
+            item_selected_check_box.setChecked(false);
         }
         resolveRootItemBackgroundColor();
 
-        film_favorite_CheckBox.setOnCheckedChangeListener(favoriteStateChangedListener);
-        film_detail_Button.setOnClickListener(detailBtnClickListener);
+        film_favorite_check_box.setOnCheckedChangeListener(favoriteStateChangedListener);
+        film_detail_button.setOnClickListener(detailBtnClickListener);
         itemView.setOnLongClickListener(itemLongClickListener);
 
-        item_selected_CheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        item_selected_check_box.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @SuppressLint("SyntheticAccessor")
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -106,7 +106,7 @@ class FilmItemViewHolder extends RecyclerView.ViewHolder {
     }
 
     private void resolveRootItemBackgroundColor() {
-        boolean isChecked = item_selected_CheckBox.isChecked();
+        boolean isChecked = item_selected_check_box.isChecked();
         TypedValue typedValue = new TypedValue();
         Resources.Theme theme = itemView.getContext().getTheme();
         if (isSelected)

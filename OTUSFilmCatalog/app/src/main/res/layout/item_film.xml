@@ -6,7 +6,7 @@
     android:layout_height="@dimen/item_film_height">
 
     <ImageView
-        android:id="@+id/film_cover_preview_imageView"
+        android:id="@+id/film_cover_preview_image_view"
         android:layout_width="@dimen/item_film_image_width"
         android:layout_height="match_parent"
         android:contentDescription="@string/film_cover_preview_contentDescription"
@@ -15,7 +15,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <CheckBox
-        android:id="@+id/item_selected_CheckBox"
+        android:id="@+id/item_selected_check_box"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
@@ -23,53 +23,53 @@
         android:scaleX="3"
         android:scaleY="3"
         android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@id/film_cover_preview_imageView"
-        app:layout_constraintEnd_toStartOf="@id/film_detail_Button"
-        app:layout_constraintStart_toEndOf="@id/film_cover_preview_imageView"
-        app:layout_constraintTop_toTopOf="@id/film_cover_preview_imageView"
+        app:layout_constraintBottom_toBottomOf="@id/film_cover_preview_image_view"
+        app:layout_constraintEnd_toStartOf="@id/film_detail_button"
+        app:layout_constraintStart_toEndOf="@id/film_cover_preview_image_view"
+        app:layout_constraintTop_toTopOf="@id/film_cover_preview_image_view"
         tools:checked="false"
         tools:visibility="visible" />
 
     <TextView
-        android:id="@+id/film_name_TextView"
+        android:id="@+id/film_name_text_view"
         android:layout_width="0dp"
         android:layout_height="@dimen/item_film_name_height"
         android:textIsSelectable="false"
         android:textSize="@dimen/item_film_name_text_size"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@id/film_description_TextView"
-        app:layout_constraintEnd_toStartOf="@id/film_detail_Button"
+        app:layout_constraintBottom_toTopOf="@id/film_description_text_view"
+        app:layout_constraintEnd_toStartOf="@id/film_detail_button"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@id/film_cover_preview_imageView"
+        app:layout_constraintStart_toEndOf="@id/film_cover_preview_image_view"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Название фильма Название фильма Название фильма " />
 
     <TextView
-        android:id="@+id/film_description_TextView"
+        android:id="@+id/film_description_text_view"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:textIsSelectable="false"
         android:textSize="@dimen/item_film_description_text_size"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/film_detail_Button"
-        app:layout_constraintStart_toEndOf="@id/film_cover_preview_imageView"
-        app:layout_constraintTop_toBottomOf="@id/film_name_TextView"
+        app:layout_constraintEnd_toStartOf="@id/film_detail_button"
+        app:layout_constraintStart_toEndOf="@id/film_cover_preview_image_view"
+        app:layout_constraintTop_toBottomOf="@id/film_name_text_view"
         tools:text="Описание фильма Описание фильма Описание фильма Описание фильма Описание фильма Описание фильма Описание фильма " />
 
     <CheckBox
-        android:id="@+id/film_favorite_CheckBox"
+        android:id="@+id/film_favorite_check_box"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:background="@android:color/transparent"
         android:button="@android:drawable/btn_star"
-        app:layout_constraintBottom_toTopOf="@+id/film_detail_Button"
-        app:layout_constraintEnd_toEndOf="@+id/film_detail_Button"
-        app:layout_constraintStart_toStartOf="@+id/film_detail_Button"
+        app:layout_constraintBottom_toTopOf="@+id/film_detail_button"
+        app:layout_constraintEnd_toEndOf="@+id/film_detail_button"
+        app:layout_constraintStart_toStartOf="@+id/film_detail_button"
         tools:checked="true" />
 
     <Button
-        android:id="@+id/film_detail_Button"
+        android:id="@+id/film_detail_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/filmDetailBtnText"
