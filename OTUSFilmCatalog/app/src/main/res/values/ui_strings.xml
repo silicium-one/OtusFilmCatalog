@@ -43,6 +43,7 @@
     <string name="appwidget_default_value">0</string>
 
     <string name="film_cover_preview_contentDescription">Предпросмотр обложки</string>
+    <string name="film_cover_contentDescription">Обложка в полном размере</string>
 
     <string name="main_favoritesList">Избранное</string>
     <string name="maim_fullList">Все фильмы</string>

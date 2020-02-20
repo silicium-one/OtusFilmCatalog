@@ -21,14 +21,16 @@
     <dimen name="bottomSheet_header">40dp</dimen>
     <dimen name="bottomSheet_checkboxSize">40dp</dimen>
     <dimen name="paddingStart">10dp</dimen>
+    <dimen name="elementPadding">4dp</dimen>
+    <dimen name="fullImageHeight">200dp</dimen>
 
     <!-- fragment_main -->
     <dimen name="padding">10dp</dimen>
     <dimen name="margin">10dp</dimen>
 
     <!-- text -->
-    <dimen name="text_body">14sp</dimen>
-    <dimen name="text_body_dp">14dp</dimen>
+    <dimen name="text_body">16sp</dimen>
+    <dimen name="text_body_dp">16dp</dimen>
 
     <!--
 Refer to App Widget Documentation for margin information
