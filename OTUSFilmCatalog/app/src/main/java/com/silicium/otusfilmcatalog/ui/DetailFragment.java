@@ -108,7 +108,7 @@ public class DetailFragment extends FragmentWithCallback implements IOnBackPress
         if (film.coverUrl.isEmpty()) {
             cover_image_view.setImageBitmap(film.cover);
         } else {
-            //todo: добавить поддержку темы, размеры получать из film_cover_preview_imageView
+            //todo: добавить поддержку темы, размеры получать из cover_image_view
             CircularProgressDrawable circularProgressDrawable = new CircularProgressDrawable(view.getContext());
             circularProgressDrawable.setStrokeWidth(5f);
             circularProgressDrawable.setCenterRadius(30f);
