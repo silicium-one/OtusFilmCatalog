@@ -15,20 +15,30 @@ public class FilmDescription {
 
     @NonNull
     public final String ID;
+
+    @NonNull
     public final Set<Integer> genres = new HashSet<>();
+
     @NonNull
     private final IMetricNotifier metricNotifier;
+
     @NonNull
     public String name = "";
+
     @NonNull
     public String description = "";
+
     @NonNull
-    public String url = "https://www.kinopoisk.ru/error";
+    public String url = "https://www.themoviedb.org/movie/0";
+
     @NonNull
     public Bitmap cover = BitmapFactory.decodeResource(App.getAppResources(), R.drawable.film_no_image);
+
     @NonNull
     public Bitmap coverPreview = BitmapFactory.decodeResource(App.getAppResources(), R.drawable.film_no_image);
+
     private boolean isFavorite;
+
     FilmDescription(@NonNull String ID, @NonNull IMetricNotifier metricNotifier) {
         this.ID = ID;
         this.metricNotifier = metricNotifier;
