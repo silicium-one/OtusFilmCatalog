@@ -1,8 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="DuplicateStrings">
     <string name="shareTextBtnText">Пригласить друга на просмотр</string>
     <string name="shareFilmDlgTitle">Выберите, как пригласить на просмотр</string>
-    <string name="isLikedCheckBoxText">Нравится</string>
-    <string name="filmCommentEditTextHint">Поделитесь впечатлениями о фильме</string>
     <string name="filmCommentExpandTextHint">Ещё</string>
     <string name="filmDetailBtnText">Детали</string>
 
@@ -47,5 +45,10 @@
 
     <string name="main_favoritesList">Избранное</string>
     <string name="maim_fullList">Все фильмы</string>
+
+    <string name="detail_popularity_header">Популярность</string>
+    <string name="detail_vote_average_header">Оценка</string>
+    <string name="detail_vote_count_header">Количество голосов</string>
+    <string name="detail_release_date_header">Дата релиза</string>
 
 </resources>

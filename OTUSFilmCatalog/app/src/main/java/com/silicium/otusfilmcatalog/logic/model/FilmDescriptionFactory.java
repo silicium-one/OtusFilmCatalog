@@ -22,6 +22,11 @@ public class FilmDescriptionFactory {
         ret.coverUrl = "http://image.tmdb.org/t/p/w1280" + movieDescriptionJson.backdropPath;
         ret.coverPreviewUrl = "http://image.tmdb.org/t/p/w300" + movieDescriptionJson.posterPath;
 
+        ret.popularity = movieDescriptionJson.popularity;
+        ret.voteCount = movieDescriptionJson.voteCount;
+        ret.voteAverage = movieDescriptionJson.voteAverage;
+        ret.releaseDate = movieDescriptionJson.releaseDate;
+
         return ret;
     }
 

@@ -43,6 +43,15 @@ public class FilmDescription {
     @NonNull
     public Bitmap coverPreview = BitmapFactory.decodeResource(App.getAppResources(), R.drawable.film_no_image);
 
+    public float popularity;
+
+    public int voteCount;
+
+    public float voteAverage;
+
+    @NonNull
+    public String releaseDate = ""; //todo: сделать датой
+
     private boolean isFavorite;
 
     FilmDescription(@NonNull String ID, @NonNull IMetricNotifier metricNotifier) {

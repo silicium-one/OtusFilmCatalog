@@ -7,8 +7,6 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -34,6 +32,8 @@ import com.tingyik90.snackprogressbar.SnackProgressBar;
 import com.tingyik90.snackprogressbar.SnackProgressBarLayout;
 import com.tingyik90.snackprogressbar.SnackProgressBarManager;
 
+import java.util.Locale;
+
 import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
 
 public class DetailFragment extends FragmentWithCallback implements IOnBackPressedListener {
@@ -43,10 +43,6 @@ public class DetailFragment extends FragmentWithCallback implements IOnBackPress
     private String filmID = "";
     @NonNull
     private FilmDescription film = FilmDescriptionFactory.getStubFilmDescription();
-    @SuppressWarnings({"FieldCanBeLocal", "unused"})
-    private CheckBox film_is_liked;
-    @SuppressWarnings({"FieldCanBeLocal", "unused"})
-    private EditText film_comment;
     private View rootView;
     private Toolbar toolbar;
     private DisappearingSnackCircularProgressBar snackProgressBar;
@@ -88,8 +84,6 @@ public class DetailFragment extends FragmentWithCallback implements IOnBackPress
 
         rootView = view;
 
-        film_is_liked = rootView.findViewById(R.id.film_is_liked);
-        film_comment = rootView.findViewById(R.id.film_comment);
         film = App.getFilmDescriptionStorage().getFilmByID(filmID);
 
         ChipGroup genre_chips_chip_group = view.findViewById(R.id.genre_chips_chip_group);
@@ -122,9 +116,14 @@ public class DetailFragment extends FragmentWithCallback implements IOnBackPress
                     .into(cover_image_view);
         }
 
+        ((TextView)view.findViewById(R.id.name_text_view)).setText(film.name);
+        ((TextView)view.findViewById(R.id.popularity_value_text_view)).setText(String.format(Locale.getDefault(),"%.3f", film.popularity));
+        ((TextView)view.findViewById(R.id.vote_average_value_text_view)).setText(String.format(Locale.getDefault(),"%.1f", film.voteAverage));
+        ((TextView)view.findViewById(R.id.vote_count_value_text_view)).setText(String.format(Locale.getDefault(),"%d", film.voteCount));
+        ((TextView)view.findViewById(R.id.release_date_value_text_view)).setText(film.releaseDate);
+
         final View more_header = rootView.findViewById(R.id.more_text_view);
         final int oldHeight = more_header.getLayoutParams().height;
-
 
         // get the bottom sheet view
         ConstraintLayout bottomSheet = rootView.findViewById(R.id.detail_bottom_sheet);
@@ -199,7 +198,7 @@ public class DetailFragment extends FragmentWithCallback implements IOnBackPress
     public void onStop() {
         super.onStop();
 
-        toolbar.getMenu().clear(); // убираем кнопок "поделиться" из панели инструментов
+        toolbar.getMenu().clear(); // убираем кнопку "поделиться" из панели инструментов
     }
 
     private void onShareBtnClick() {
@@ -217,23 +216,12 @@ public class DetailFragment extends FragmentWithCallback implements IOnBackPress
         }
     }
 
-    /**
-     * Если вернуть ИСТИНА, то нажатие кнопки "назад" обрабтано. Если вернуть ЛОЖЬ, то требуется обработка выше по стэку.
-     *
-     * @return ИСТИНА, если нажание кнопки back обработано и ЛОЖЬ в противном случае
-     */
     @Override
     public boolean onBackPressed() {
         if (isLandscape())
             return false;
 
         if (doubleBackToExitPressedOnce) {
-//            Intent intent = new Intent();
-//            intent.putExtra("film_is_liked", film_is_liked.isChecked());
-//            intent.putExtra("film_comment", film_comment.getText().toString());
-//            setResult(RESULT_OK, intent);
-//            finish();
-            // TODO: придумать, как обработать полученные даннве. Возможно, упокавать их в базу
             return false;
         } else {
             snackProgressBar.Show();

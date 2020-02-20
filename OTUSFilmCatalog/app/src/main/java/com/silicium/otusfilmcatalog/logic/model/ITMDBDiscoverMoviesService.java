@@ -11,6 +11,6 @@ import retrofit2.http.Query;
  */
 public interface ITMDBDiscoverMoviesService {
     @NonNull
-    @GET("movie?sort_by=popularity.desc&language=ru")
+    @GET("movie?sort_by=popularity.desc&language=ru-RU")
     Call<DiscoverMoviesResultJson> getMovies(@Query("page") int page);
 }
