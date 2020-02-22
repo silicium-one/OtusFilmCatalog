@@ -112,7 +112,7 @@ public class DetailFragment extends FragmentWithCallback implements IOnBackPress
             circularProgressDrawable.setCenterRadius(30f);
             circularProgressDrawable.start();
 
-            Glide.with(view.getContext()).asBitmap()
+            Glide.with(App.getApplication().getApplicationContext())
                     .load(film.coverUrl)
                     .fitCenter()
                     .placeholder(circularProgressDrawable)

@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
 
 import com.bumptech.glide.Glide;
+import com.silicium.otusfilmcatalog.App;
 import com.silicium.otusfilmcatalog.R;
 import com.silicium.otusfilmcatalog.logic.model.FilmDescription;
 
@@ -63,7 +64,7 @@ class FilmItemViewHolder extends RecyclerView.ViewHolder {
             circularProgressDrawable.setCenterRadius(30f);
             circularProgressDrawable.start();
 
-            Glide.with(itemView.getContext()).asBitmap()
+            Glide.with(App.getApplication().getApplicationContext())
                     .load(item.coverPreviewUrl)
                     .centerCrop()
                     .placeholder(circularProgressDrawable)
