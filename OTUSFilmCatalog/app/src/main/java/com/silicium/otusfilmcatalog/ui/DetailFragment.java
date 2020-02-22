@@ -1,5 +1,6 @@
 package com.silicium.otusfilmcatalog.ui;
 
+import android.animation.Animator;
 import android.annotation.SuppressLint;
 import android.app.PendingIntent;
 import android.content.Intent;
@@ -49,6 +50,8 @@ public class DetailFragment extends FragmentWithCallback implements IOnBackPress
     private FilmDescription film = FilmDescriptionFactory.getStubFilmDescription();
     private View rootView;
     private Toolbar toolbar;
+    private View more_header;
+    private BottomSheetBehavior bShBehavior;
     private DisappearingSnackCircularProgressBar snackProgressBar;
     private boolean doubleBackToExitPressedOnce = false;
 
@@ -126,13 +129,13 @@ public class DetailFragment extends FragmentWithCallback implements IOnBackPress
         ((TextView) view.findViewById(R.id.vote_count_value_text_view)).setText(String.format(Locale.getDefault(), "%d", film.voteCount));
         ((TextView) view.findViewById(R.id.release_date_value_text_view)).setText(film.releaseDate);
 
-        final View more_header = rootView.findViewById(R.id.more_text_view);
+        more_header = rootView.findViewById(R.id.more_text_view);
         final int oldHeight = more_header.getLayoutParams().height;
 
         // get the bottom sheet view
         ConstraintLayout bottomSheet = rootView.findViewById(R.id.detail_bottom_sheet);
         // init the bottom sheet behavior
-        final BottomSheetBehavior bShBehavior = BottomSheetBehavior.from(bottomSheet);
+        bShBehavior = BottomSheetBehavior.from(bottomSheet);
 
         bShBehavior.setBottomSheetCallback(
                 new BottomSheetBehavior.BottomSheetCallback() {
@@ -147,9 +150,47 @@ public class DetailFragment extends FragmentWithCallback implements IOnBackPress
                             }, getResources().getInteger(R.integer.foolproof_time_ms));
                         } else if (newState == BottomSheetBehavior.STATE_EXPANDED) {
                             float scaleFactor = 0.1F;
-                            more_header.animate().y(-(oldHeight * (1 - scaleFactor) / 2F)).scaleY(scaleFactor).start();
+                            more_header.animate().y(-(oldHeight * (1 - scaleFactor) / 2F)).scaleY(scaleFactor).setListener(new Animator.AnimatorListener() {
+                                @Override
+                                public void onAnimationStart(Animator animation) {
+
+                                }
+
+                                @Override
+                                public void onAnimationEnd(Animator animation) {
+                                    more_header.setVisibility(View.GONE);
+                                }
+
+                                @Override
+                                public void onAnimationCancel(Animator animation) {
+
+                                }
+
+                                @Override
+                                public void onAnimationRepeat(Animator animation) {
+
+                                }
+                            }).start();
                         } else if (newState == BottomSheetBehavior.STATE_COLLAPSED) {
-                            more_header.animate().setDuration(getResources().getInteger(R.integer.smooth_transition_time_ms)).y(0).scaleY(1F).start();
+                            more_header.animate().setDuration(getResources().getInteger(R.integer.smooth_transition_time_ms)).y(0).scaleY(1F).setListener(new Animator.AnimatorListener() {
+                                @Override
+                                public void onAnimationStart(Animator animation) {
+                                    more_header.setVisibility(View.VISIBLE);
+                                }
+
+                                @Override
+                                public void onAnimationEnd(Animator animation) {
+                                }
+
+                                @Override
+                                public void onAnimationCancel(Animator animation) {
+                                }
+
+                                @Override
+                                public void onAnimationRepeat(Animator animation) {
+
+                                }
+                            }).start();
                         }
                     }
 
@@ -196,6 +237,11 @@ public class DetailFragment extends FragmentWithCallback implements IOnBackPress
                 return false;
             }
         });
+
+        if (bShBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED)
+            more_header.setVisibility(View.GONE);
+        else if (bShBehavior.getState() == BottomSheetBehavior.STATE_COLLAPSED)
+            more_header.setVisibility(View.VISIBLE);
     }
 
     @Override
