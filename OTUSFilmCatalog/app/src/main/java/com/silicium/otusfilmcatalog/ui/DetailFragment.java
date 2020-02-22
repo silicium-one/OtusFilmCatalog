@@ -139,6 +139,7 @@ public class DetailFragment extends FragmentWithCallback implements IOnBackPress
 
         bShBehavior.setBottomSheetCallback(
                 new BottomSheetBehavior.BottomSheetCallback() {
+                    @SuppressLint("SyntheticAccessor")
                     @Override
                     public void onStateChanged(@NonNull final View view, int newState) {
                         if (newState == BottomSheetBehavior.STATE_HIDDEN) {
@@ -199,6 +200,15 @@ public class DetailFragment extends FragmentWithCallback implements IOnBackPress
                     }
                 }
         );
+
+        more_header.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("SyntheticAccessor")
+            @Override
+            public void onClick(View v) {
+                if (bShBehavior.getState() == BottomSheetBehavior.STATE_COLLAPSED)
+                    bShBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+            }
+        });
 
         snackProgressBar = new DisappearingSnackCircularProgressBar(rootView.findViewById(R.id.fragment_detail),
                 getString(R.string.backPressedToastText),
