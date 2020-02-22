@@ -18,7 +18,6 @@
         android:layout_height="@dimen/bottomSheet_header"
         android:gravity="center"
         android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
-        android:textColor="?colorAccent"
         android:textIsSelectable="false"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Название фильма" />
