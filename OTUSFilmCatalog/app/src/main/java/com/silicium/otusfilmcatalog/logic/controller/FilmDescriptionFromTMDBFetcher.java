@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.util.Consumer;
 
+import com.silicium.otusfilmcatalog.BuildConfig;
 import com.silicium.otusfilmcatalog.R;
 import com.silicium.otusfilmcatalog.logic.model.DiscoverMoviesResultJson;
 import com.silicium.otusfilmcatalog.logic.model.ErrorResponse;
@@ -56,7 +57,7 @@ public class FilmDescriptionFromTMDBFetcher implements IFilmDescriptionStorage {
                     public Response intercept(@NonNull Chain chain) throws IOException {
                         Request request = chain.request().newBuilder()
                                 .addHeader("Content-Type", "application/json")
-                                .addHeader("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1ZGVhYTJlM2FjOGUxNGIwMjAxOTk4YmU3ZTVmY2ZiNSIsInN1YiI6IjVlM2IwZDdjMGMyNzEwMDAxYTc2YmZlMCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.j1T-lSL41AXfxUn2OWVxyjB88vTtuR9w0PJ3JgNtoxw")
+                                .addHeader("Authorization", BuildConfig.TMDB_V4)
                                 .build();
                         return chain.proceed(request);
                     }
