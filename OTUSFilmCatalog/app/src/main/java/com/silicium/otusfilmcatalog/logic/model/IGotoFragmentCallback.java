@@ -9,5 +9,7 @@ public interface IGotoFragmentCallback {
 
     void gotoMainFragment();
 
+    void gotoCinemasFragment();
+
     void gotoAboutFragment();
 }

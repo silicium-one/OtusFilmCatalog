@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -31,7 +32,7 @@ import com.silicium.otusfilmcatalog.ui.MainFragment;
 
 import static android.content.res.Configuration.ORIENTATION_PORTRAIT;
 
-public class RootActivity extends AppCompatActivity implements IGotoFragmentCallback, FragmentManager.OnBackStackChangedListener, NavigationView.OnNavigationItemSelectedListener  {
+public class RootActivity extends AppCompatActivity implements IGotoFragmentCallback, FragmentManager.OnBackStackChangedListener, NavigationView.OnNavigationItemSelectedListener {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -123,6 +124,11 @@ public class RootActivity extends AppCompatActivity implements IGotoFragmentCall
     }
 
     @Override
+    public void gotoCinemasFragment() {
+        Toast.makeText(this, R.string.under_construction_string, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
     public void gotoAboutFragment() {
         getSupportFragmentManager()
                 .beginTransaction()
@@ -183,6 +189,8 @@ public class RootActivity extends AppCompatActivity implements IGotoFragmentCall
 
         if (id == R.id.item_home)
             gotoMainFragment();
+        else if (id == R.id.item_cinemas)
+            gotoCinemasFragment();
         else if (id == R.id.item_about)
             gotoAboutFragment();
         else if (id == R.id.item_exit) {

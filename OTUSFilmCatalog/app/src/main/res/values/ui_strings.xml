@@ -4,7 +4,8 @@
     <string name="filmCommentExpandTextHint">Подробности</string>
     <string name="filmDetailBtnText">Детали</string>
 
-    <string name="homeMenuItem">Главный экран</string>
+    <string name="homeMenuItem">Фильмы</string>
+    <string name="cinemasMenuItem">Кинотеатры</string>
     <string name="aboutMenuItem">О программе</string>
     <string name="exitMenuItem">Выход</string>
 
