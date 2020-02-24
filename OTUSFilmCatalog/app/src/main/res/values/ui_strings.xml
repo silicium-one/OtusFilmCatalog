@@ -18,6 +18,10 @@
     <string name="exitDialogNegativeAnswer">Нет</string>
     <string name="exitDialogPositiveAnswer">Да</string>
 
+    <string name="locationPermissionErrorDialogTitle">Не хватает разрешений</string>
+    <string name="locationPermissionErrorDialogMessage">Для поиска кинотеатров поблизости необходимо разрешить приложению доступ к данным о местоположении</string>
+    <string name="locationPermissionErrorDialogNeutralAnswer">Понятно</string>
+
     <string name="bottom_sheet_option_heading">Дополнительно</string>
     <string name="bottom_sheet_option_pic_photo">Выбрать обложку</string>
     <string name="bottom_sheet_option_add_category">Указать категорию</string>

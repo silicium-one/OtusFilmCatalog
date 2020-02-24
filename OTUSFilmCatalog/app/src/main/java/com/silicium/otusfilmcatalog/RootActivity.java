@@ -1,6 +1,9 @@
 package com.silicium.otusfilmcatalog;
 
+import android.Manifest;
 import android.content.DialogInterface;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.ViewGroup;
@@ -14,6 +17,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
@@ -33,6 +37,8 @@ import com.silicium.otusfilmcatalog.ui.MainFragment;
 import static android.content.res.Configuration.ORIENTATION_PORTRAIT;
 
 public class RootActivity extends AppCompatActivity implements IGotoFragmentCallback, FragmentManager.OnBackStackChangedListener, NavigationView.OnNavigationItemSelectedListener {
+
+    private static final int PERMISSIONS_REQUEST_FINE_LOCATION = 666;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -189,9 +195,17 @@ public class RootActivity extends AppCompatActivity implements IGotoFragmentCall
 
         if (id == R.id.item_home)
             gotoMainFragment();
-        else if (id == R.id.item_cinemas)
-            gotoCinemasFragment();
-        else if (id == R.id.item_about)
+        else if (id == R.id.item_cinemas) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                    != PackageManager.PERMISSION_GRANTED) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                            PERMISSIONS_REQUEST_FINE_LOCATION);
+                }
+            } else {
+                gotoCinemasFragment();
+            }
+        } else if (id == R.id.item_about)
             gotoAboutFragment();
         else if (id == R.id.item_exit) {
             AlertDialog.Builder bld = new AlertDialog.Builder(this);
@@ -215,5 +229,24 @@ public class RootActivity extends AppCompatActivity implements IGotoFragmentCall
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        if (requestCode == PERMISSIONS_REQUEST_FINE_LOCATION
+                && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+            gotoCinemasFragment();
+        } else {
+            AlertDialog.Builder bld = new AlertDialog.Builder(this);
+
+            bld.setMessage(R.string.locationPermissionErrorDialogMessage);
+            bld.setTitle(R.string.locationPermissionErrorDialogTitle);
+            bld.setNeutralButton(R.string.locationPermissionErrorDialogNeutralAnswer, null);
+            bld.setCancelable(false);
+            AlertDialog dialog = bld.create();
+            dialog.show();
+        }
     }
 }
