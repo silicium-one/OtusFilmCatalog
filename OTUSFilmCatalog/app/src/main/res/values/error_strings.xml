@@ -7,4 +7,6 @@
     <string name="httpResponseEmptyBody">HTTP запрос вернул пустое тело</string>
     <string name="interruptedExceptionError">Операция прервана</string>
 
+    <string name="error_location">Не удалось получить текущее местоположение</string>
+
 </resources>
