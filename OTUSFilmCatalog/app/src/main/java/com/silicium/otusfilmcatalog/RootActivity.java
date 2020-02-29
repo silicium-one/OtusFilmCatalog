@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -31,6 +30,7 @@ import com.silicium.otusfilmcatalog.logic.model.IGotoFragmentCallback;
 import com.silicium.otusfilmcatalog.logic.model.IOnBackPressedListener;
 import com.silicium.otusfilmcatalog.ui.AboutFragment;
 import com.silicium.otusfilmcatalog.ui.AddFragment;
+import com.silicium.otusfilmcatalog.ui.CinemasMapFragment;
 import com.silicium.otusfilmcatalog.ui.DetailFragment;
 import com.silicium.otusfilmcatalog.ui.MainFragment;
 
@@ -131,7 +131,12 @@ public class RootActivity extends AppCompatActivity implements IGotoFragmentCall
 
     @Override
     public void gotoCinemasFragment() {
-        Toast.makeText(this, R.string.under_construction_string, Toast.LENGTH_LONG).show();
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.root_fragment, new CinemasMapFragment(), CinemasMapFragment.FRAGMENT_TAG)
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                .addToBackStack(null)
+                .commit();
     }
 
     @Override

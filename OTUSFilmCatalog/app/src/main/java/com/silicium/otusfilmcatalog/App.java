@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 
 import com.silicium.otusfilmcatalog.logic.controller.FilmDescriptionFromTMDBFetcher;
 import com.silicium.otusfilmcatalog.logic.model.IFilmDescriptionStorage;
+import com.yandex.mapkit.MapKitFactory;
 
 import org.jetbrains.annotations.Contract;
 
@@ -41,5 +42,6 @@ public class App extends Application {
         application = this;
         storage = FilmDescriptionFromTMDBFetcher.getInstance();
         //storage = FilmDescriptionStorage.getInstance();
+        MapKitFactory.setApiKey(BuildConfig.YANDEX_MAPKIT_API_KEY);
     }
 }
