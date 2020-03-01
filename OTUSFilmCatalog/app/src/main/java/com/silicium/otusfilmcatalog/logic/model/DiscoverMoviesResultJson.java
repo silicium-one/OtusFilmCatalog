@@ -1,5 +1,7 @@
 package com.silicium.otusfilmcatalog.logic.model;
 
+import androidx.annotation.NonNull;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -16,7 +18,8 @@ public class DiscoverMoviesResultJson {
     @SerializedName("total_pages")
     @Expose
     public int totalPages;
+    @NonNull
     @SerializedName("results")
     @Expose
-    public List<MovieDescriptionJson> results = new ArrayList<MovieDescriptionJson>();
+    public List<MovieDescriptionJson> results = new ArrayList<>();
 }
