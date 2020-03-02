@@ -1,11 +1,13 @@
 package com.silicium.otusfilmcatalog.logic.controller;
 
 import android.annotation.SuppressLint;
+import android.os.Handler;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.util.Consumer;
 
+import com.silicium.otusfilmcatalog.App;
 import com.silicium.otusfilmcatalog.BuildConfig;
 import com.silicium.otusfilmcatalog.R;
 import com.silicium.otusfilmcatalog.logic.model.CinemaDescription;
@@ -96,10 +98,10 @@ public class CinemaDescriptionFromGooglePlacesFetcher {
 
     private void getCinemasAsync(@NonNull final String location, @NonNull final Consumer<Collection<CinemaDescription>> callback, @Nullable final Consumer<ErrorResponse> errorResponse,
                                  @Nullable final String nextPageToken, @NonNull final Collection<CinemaDescription> alreadyFetchedCinemas) {
-        service.getCinemas(location, nextPageToken).enqueue(new Callback<DiscoverPlacesResultJson>() {
+        final Callback<DiscoverPlacesResultJson> serviceCallback = new Callback<DiscoverPlacesResultJson>() {
             @SuppressLint("SyntheticAccessor")
             @Override
-            public void onResponse(@NonNull Call<DiscoverPlacesResultJson> call, @NonNull retrofit2.Response<DiscoverPlacesResultJson> response) {
+            public void onResponse(@NonNull Call<DiscoverPlacesResultJson> call, @NonNull final retrofit2.Response<DiscoverPlacesResultJson> response) {
                 if (!response.isSuccessful()) {
                     if (alreadyFetchedCinemas.size() > 0)
                         callback.accept(alreadyFetchedCinemas);
@@ -142,7 +144,18 @@ public class CinemaDescriptionFromGooglePlacesFetcher {
                 if (errorResponse != null)
                     errorResponse.accept(new ErrorResponse(R.string.connectGooglePlacesFailure, t));
             }
-        });
+        };
 
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @SuppressLint("SyntheticAccessor")
+            @Override
+            public void run() {
+                if (nextPageToken == null)
+                    service.getCinemas(location).enqueue(serviceCallback);
+                else
+                    service.getCinemasNextPage(nextPageToken).enqueue(serviceCallback);
+            }
+        }, App.getAppResources().getInteger(R.integer.google_places_api_fetch_delay_ms));
     }
 }
