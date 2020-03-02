@@ -39,7 +39,7 @@ public class CinemaDescriptionFromGooglePlacesFetcher {
      * действует по принципу "не менее чем". Исключение составляют ситуации,
      * когда сервис не возвращает признак следующей страницы
      */
-    private static final int MAX_CINEMAS_COUNT = 100;
+    private static final int MAX_CINEMAS_COUNT = 20;
 
     @Nullable
     private static volatile CinemaDescriptionFromGooglePlacesFetcher instance = null;
