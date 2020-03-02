@@ -20,6 +20,7 @@ import com.silicium.otusfilmcatalog.logic.model.PlaceDescriptionJson;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Locale;
 
 import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
@@ -92,7 +93,7 @@ public class CinemaDescriptionFromGooglePlacesFetcher {
 
     public void getCinemasAsync(double latitude, double longitude, @NonNull final Consumer<Collection<CinemaDescription>> callback, @Nullable final Consumer<ErrorResponse> errorResponse) {
         Collection<CinemaDescription> ret = new ArrayList<>();
-        String location = String.format("%s,%s", latitude, longitude);
+        String location = String.format(Locale.ENGLISH, "%.3f,%.3f", latitude, longitude);
         getCinemasAsync(location, callback, errorResponse, null, ret);
     }
 
