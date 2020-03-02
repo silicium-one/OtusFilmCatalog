@@ -13,6 +13,7 @@ android {
         vectorDrawables.useSupportLibrary = true
         buildConfigField 'String', "TMDB_V4", (project.findProperty("TMDB_ApiV4key") ?: "")
         buildConfigField 'String', "YANDEX_MAPKIT_API_KEY", (project.findProperty("YANDEX_ApiKey") ?: "")
+        buildConfigField 'String', "GOOGLE_PLACES_API_KEY", (project.findProperty("GOOGLE_ApiKey") ?: "")
     }
     buildTypes {
         release {

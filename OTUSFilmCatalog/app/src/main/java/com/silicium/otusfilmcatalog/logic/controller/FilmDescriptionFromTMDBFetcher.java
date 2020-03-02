@@ -160,7 +160,7 @@ public class FilmDescriptionFromTMDBFetcher implements IFilmDescriptionStorage {
             @Override
             public void onFailure(@NonNull Call<DiscoverMoviesResultJson> call, @NonNull Throwable t) {
                 if (errorResponse != null)
-                    errorResponse.accept(new ErrorResponse(R.string.connectFailure, t));
+                    errorResponse.accept(new ErrorResponse(R.string.connectTMDBFailure, t));
             }
         });
     }

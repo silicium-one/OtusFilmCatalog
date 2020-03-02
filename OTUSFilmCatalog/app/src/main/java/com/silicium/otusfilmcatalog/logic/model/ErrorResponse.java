@@ -20,14 +20,13 @@ public class ErrorResponse {
      * исключение, которое вызвало ощибку
      */
     @Nullable
-    public final Throwable t;
+    private final Throwable t;
 
     /**
      * код ошибки ответа по HTTP, или -1, если не применимо
      */
-    public final int httpResponseCode;
+    private final int httpResponseCode;
 
-    @Deprecated
     public ErrorResponse(@NonNull String message) {
         this.message = message;
         t = null;
@@ -35,19 +34,19 @@ public class ErrorResponse {
     }
 
     public ErrorResponse(int resId) {
-        this.message = App.getAppResources().getString(resId);;
+        this.message = App.getAppResources().getString(resId);
         t = null;
         httpResponseCode = -1;
     }
 
     public ErrorResponse(int resId, @NonNull Throwable t) {
-        this.message = App.getAppResources().getString(resId);;
+        this.message = App.getAppResources().getString(resId);
         this.t = t;
         httpResponseCode = -1;
     }
 
     public ErrorResponse(int resId, int httpResponseCode) {
-        this.message = App.getAppResources().getString(resId);;
+        this.message = App.getAppResources().getString(resId);
         this.t = null;
         this.httpResponseCode = httpResponseCode;
     }

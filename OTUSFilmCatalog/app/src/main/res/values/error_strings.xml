@@ -2,7 +2,8 @@
     <string name="noFilmByIDErr">ID фильма не найден в базе</string>
 
     <string name="limitExceed">Достигнут предел</string>
-    <string name="connectFailure">Ошибка связи с themoviedb.org</string>
+    <string name="connectTMDBFailure">Ошибка связи с https://api.themoviedb.org/4/discover/</string>
+    <string name="connectGooglePlacesFailure">Ошибка связи с https://maps.googleapis.com/maps/api/place/nearbysearch/</string>
     <string name="httpRequestFail">Ошибка HTTP</string>
     <string name="httpResponseEmptyBody">HTTP запрос вернул пустое тело</string>
     <string name="interruptedExceptionError">Операция прервана</string>
