@@ -6,5 +6,5 @@
     <integer name="element_adding_animation_time_ms">2000</integer>
     <integer name="element_shake_animation_time_ms">500</integer>
 
-    <integer name="camera_smooth_time_s">5</integer>
+    <integer name="camera_smooth_time_s">2</integer>
 </resources>
