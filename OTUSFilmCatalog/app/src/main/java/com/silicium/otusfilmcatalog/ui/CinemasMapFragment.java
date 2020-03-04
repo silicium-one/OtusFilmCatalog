@@ -51,6 +51,7 @@ import com.silicium.otusfilmcatalog.logic.model.ErrorResponse;
 import com.silicium.otusfilmcatalog.logic.model.FragmentWithCallback;
 import com.yandex.mapkit.Animation;
 import com.yandex.mapkit.MapKitFactory;
+import com.yandex.mapkit.ScreenPoint;
 import com.yandex.mapkit.geometry.Point;
 import com.yandex.mapkit.map.CameraListener;
 import com.yandex.mapkit.map.CameraPosition;
@@ -76,6 +77,7 @@ public class CinemasMapFragment extends FragmentWithCallback implements CameraLi
     private PlacesClient placesClient;
     private ClusterizedPlacemarkCollection clusterizedCollection;
     private ImageProvider placemarkImg;
+    LinearLayout cinemas_map_bottom_sheet;
     private BottomSheetBehavior bShBehavior;
     private TextView cinema_name_text_view;
     private TextView cinema_address_text_view;
@@ -114,10 +116,8 @@ public class CinemasMapFragment extends FragmentWithCallback implements CameraLi
             }
         });
 
-        // get the bottom sheet view
-        LinearLayout bottomSheet = view.findViewById(R.id.cinemas_map_bottom_sheet);
-        // init the bottom sheet behavior
-        bShBehavior = BottomSheetBehavior.from(bottomSheet);
+        cinemas_map_bottom_sheet = view.findViewById(R.id.cinemas_map_bottom_sheet);
+        bShBehavior = BottomSheetBehavior.from(cinemas_map_bottom_sheet);
 
         bShBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
 
@@ -144,15 +144,10 @@ public class CinemasMapFragment extends FragmentWithCallback implements CameraLi
                     @SuppressLint("SyntheticAccessor")
                     @Override
                     public void onSuccess(Location location) {
-                        if (location == null) {
+                        if (location == null)
                             Toast.makeText(CinemasMapFragment.this.requireContext(), R.string.error_location, Toast.LENGTH_LONG).show();
-                        } else {
-                            float zoom = getResources().getInteger(R.integer.camera_zoom_size);
-                            Point myLocation = new Point(location.getLatitude(), location.getLongitude());
-                            mapview.getMap().move(new CameraPosition(myLocation, zoom, 0f, 0f),
-                                    new Animation(Animation.Type.SMOOTH, getResources().getInteger(R.integer.camera_smooth_time_s)),
-                                    null);
-                        }
+                        else
+                            moveCameraToLocation(location.getLatitude(), location.getLongitude());
                     }
                 });
 
@@ -229,8 +224,8 @@ public class CinemasMapFragment extends FragmentWithCallback implements CameraLi
     }
 
     @Override
-    public boolean onMapObjectTap(@NonNull MapObject mapObject, @NonNull Point point) {
-        CinemaDescription pickedCinema = getPlaceIDFromPoint(point.getLatitude(), point.getLongitude());
+    public boolean onMapObjectTap(@NonNull MapObject mapObject, @NonNull final Point point) {
+        final CinemaDescription pickedCinema = getPlaceIDFromPoint(point.getLatitude(), point.getLongitude());
         if (pickedCinema == null)
             return false;
 
@@ -285,12 +280,23 @@ public class CinemasMapFragment extends FragmentWithCallback implements CameraLi
                         @Override
                         public void onComplete(@NonNull Task<FetchPhotoResponse> task) {
                             cinema_photo_loading_progress_bar.setVisibility(View.GONE);
-                            bShBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                            showBottomSheet();
                         }
                     });
                 } else {
-                    bShBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                    showBottomSheet();
                 }
+            }
+
+            @SuppressLint("SyntheticAccessor")
+            private void showBottomSheet() {
+                bShBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                // хитрый финт ушами, что бы точка встала в центр свободного экрана
+                int height = mapview.height() - cinemas_map_bottom_sheet.getHeight();
+                Point centerOfVisibleRect = mapview.screenToWorld(new ScreenPoint(mapview.width(), height / 2f));
+                Point currentPointOfView = mapview.getMap().getCameraPosition().getTarget();
+                Point newPointOfView = new Point(currentPointOfView.getLatitude() - (centerOfVisibleRect.getLatitude() - pickedCinema.latitude), pickedCinema.longitude);
+                moveCameraToLocation(newPointOfView.getLatitude(), newPointOfView.getLongitude());
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -308,6 +314,14 @@ public class CinemasMapFragment extends FragmentWithCallback implements CameraLi
         });
 
         return true;
+    }
+
+    private void moveCameraToLocation(double latitude, double longitude) {
+        float zoom = getResources().getInteger(R.integer.camera_zoom_size);
+        Point newLocation = new Point(latitude, longitude);
+        mapview.getMap().move(new CameraPosition(newLocation, zoom, 0f, 0f),
+                new Animation(Animation.Type.SMOOTH, getResources().getInteger(R.integer.camera_smooth_time_s)),
+                null);
     }
 
     public class TextImageProvider extends ImageProvider {

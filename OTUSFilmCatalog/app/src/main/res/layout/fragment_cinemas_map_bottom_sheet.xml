@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/cinemas_map_bottom_sheet"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="@dimen/cinema_map_bottom_sheet_height"
     android:background="?background"
     android:orientation="vertical"
     app:behavior_hideable="true"
@@ -15,6 +15,15 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+        <ProgressBar
+            android:id="@+id/cinema_photo_loading_progress_bar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            android:visibility="gone"
+            tools:visibility="visible" />
+
         <ImageView
             android:id="@+id/cinema_photo_image_view"
             android:layout_width="match_parent"
@@ -24,15 +33,6 @@
             android:scaleType="fitCenter"
             android:visibility="gone"
             tools:src="@drawable/film_no_image"
-            tools:visibility="visible" />
-
-        <ProgressBar
-            android:id="@+id/cinema_photo_loading_progress_bar"
-            style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:indeterminate="true"
-            android:visibility="gone"
             tools:visibility="visible" />
 
     </LinearLayout>
@@ -46,15 +46,6 @@
         android:textSize="@dimen/text_header"
         android:textStyle="bold"
         tools:text="Название кинотеатра" />
-
-    <TextView
-        android:id="@+id/cinema_address_text_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/description_element_padding"
-        android:textIsSelectable="true"
-        android:textSize="@dimen/text_body"
-        tools:text="Большой и длинный адрес кинотеатра, большой и длинный адрес кинотеатра,большой и длинный адрес кинотеатра. " />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -78,6 +69,7 @@
             android:textIsSelectable="true"
             android:textSize="@dimen/text_body"
             tools:text="+7(495)777-77-77" />
+
     </LinearLayout>
 
     <TextView
@@ -89,5 +81,14 @@
         android:textIsSelectable="true"
         android:textSize="@dimen/text_body"
         tools:text="сайт кинотеатра" />
+
+    <TextView
+        android:id="@+id/cinema_address_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/description_element_padding"
+        android:textIsSelectable="true"
+        android:textSize="@dimen/text_body"
+        tools:text="Большой и длинный адрес кинотеатра, большой и длинный адрес кинотеатра,большой и длинный адрес кинотеатра. " />
 
 </LinearLayout>
