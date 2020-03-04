@@ -193,8 +193,8 @@ public class CinemasMapFragment extends FragmentWithCallback implements CameraLi
 
                             // Placemarks won't be displayed until this method is called. It must be also called
                             // to force clusters update after collection change
-                            clusterizedCollection.clusterPlacemarks(App.getAppResources().getInteger(R.integer.placemark_clyster_radius),
-                                    App.getAppResources().getInteger(R.integer.placemark_clyster_min_zoom));
+                            clusterizedCollection.clusterPlacemarks(App.getAppResources().getInteger(R.integer.placemark_cluster_radius),
+                                    App.getAppResources().getInteger(R.integer.placemark_cluster_min_zoom));
                         }
                     }, new Consumer<ErrorResponse>() {
                         @SuppressLint("SyntheticAccessor")
@@ -291,7 +291,7 @@ public class CinemasMapFragment extends FragmentWithCallback implements CameraLi
             manager.getDefaultDisplay().getMetrics(metrics);
 
             Paint textPaint = new Paint();
-            textPaint.setTextSize(App.getAppResources().getInteger(R.integer.placemark_clyster_font_size) * metrics.density);
+            textPaint.setTextSize(App.getAppResources().getInteger(R.integer.placemark_cluster_font_size) * metrics.density);
             textPaint.setTextAlign(Paint.Align.CENTER);
             textPaint.setStyle(Paint.Style.FILL);
             textPaint.setAntiAlias(true);
@@ -300,8 +300,8 @@ public class CinemasMapFragment extends FragmentWithCallback implements CameraLi
             Paint.FontMetrics textMetrics = textPaint.getFontMetrics();
             float heightF = Math.abs(textMetrics.bottom) + Math.abs(textMetrics.top);
             float textRadius = (float) Math.sqrt(widthF * widthF + heightF * heightF) / 2;
-            float internalRadius = textRadius + App.getAppResources().getInteger(R.integer.placemark_clyster_marign_size) * metrics.density;
-            float externalRadius = internalRadius + App.getAppResources().getInteger(R.integer.placemark_clyster_stroke_size) * metrics.density;
+            float internalRadius = textRadius + App.getAppResources().getInteger(R.integer.placemark_cluster_marign_size) * metrics.density;
+            float externalRadius = internalRadius + App.getAppResources().getInteger(R.integer.placemark_cluster_stroke_size) * metrics.density;
 
             int width = (int) (2 * externalRadius + 0.5);
 
