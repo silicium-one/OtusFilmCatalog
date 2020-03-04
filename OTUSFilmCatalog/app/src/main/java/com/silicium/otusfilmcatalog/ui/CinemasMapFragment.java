@@ -24,8 +24,17 @@ import androidx.core.util.Consumer;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.net.FetchPlaceRequest;
+import com.google.android.libraries.places.api.net.FetchPlaceResponse;
+import com.google.android.libraries.places.api.net.PlacesClient;
 import com.silicium.otusfilmcatalog.App;
+import com.silicium.otusfilmcatalog.BuildConfig;
 import com.silicium.otusfilmcatalog.R;
 import com.silicium.otusfilmcatalog.logic.controller.CinemaDescriptionFromGooglePlacesFetcher;
 import com.silicium.otusfilmcatalog.logic.model.CinemaDescription;
@@ -42,6 +51,8 @@ import com.yandex.mapkit.map.ClusterListener;
 import com.yandex.mapkit.map.ClusterizedPlacemarkCollection;
 import com.yandex.mapkit.map.IconStyle;
 import com.yandex.mapkit.map.Map;
+import com.yandex.mapkit.map.MapObject;
+import com.yandex.mapkit.map.MapObjectTapListener;
 import com.yandex.mapkit.mapview.MapView;
 import com.yandex.runtime.image.ImageProvider;
 
@@ -50,12 +61,19 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 
-public class CinemasMapFragment extends FragmentWithCallback implements CameraListener {
+public class CinemasMapFragment extends FragmentWithCallback implements CameraListener, MapObjectTapListener {
     public final static String FRAGMENT_TAG = CinemasMapFragment.class.getSimpleName();
 
     private MapView mapview;
-    ClusterizedPlacemarkCollection clusterizedCollection;
-    ImageProvider placemarkImg;
+    private PlacesClient placesClient;
+    private ClusterizedPlacemarkCollection clusterizedCollection;
+    private ImageProvider placemarkImg;
+
+    private Collection<CinemaDescription> actualCinemas;
+
+    public CinemasMapFragment() {
+        Places.initialize(App.getApplication().getApplicationContext(), BuildConfig.GOOGLE_PLACES_API_KEY);
+    }
 
     @NonNull
     @Override
@@ -103,6 +121,8 @@ public class CinemasMapFragment extends FragmentWithCallback implements CameraLi
                     }
                 });
 
+        placesClient = Places.createClient(context);
+
         placemarkImg = ImageProvider.fromResource(context, R.drawable.cinema_placemark);
     }
 
@@ -128,16 +148,20 @@ public class CinemasMapFragment extends FragmentWithCallback implements CameraLi
             Log.d(FRAGMENT_TAG, "onCameraPositionChanged: " + String.format(Locale.ENGLISH, "%.3f,%.3f %.3f", cameraPosition.getTarget().getLatitude(), cameraPosition.getTarget().getLongitude(), cameraPosition.getTarget().getLongitude()));
             CinemaDescriptionFromGooglePlacesFetcher.getInstance().getCinemasAsync(cameraPosition.getTarget().getLatitude(), cameraPosition.getTarget().getLongitude(),
                     new Consumer<Collection<CinemaDescription>>() {
+                        @SuppressLint("SyntheticAccessor")
                         @Override
                         public void accept(Collection<CinemaDescription> cinemaDescriptions) {
+                            actualCinemas = cinemaDescriptions;
                             Toast.makeText(App.getApplication().getApplicationContext(), "Кинотеатров в округе найдено: " + cinemaDescriptions.size(), Toast.LENGTH_LONG).show();
                             clusterizedCollection.clear();
                             List<Point> points = new ArrayList<>();
-                            for (CinemaDescription cinemaDescription: cinemaDescriptions) {
-                                Point point = new Point(cinemaDescription.latitude,cinemaDescription.longitude);
+                            for (CinemaDescription cinemaDescription : cinemaDescriptions) {
+                                Point point = new Point(cinemaDescription.latitude, cinemaDescription.longitude);
                                 points.add(point);
                             }
+
                             clusterizedCollection.addPlacemarks(points, placemarkImg, new IconStyle());
+                            clusterizedCollection.addTapListener(CinemasMapFragment.this);
 
                             // Placemarks won't be displayed until this method is called. It must be also called
                             // to force clusters update after collection change
@@ -147,27 +171,78 @@ public class CinemasMapFragment extends FragmentWithCallback implements CameraLi
                     }, new Consumer<ErrorResponse>() {
                         @Override
                         public void accept(ErrorResponse errorResponse) {
-                            Toast.makeText(App.getApplication().getApplicationContext(), errorResponse.message, Toast.LENGTH_LONG).show();
+                            //Toast.makeText(App.getApplication().getApplicationContext(), errorResponse.message, Toast.LENGTH_LONG).show();
                             Log.e(FRAGMENT_TAG, errorResponse.message);
                         }
                     });
         }
     }
 
+    @Nullable
+    private CinemaDescription getPlaceIDFromPoint(double latitude, double longitude) {
+        if (actualCinemas != null)
+            for (CinemaDescription cinemaDescription : actualCinemas)
+                //if (cinemaDescription.latitude.compareTo(latitude) == 0 && cinemaDescription.longitude.compareTo(longitude) == 0)
+                if (Math.abs(cinemaDescription.latitude - latitude) < 0.001 && Math.abs(cinemaDescription.longitude - longitude) < 0.001)
+                    return cinemaDescription;
+
+        return null;
+    }
+
+    @Override
+    public boolean onMapObjectTap(@NonNull MapObject mapObject, @NonNull Point point) {
+        CinemaDescription pickedCinema = getPlaceIDFromPoint(point.getLatitude(), point.getLongitude());
+        if (pickedCinema == null)
+            return false;
+
+        List<Place.Field> requiredFields = new ArrayList<>();
+        requiredFields.add(Place.Field.NAME);
+        requiredFields.add(Place.Field.ADDRESS);
+        //requiredFields.add(Place.Field.ADDRESS_COMPONENTS);
+        requiredFields.add(Place.Field.PHONE_NUMBER);
+        requiredFields.add(Place.Field.WEBSITE_URI);
+        //requiredFields.add(Place.Field.PHOTO_METADATAS);
+
+        final FetchPlaceRequest fetchPlaceRequest = FetchPlaceRequest.builder(pickedCinema.placeID, requiredFields).build();
+        Task<FetchPlaceResponse> taskResponse = placesClient.fetchPlace(fetchPlaceRequest);
+        taskResponse.addOnSuccessListener(new OnSuccessListener<FetchPlaceResponse>() {
+            @Override
+            public void onSuccess(FetchPlaceResponse fetchPlaceResponse) {
+                Log.d(FRAGMENT_TAG, "onSuccess: " + fetchPlaceResponse.toString());
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.e(FRAGMENT_TAG, "onFailure: " + e.toString());
+            }
+        }).addOnCompleteListener(new OnCompleteListener<FetchPlaceResponse>() {
+            @Override
+            public void onComplete(@NonNull Task<FetchPlaceResponse> task) {
+                Log.i(FRAGMENT_TAG, "onComplete: ");
+            }
+        });
+
+        return true;
+    }
+
     public class TextImageProvider extends ImageProvider {
+        private final String text;
+
+        TextImageProvider(String text) {
+            this.text = text;
+        }
+
         @NonNull
         @Override
         public String getId() {
             return "text_" + text;
         }
 
-        private final String text;
-
         @Nullable
         @Override
         public Bitmap getImage() {
             DisplayMetrics metrics = new DisplayMetrics();
-            WindowManager manager = (WindowManager)requireActivity().getSystemService(Context.WINDOW_SERVICE);
+            WindowManager manager = (WindowManager) requireActivity().getSystemService(Context.WINDOW_SERVICE);
             if (manager == null) //redundant
                 return BitmapFactory.decodeResource(App.getAppResources(), R.drawable.cinema_placemark);
             manager.getDefaultDisplay().getMetrics(metrics);
@@ -181,7 +256,7 @@ public class CinemasMapFragment extends FragmentWithCallback implements CameraLi
             float widthF = textPaint.measureText(text);
             Paint.FontMetrics textMetrics = textPaint.getFontMetrics();
             float heightF = Math.abs(textMetrics.bottom) + Math.abs(textMetrics.top);
-            float textRadius = (float)Math.sqrt(widthF * widthF + heightF * heightF) / 2;
+            float textRadius = (float) Math.sqrt(widthF * widthF + heightF * heightF) / 2;
             float internalRadius = textRadius + App.getAppResources().getInteger(R.integer.placemark_clyster_marign_size) * metrics.density;
             float externalRadius = internalRadius + App.getAppResources().getInteger(R.integer.placemark_clyster_stroke_size) * metrics.density;
 
@@ -205,10 +280,6 @@ public class CinemasMapFragment extends FragmentWithCallback implements CameraLi
                     textPaint);
 
             return bitmap;
-        }
-
-        TextImageProvider(String text) {
-            this.text = text;
         }
     }
 }

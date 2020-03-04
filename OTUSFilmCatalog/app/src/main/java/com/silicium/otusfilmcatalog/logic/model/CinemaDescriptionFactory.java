@@ -11,6 +11,7 @@ public class CinemaDescriptionFactory {
         ret.latitude = cinemaDescription.geometry.location.lat;
         ret.longitude = cinemaDescription.geometry.location.lng;
         ret.name = cinemaDescription.name;
+        ret.placeID = cinemaDescription.placeId;
 
         return ret;
     }

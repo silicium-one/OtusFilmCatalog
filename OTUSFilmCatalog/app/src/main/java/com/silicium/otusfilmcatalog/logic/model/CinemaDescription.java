@@ -9,4 +9,7 @@ public class CinemaDescription {
 
     @NonNull
     public String name = "";
+
+    @NonNull
+    public String placeID = "";
 }
