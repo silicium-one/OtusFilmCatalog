@@ -201,7 +201,7 @@ public class CinemasMapFragment extends FragmentWithCallback implements CameraLi
                         @Override
                         public void accept(ErrorResponse errorResponse) {
                             content_loading_progress_bar.setVisibility(View.GONE);
-                            //Toast.makeText(App.getApplication().getApplicationContext(), errorResponse.message, Toast.LENGTH_LONG).show();
+                            Toast.makeText(App.getApplication().getApplicationContext(), errorResponse.message, Toast.LENGTH_SHORT).show();
                             Log.e(FRAGMENT_TAG, errorResponse.message);
                         }
                     });
