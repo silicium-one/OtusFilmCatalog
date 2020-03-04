@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,6 +28,7 @@ import androidx.core.util.Consumer;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -62,7 +64,6 @@ import com.yandex.runtime.image.ImageProvider;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Locale;
 
 public class CinemasMapFragment extends FragmentWithCallback implements CameraListener, MapObjectTapListener {
     public final static String FRAGMENT_TAG = CinemasMapFragment.class.getSimpleName();
@@ -76,6 +77,7 @@ public class CinemasMapFragment extends FragmentWithCallback implements CameraLi
     private TextView cinema_address_text_view;
     private TextView cinema_phone_number_text_view;
     private TextView cinema_url_text_view;
+    private ProgressBar content_loading_progress_bar;
 
     private Collection<CinemaDescription> actualCinemas;
 
@@ -119,6 +121,8 @@ public class CinemasMapFragment extends FragmentWithCallback implements CameraLi
         cinema_url_text_view = view.findViewById(R.id.cinema_url_text_view);
 
         cinema_url_text_view.setMovementMethod(LinkMovementMethod.getInstance());
+
+        content_loading_progress_bar = view.findViewById(R.id.content_loading_progress_bar);
     }
 
     @Override
@@ -166,15 +170,17 @@ public class CinemasMapFragment extends FragmentWithCallback implements CameraLi
 
     @Override
     public void onCameraPositionChanged(@NonNull Map map, @NonNull CameraPosition cameraPosition, @NonNull CameraUpdateSource cameraUpdateSource, boolean finished) {
+        content_loading_progress_bar.setVisibility(View.VISIBLE);
         if (finished) {
-            Log.d(FRAGMENT_TAG, "onCameraPositionChanged: " + String.format(Locale.ENGLISH, "%.3f,%.3f %.3f", cameraPosition.getTarget().getLatitude(), cameraPosition.getTarget().getLongitude(), cameraPosition.getTarget().getLongitude()));
             CinemaDescriptionFromGooglePlacesFetcher.getInstance().getCinemasAsync(cameraPosition.getTarget().getLatitude(), cameraPosition.getTarget().getLongitude(),
                     new Consumer<Collection<CinemaDescription>>() {
-                        @SuppressLint("SyntheticAccessor")
+                        @SuppressLint({"SyntheticAccessor", "LogConditional"})
                         @Override
                         public void accept(Collection<CinemaDescription> cinemaDescriptions) {
                             actualCinemas = cinemaDescriptions;
-                            Toast.makeText(App.getApplication().getApplicationContext(), "Кинотеатров в округе найдено: " + cinemaDescriptions.size(), Toast.LENGTH_LONG).show();
+                            content_loading_progress_bar.setVisibility(View.GONE);
+                            //Toast.makeText(App.getApplication().getApplicationContext(), "Кинотеатров в округе найдено: " + cinemaDescriptions.size(), Toast.LENGTH_LONG).show();
+                            Log.i(FRAGMENT_TAG, "Кинотеатров в округе найдено: " + cinemaDescriptions.size());
                             clusterizedCollection.clear();
                             List<Point> points = new ArrayList<>();
                             for (CinemaDescription cinemaDescription : cinemaDescriptions) {
@@ -191,8 +197,10 @@ public class CinemasMapFragment extends FragmentWithCallback implements CameraLi
                                     App.getAppResources().getInteger(R.integer.placemark_clyster_min_zoom));
                         }
                     }, new Consumer<ErrorResponse>() {
+                        @SuppressLint("SyntheticAccessor")
                         @Override
                         public void accept(ErrorResponse errorResponse) {
+                            content_loading_progress_bar.setVisibility(View.GONE);
                             //Toast.makeText(App.getApplication().getApplicationContext(), errorResponse.message, Toast.LENGTH_LONG).show();
                             Log.e(FRAGMENT_TAG, errorResponse.message);
                         }
@@ -225,6 +233,7 @@ public class CinemasMapFragment extends FragmentWithCallback implements CameraLi
         requiredFields.add(Place.Field.WEBSITE_URI);
         //requiredFields.add(Place.Field.PHOTO_METADATAS);
 
+        content_loading_progress_bar.setVisibility(View.VISIBLE);
         final FetchPlaceRequest fetchPlaceRequest = FetchPlaceRequest.builder(pickedCinema.placeID, requiredFields).build();
         Task<FetchPlaceResponse> taskResponse = placesClient.fetchPlace(fetchPlaceRequest);
         taskResponse.addOnSuccessListener(new OnSuccessListener<FetchPlaceResponse>() {
@@ -247,6 +256,12 @@ public class CinemasMapFragment extends FragmentWithCallback implements CameraLi
             @Override
             public void onFailure(@NonNull Exception e) {
                 Log.e(FRAGMENT_TAG, "onFailure: " + e.toString());
+            }
+        }).addOnCompleteListener(new OnCompleteListener<FetchPlaceResponse>() {
+            @SuppressLint("SyntheticAccessor")
+            @Override
+            public void onComplete(@NonNull Task<FetchPlaceResponse> task) {
+                content_loading_progress_bar.setVisibility(View.GONE);
             }
         });
 
