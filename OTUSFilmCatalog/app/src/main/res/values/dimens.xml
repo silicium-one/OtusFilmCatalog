@@ -53,8 +53,8 @@ http://developer.android.com/guide/topics/appwidgets/index.html#CreatingLayout
 
     <integer name="camera_zoom_size">14</integer>
 
-    <!-- В силу ограничений ключа Google быстро подкачивать страницы не получится -->
-    <integer name="google_places_api_fetch_delay_ms">100</integer>
+    <!-- В силу ограничений ключа Google быстро подкачивать страницы не получится, а может я - криворукий -->
+    <integer name="google_places_api_fetch_delay_ms">2000</integer>
 
     <!-- fragment_cinemas_map -->
     <integer name="placemark_cluster_font_size">15</integer>
@@ -63,5 +63,5 @@ http://developer.android.com/guide/topics/appwidgets/index.html#CreatingLayout
     <integer name="placemark_cluster_radius">60</integer>
     <integer name="placemark_cluster_min_zoom">15</integer>
     <dimen name="description_element_padding">4dp</dimen>
-    
+
 </resources>
