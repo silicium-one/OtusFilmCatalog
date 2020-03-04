@@ -18,7 +18,7 @@
         <ImageView
             android:id="@+id/cinema_photo_image_view"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/cinema_image_height"
             android:contentDescription="@string/cinema_photo_description_string"
             android:padding="@dimen/description_element_padding"
             android:scaleType="fitCenter"

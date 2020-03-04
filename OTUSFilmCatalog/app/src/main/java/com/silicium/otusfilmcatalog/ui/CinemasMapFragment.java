@@ -17,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -33,7 +34,10 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.PhotoMetadata;
 import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.net.FetchPhotoRequest;
+import com.google.android.libraries.places.api.net.FetchPhotoResponse;
 import com.google.android.libraries.places.api.net.FetchPlaceRequest;
 import com.google.android.libraries.places.api.net.FetchPlaceResponse;
 import com.google.android.libraries.places.api.net.PlacesClient;
@@ -78,6 +82,8 @@ public class CinemasMapFragment extends FragmentWithCallback implements CameraLi
     private TextView cinema_phone_number_text_view;
     private TextView cinema_url_text_view;
     private ProgressBar content_loading_progress_bar;
+    private ImageView cinema_photo_image_view;
+    private ProgressBar cinema_photo_loading_progress_bar;
 
     private Collection<CinemaDescription> actualCinemas;
 
@@ -123,6 +129,9 @@ public class CinemasMapFragment extends FragmentWithCallback implements CameraLi
         cinema_url_text_view.setMovementMethod(LinkMovementMethod.getInstance());
 
         content_loading_progress_bar = view.findViewById(R.id.content_loading_progress_bar);
+
+        cinema_photo_image_view = view.findViewById(R.id.cinema_photo_image_view);
+        cinema_photo_loading_progress_bar = view.findViewById(R.id.cinema_photo_loading_progress_bar);
     }
 
     @Override
@@ -231,7 +240,7 @@ public class CinemasMapFragment extends FragmentWithCallback implements CameraLi
         //requiredFields.add(Place.Field.ADDRESS_COMPONENTS);
         requiredFields.add(Place.Field.PHONE_NUMBER);
         requiredFields.add(Place.Field.WEBSITE_URI);
-        //requiredFields.add(Place.Field.PHOTO_METADATAS);
+        requiredFields.add(Place.Field.PHOTO_METADATAS);
 
         content_loading_progress_bar.setVisibility(View.VISIBLE);
         final FetchPlaceRequest fetchPlaceRequest = FetchPlaceRequest.builder(pickedCinema.placeID, requiredFields).build();
@@ -250,7 +259,38 @@ public class CinemasMapFragment extends FragmentWithCallback implements CameraLi
                 else
                     cinema_url_text_view.setText(Html.fromHtml(String.format(getResources().getString(R.string.cinema_url_pattern_string), place.getWebsiteUri().toString())));
 
-                bShBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                List<PhotoMetadata> photoMetadatas = place.getPhotoMetadatas();
+                if (photoMetadatas != null && !photoMetadatas.isEmpty()) {
+                    cinema_photo_loading_progress_bar.setVisibility(View.VISIBLE);
+                    cinema_photo_image_view.setImageBitmap(null);
+
+                    Task<FetchPhotoResponse> photoTask = placesClient.fetchPhoto(FetchPhotoRequest.builder(photoMetadatas.get(0)).build());
+
+                    photoTask.addOnSuccessListener(new OnSuccessListener<FetchPhotoResponse>() {
+                        @Override
+                        public void onSuccess(FetchPhotoResponse fetchPhotoResponse) {
+                            Bitmap bitmap = fetchPhotoResponse.getBitmap();
+                            cinema_photo_image_view.setImageBitmap(bitmap);
+                            cinema_photo_image_view.setVisibility(View.VISIBLE);
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(App.getApplication().getApplicationContext(), e.toString(), Toast.LENGTH_SHORT).show();
+                            e.printStackTrace();
+                            Log.e(FRAGMENT_TAG, "onFailure: " + e.toString());
+                            cinema_photo_image_view.setVisibility(View.GONE);
+                        }
+                    }).addOnCompleteListener(new OnCompleteListener<FetchPhotoResponse>() {
+                        @Override
+                        public void onComplete(@NonNull Task<FetchPhotoResponse> task) {
+                            cinema_photo_loading_progress_bar.setVisibility(View.GONE);
+                            bShBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                        }
+                    });
+                } else {
+                    bShBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                }
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
