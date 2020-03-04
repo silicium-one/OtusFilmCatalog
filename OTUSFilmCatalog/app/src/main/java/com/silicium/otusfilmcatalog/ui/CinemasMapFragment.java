@@ -255,6 +255,8 @@ public class CinemasMapFragment extends FragmentWithCallback implements CameraLi
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
+                Toast.makeText(App.getApplication().getApplicationContext(), e.toString(), Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
                 Log.e(FRAGMENT_TAG, "onFailure: " + e.toString());
             }
         }).addOnCompleteListener(new OnCompleteListener<FetchPlaceResponse>() {
