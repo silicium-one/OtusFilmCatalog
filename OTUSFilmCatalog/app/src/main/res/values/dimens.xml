@@ -31,6 +31,8 @@
     <!-- text -->
     <dimen name="text_body">16sp</dimen>
     <dimen name="text_body_dp">16dp</dimen>
+    <dimen name="text_header">20sp</dimen>
+    <dimen name="text_header_dp">20dp</dimen>
 
     <!--
 Refer to App Widget Documentation for margin information
@@ -54,9 +56,14 @@ http://developer.android.com/guide/topics/appwidgets/index.html#CreatingLayout
     <!-- В силу ограничений ключа Google быстро подкачивать страницы не получится -->
     <integer name="google_places_api_fetch_delay_ms">100</integer>
 
+    <!-- fregment_cimemsas_map -->
     <integer name="placemark_clyster_font_size">15</integer>
     <integer name="placemark_clyster_marign_size">3</integer>
     <integer name="placemark_clyster_stroke_size">3</integer>
     <integer name="placemark_clyster_radius">60</integer>
     <integer name="placemark_clyster_min_zoom">15</integer>
+    <dimen name="description_element_padding">4dp</dimen>
+
+
+
 </resources>

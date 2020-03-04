@@ -1,6 +1,5 @@
 package com.silicium.otusfilmcatalog.ui;
 
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -10,12 +9,16 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.location.Location;
 import android.os.Bundle;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -24,7 +27,6 @@ import androidx.core.util.Consumer;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -33,6 +35,7 @@ import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.net.FetchPlaceRequest;
 import com.google.android.libraries.places.api.net.FetchPlaceResponse;
 import com.google.android.libraries.places.api.net.PlacesClient;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.silicium.otusfilmcatalog.App;
 import com.silicium.otusfilmcatalog.BuildConfig;
 import com.silicium.otusfilmcatalog.R;
@@ -68,6 +71,11 @@ public class CinemasMapFragment extends FragmentWithCallback implements CameraLi
     private PlacesClient placesClient;
     private ClusterizedPlacemarkCollection clusterizedCollection;
     private ImageProvider placemarkImg;
+    private BottomSheetBehavior bShBehavior;
+    private TextView cinema_name_text_view;
+    private TextView cinema_address_text_view;
+    private TextView cinema_phone_number_text_view;
+    private TextView cinema_url_text_view;
 
     private Collection<CinemaDescription> actualCinemas;
 
@@ -97,6 +105,20 @@ public class CinemasMapFragment extends FragmentWithCallback implements CameraLi
                 //cluster.addClusterTapListener(this); //todo: сделать приближение, если нажимаешь на кластер
             }
         });
+
+        // get the bottom sheet view
+        LinearLayout bottomSheet = view.findViewById(R.id.cinemas_map_bottom_sheet);
+        // init the bottom sheet behavior
+        bShBehavior = BottomSheetBehavior.from(bottomSheet);
+
+        bShBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+
+        cinema_name_text_view = view.findViewById(R.id.cinema_name_text_view);
+        cinema_address_text_view = view.findViewById(R.id.cinema_address_text_view);
+        cinema_phone_number_text_view = view.findViewById(R.id.cinema_phone_number_text_view);
+        cinema_url_text_view = view.findViewById(R.id.cinema_url_text_view);
+
+        cinema_url_text_view.setMovementMethod(LinkMovementMethod.getInstance());
     }
 
     @Override
@@ -206,19 +228,25 @@ public class CinemasMapFragment extends FragmentWithCallback implements CameraLi
         final FetchPlaceRequest fetchPlaceRequest = FetchPlaceRequest.builder(pickedCinema.placeID, requiredFields).build();
         Task<FetchPlaceResponse> taskResponse = placesClient.fetchPlace(fetchPlaceRequest);
         taskResponse.addOnSuccessListener(new OnSuccessListener<FetchPlaceResponse>() {
+            @SuppressLint("SyntheticAccessor")
             @Override
             public void onSuccess(FetchPlaceResponse fetchPlaceResponse) {
-                Log.d(FRAGMENT_TAG, "onSuccess: " + fetchPlaceResponse.toString());
+                Place place = fetchPlaceResponse.getPlace();
+                cinema_name_text_view.setText(place.getName());
+                cinema_address_text_view.setText(place.getAddress());
+                cinema_phone_number_text_view.setText(place.getPhoneNumber());
+
+                if (place.getWebsiteUri() == null)
+                    cinema_url_text_view.setText(null);
+                else
+                    cinema_url_text_view.setText(Html.fromHtml(String.format(getResources().getString(R.string.cinema_url_pattern_string), place.getWebsiteUri().toString())));
+
+                bShBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
                 Log.e(FRAGMENT_TAG, "onFailure: " + e.toString());
-            }
-        }).addOnCompleteListener(new OnCompleteListener<FetchPlaceResponse>() {
-            @Override
-            public void onComplete(@NonNull Task<FetchPlaceResponse> task) {
-                Log.i(FRAGMENT_TAG, "onComplete: ");
             }
         });
 

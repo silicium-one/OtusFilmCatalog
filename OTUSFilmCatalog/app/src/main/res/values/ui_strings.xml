@@ -56,4 +56,8 @@
     <string name="detail_vote_count_header">Количество голосов</string>
     <string name="detail_release_date_header">Дата релиза</string>
 
+    <string name="cinema_photo_description_string">Фото кинотеатра</string>
+    <string name="cinema_url_pattern_string">&lt;a href=&quot;%s&quot;&gt;Сайт кинотеатра&lt;/a&gt;</string>
+    <string name="cinema_phone_string">телефон:</string>
+
 </resources>
