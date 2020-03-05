@@ -13,37 +13,128 @@
     tools:ignore="Overdraw">
 
     <TextView
+        android:id="@+id/name_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/bottomSheet_header"
+        android:gravity="center"
+        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
+        android:textIsSelectable="false"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Название фильма" />
+
+    <TextView
         android:id="@+id/more_text_view"
         android:layout_width="match_parent"
         android:layout_height="@dimen/bottomSheet_header"
         android:background="?colorAccent"
         android:gravity="center"
         android:text="@string/filmCommentExpandTextHint"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="gone" />
 
+    <TextView
+        android:id="@+id/popularity_header_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="end"
+        android:padding="@dimen/paddingStart"
+        android:text="@string/detail_popularity_header"
+        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
+        android:textIsSelectable="false"
+        app:layout_constraintBottom_toBottomOf="@+id/popularity_value_text_view"
+        app:layout_constraintEnd_toStartOf="@+id/popularity_value_text_view"
+        app:layout_constraintTop_toTopOf="@+id/popularity_value_text_view" />
 
-    <CheckBox
-        android:id="@+id/film_is_liked"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/bottomSheet_checkboxSize"
-        android:layout_weight="1"
-        android:text="@string/isLikedCheckBoxText"
+    <TextView
+        android:id="@+id/popularity_value_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="start"
+        android:padding="@dimen/paddingStart"
         android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
-        app:layout_constraintTop_toBottomOf="@+id/more_text_view" />
+        android:textColor="?colorAccent"
+        android:textIsSelectable="false"
+        app:layout_constraintStart_toEndOf="@+id/popularity_header_text_view"
+        app:layout_constraintTop_toBottomOf="@+id/name_text_view"
+        tools:text="353.304" />
 
-    <EditText
-        android:id="@+id/film_comment"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:gravity="top"
-        android:hint="@string/filmCommentEditTextHint"
-        android:importantForAutofill="no"
-        android:inputType="text"
-        android:paddingStart="@dimen/paddingStart"
-        android:paddingEnd="@dimen/paddingStart"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/film_is_liked" />
+    <TextView
+        android:id="@+id/vote_average_header_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="end"
+        android:padding="@dimen/paddingStart"
+        android:text="@string/detail_vote_average_header"
+        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
+        android:textIsSelectable="false"
+        app:layout_constraintBottom_toBottomOf="@+id/vote_average_value_text_view"
+        app:layout_constraintEnd_toStartOf="@+id/vote_average_value_text_view"
+        app:layout_constraintTop_toTopOf="@+id/vote_average_value_text_view" />
 
+    <TextView
+        android:id="@+id/vote_average_value_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="start"
+        android:padding="@dimen/paddingStart"
+        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
+        android:textColor="?colorAccent"
+        android:textIsSelectable="false"
+        app:layout_constraintStart_toStartOf="@+id/popularity_value_text_view"
+        app:layout_constraintTop_toBottomOf="@+id/popularity_value_text_view"
+        tools:text="10" />
+
+    <TextView
+        android:id="@+id/vote_count_header_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="end"
+        android:padding="@dimen/paddingStart"
+        android:text="@string/detail_vote_count_header"
+        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
+        android:textIsSelectable="false"
+        app:layout_constraintBottom_toBottomOf="@+id/vote_count_value_text_view"
+        app:layout_constraintEnd_toStartOf="@+id/vote_count_value_text_view"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/vote_count_value_text_view" />
+
+    <TextView
+        android:id="@+id/vote_count_value_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="start"
+        android:padding="@dimen/paddingStart"
+        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
+        android:textColor="?colorAccent"
+        android:textIsSelectable="false"
+        app:layout_constraintStart_toStartOf="@+id/popularity_value_text_view"
+        app:layout_constraintTop_toBottomOf="@+id/vote_average_value_text_view"
+        tools:text="24536" />
+
+    <TextView
+        android:id="@+id/release_date_header_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="end"
+        android:padding="@dimen/paddingStart"
+        android:text="@string/detail_release_date_header"
+        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
+        android:textIsSelectable="false"
+        app:layout_constraintBottom_toBottomOf="@+id/release_date_value_text_view"
+        app:layout_constraintEnd_toStartOf="@+id/vote_count_value_text_view"
+        app:layout_constraintTop_toTopOf="@+id/release_date_value_text_view" />
+
+    <TextView
+        android:id="@+id/release_date_value_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="start"
+        android:padding="@dimen/paddingStart"
+        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
+        android:textColor="?colorAccent"
+        android:textIsSelectable="false"
+        app:layout_constraintStart_toStartOf="@+id/popularity_value_text_view"
+        app:layout_constraintTop_toBottomOf="@+id/vote_count_value_text_view"
+        tools:text="2019-05-30" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

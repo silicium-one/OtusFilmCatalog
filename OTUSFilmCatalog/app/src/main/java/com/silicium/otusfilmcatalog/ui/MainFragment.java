@@ -4,7 +4,6 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -13,15 +12,12 @@ import android.view.ViewGroup;
 import android.view.animation.OvershootInterpolator;
 import android.widget.CompoundButton;
 import android.widget.FrameLayout;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.core.util.Consumer;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -29,14 +25,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.navigation.NavigationView;
+import com.silicium.otusfilmcatalog.App;
 import com.silicium.otusfilmcatalog.R;
-import com.silicium.otusfilmcatalog.logic.controller.FilmDescriptionStorage;
+import com.silicium.otusfilmcatalog.logic.model.ErrorResponse;
 import com.silicium.otusfilmcatalog.logic.model.FragmentWithCallback;
 import com.silicium.otusfilmcatalog.logic.model.IItemTouchHelperAdapter;
 import com.silicium.otusfilmcatalog.logic.model.IOnBackPressedListener;
 import com.silicium.otusfilmcatalog.logic.view.FilmItemAdapter;
-import com.silicium.otusfilmcatalog.logic.view.FilmViewWrapper;
 import com.silicium.otusfilmcatalog.ui.cuctomcomponents.DisappearingSnackCircularProgressBar;
 import com.silicium.otusfilmcatalog.ui.cuctomcomponents.SwipeProcessor;
 import com.silicium.otusfilmcatalog.ui.cuctomcomponents.UiComponents;
@@ -47,15 +42,17 @@ import com.tingyik90.snackprogressbar.SnackProgressBarManager;
 import org.jetbrains.annotations.Contract;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import jp.wasabeef.recyclerview.animators.SlideInUpAnimator;
 
-public class MainFragment extends FragmentWithCallback implements NavigationView.OnNavigationItemSelectedListener, IOnBackPressedListener {
+import static androidx.recyclerview.widget.RecyclerView.SCROLL_STATE_SETTLING;
+
+public class MainFragment extends FragmentWithCallback implements IOnBackPressedListener {
     public final static String FRAGMENT_TAG = MainFragment.class.getSimpleName();
     @NonNull
     private String selectedFilmTag = "";
-    private View rootView;
     private FilmItemAdapter filmItemAdapter;
     private DisappearingSnackCircularProgressBar snackProgressBar;
     private boolean isFavoritesOnly;
@@ -71,7 +68,7 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
         @Override
         public void onItemDismiss(int position) {
             if (isFavoritesOnly())
-                FilmDescriptionStorage.getInstance().getFilmByID(filmItemAdapter.getFilmIDByPos(position)).setFavorite(false);
+                App.getFilmDescriptionStorage().getFilmByID(filmItemAdapter.getFilmIDByPos(position)).setFavorite(false);
             filmItemAdapter.onItemDismiss(position);
         }
     });
@@ -80,6 +77,7 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
     private FloatingActionButton fab_del;
     private FloatingActionButton fab_manipulate_favorites;
     private BottomNavigationView nav_view;
+    private ProgressBar progress_bar;
     private boolean isMultiselectMode;
     private boolean doubleBackToExitPressedOnce = false;
 
@@ -163,30 +161,59 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
     private void favoritesListMode() {
         swipeCallback.setSwipeDeletionPossible(true);
         nav_view.getMenu().getItem(0).setChecked(true); //nav_view.setSelectedItemId(R.id.favorites_list); - бесконечная рекурсия
-        film_recycler_view.post(new Runnable() {
-            @SuppressLint("SyntheticAccessor")
-            @Override
-            public void run() {
-                filmItemAdapter.removeAllItems();
+        filmItemAdapter.removeAllItems();
 
-                for (String item : FilmDescriptionStorage.getInstance().getFavoriteFilmsIDs())
-                    filmItemAdapter.addItem(item);
-
-                setSelectedFilmTag(getSelectedFilmTag());
-            }
-        });
+        addItemsToAdapter(App.getFilmDescriptionStorage().getFavoriteFilmsIDs(true));
     }
 
     private void fullListMode() {
         swipeCallback.setSwipeDeletionPossible(false);
         nav_view.getMenu().getItem(1).setChecked(true); //nav_view.setSelectedItemId(R.id.full_list); - бесконечная рекурсия
+        filmItemAdapter.removeAllItems();
+
+        Collection<String> filmsInDB = App.getFilmDescriptionStorage().getFilmsIDs();
+        if (filmsInDB.isEmpty()) {
+            fetchNextPageToAdapter();
+        } else {
+            addItemsToAdapter(filmsInDB);
+        }
+    }
+
+    private void fetchNextPageToAdapter() {
+        progress_bar.setVisibility(View.VISIBLE);
+        App.getFilmDescriptionStorage().getFilmsIDsNextPageAsync(new Consumer<Collection<String>>() {
+            @SuppressLint("SyntheticAccessor")
+            @Override
+            public void accept(final Collection<String> filmIDs) {
+                requireActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        progress_bar.setVisibility(View.GONE);
+                        addItemsToAdapter(filmIDs);
+                    }
+                });
+            }
+        }, new Consumer<ErrorResponse>() {
+            @SuppressLint("SyntheticAccessor")
+            @Override
+            public void accept(final ErrorResponse errorResponse) {
+                requireActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        progress_bar.setVisibility(View.GONE);
+                        Toast.makeText(getContext(), errorResponse.message, Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
+    }
+
+    private void addItemsToAdapter(@NonNull final Collection<String> filmIDs) {
         film_recycler_view.post(new Runnable() {
             @SuppressLint("SyntheticAccessor")
             @Override
             public void run() {
-                filmItemAdapter.removeAllItems();
-
-                for (String item : FilmDescriptionStorage.getInstance().getFilmsIDs())
+                for (String item : filmIDs)
                     filmItemAdapter.addItem(item);
 
                 setSelectedFilmTag(getSelectedFilmTag());
@@ -205,8 +232,6 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
     public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        rootView = view;
-
         nav_view = view.findViewById(R.id.bottom_main_navigation);
         nav_view.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @SuppressLint("SyntheticAccessor")
@@ -221,18 +246,6 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
                 return false;
             }
         });
-
-        Toolbar toolbar = view.findViewById(R.id.fragment_main_toolbar);
-
-        DrawerLayout drawer = view.findViewById(R.id.drawer_main_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                getActivity(), drawer, toolbar,
-                R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
-
-        NavigationView navigationView = view.findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
 
         FloatingActionButton fab_add = view.findViewById(R.id.fab_add);
         fab_add.setOnClickListener(new View.OnClickListener() {
@@ -262,7 +275,7 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
                 @SuppressLint("SyntheticAccessor") List<String> checkedIDs = filmItemAdapter.getCheckedIDs();
                 if (isFavoritesOnly()) {
                     for (String filmID : checkedIDs) {
-                        FilmDescriptionStorage.getInstance().getFilmByID(filmID).setFavorite(false);
+                        App.getFilmDescriptionStorage().getFilmByID(filmID).setFavorite(false);
                         filmItemAdapter.removeItemByID(filmID);
                     }
 
@@ -271,18 +284,18 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
                 } else {
                     List<String> favoriteIDs = new ArrayList<>();
                     for (String filmID : checkedIDs) {
-                        if (FilmDescriptionStorage.getInstance().getFilmByID(filmID).isFavorite())
+                        if (App.getFilmDescriptionStorage().getFilmByID(filmID).isFavorite())
                             favoriteIDs.add(filmID);
                     }
 
                     if (favoriteIDs.size() == 0) { // в выбранных элементах избранных нет, надо добавить выбранные элементы в избранное
                         for (String filmID : checkedIDs) {
-                            FilmDescriptionStorage.getInstance().getFilmByID(filmID).setFavorite(true);
+                            App.getFilmDescriptionStorage().getFilmByID(filmID).setFavorite(true);
                             filmItemAdapter.notifyItemChanged(filmItemAdapter.getPosByID(filmID));
                         }
                     } else { // надо удалить элементы из избранного
                         for (String filmID : favoriteIDs) {
-                            FilmDescriptionStorage.getInstance().getFilmByID(filmID).setFavorite(false);
+                            App.getFilmDescriptionStorage().getFilmByID(filmID).setFavorite(false);
                             filmItemAdapter.notifyItemChanged(filmItemAdapter.getPosByID(filmID));
                         }
                     }
@@ -290,7 +303,7 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
             }
         });
 
-        snackProgressBar = new DisappearingSnackCircularProgressBar(rootView,
+        snackProgressBar = new DisappearingSnackCircularProgressBar(view,
                 getString(R.string.backPressedCancelSelectionToastText),
                 new SnackProgressBarManager.OnDisplayListener() {
                     @SuppressLint("SyntheticAccessor")
@@ -308,12 +321,12 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
                     }
                 }, this);
 
-        film_recycler_view = rootView.findViewById(R.id.film_recycler_view);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(rootView.getContext(), RecyclerView.VERTICAL, false);
+        film_recycler_view = view.findViewById(R.id.film_recycler_view);
+        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(view.getContext(), RecyclerView.VERTICAL, false);
         film_recycler_view.setLayoutManager(linearLayoutManager);
-        film_recycler_view.addItemDecoration(new DividerItemDecoration(rootView.getContext(), DividerItemDecoration.VERTICAL));
+        film_recycler_view.addItemDecoration(new DividerItemDecoration(view.getContext(), DividerItemDecoration.VERTICAL));
         RecyclerView.ItemAnimator itemAnimator = new SlideInUpAnimator(new OvershootInterpolator(1f));
-        itemAnimator.setAddDuration(rootView.getResources().getInteger(R.integer.element_adding_animation_time_ms));
+        itemAnimator.setAddDuration(view.getResources().getInteger(R.integer.element_adding_animation_time_ms));
         film_recycler_view.setItemAnimator(itemAnimator);
         swipeProcessingHelper.attachToRecyclerView(film_recycler_view);
 
@@ -327,7 +340,7 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
                         @Override
                         public void onCheckedChanged(@NonNull CompoundButton buttonView, boolean isChecked) {
                             String filmID = buttonView.getTag().toString();
-                            FilmDescriptionStorage.getInstance().getFilmByID(filmID).setFavorite(isChecked);
+                            App.getFilmDescriptionStorage().getFilmByID(filmID).setFavorite(isChecked);
                             if (!isChecked && isFavoritesOnly())
                                 filmItemAdapter.removeItemByID(filmID);
                         }
@@ -352,6 +365,8 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
 
         film_recycler_view.setAdapter(filmItemAdapter);
 
+        progress_bar = view.findViewById(R.id.progress_bar);
+
         if (adapterCreationRequired) {
             if (isFavoritesOnly())
                 favoritesListMode();
@@ -360,10 +375,29 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
         }
 
         setMultiselectProcessingMode(isMultiselectMode);
+
+        film_recycler_view.addOnScrollListener(new RecyclerView.OnScrollListener() {
+
+            @SuppressLint("SyntheticAccessor")
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+
+                if (progress_bar.getVisibility() == View.VISIBLE)
+                    return;
+
+                if (isFavoritesOnly())
+                    return;
+
+                if (newState == SCROLL_STATE_SETTLING && linearLayoutManager.findLastVisibleItemPosition() == filmItemAdapter.getItemCount() - 1) {
+                    fetchNextPageToAdapter();
+                }
+            }
+        });
     }
 
     private void gotoDetailFragment() {
-        if (FilmViewWrapper.getInstance().containsID(getSelectedFilmTag())) {
+        if (App.getFilmDescriptionStorage().containsID(getSelectedFilmTag())) {
             try {
                 gotoFragmentCallback.gotoDetailFragment(getSelectedFilmTag());
             } catch (NullPointerException e) {
@@ -383,36 +417,6 @@ public class MainFragment extends FragmentWithCallback implements NavigationView
     public void setSelectedFilmTag(@NonNull String selectedFilmTag) {
         filmItemAdapter.setSelectedFilmTag(selectedFilmTag);
         this.selectedFilmTag = selectedFilmTag;
-    }
-
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        int id = item.getItemId();
-
-        if (id == R.id.item_about)
-            gotoFragmentCallback.gotoAboutFragment();
-        else if (id == R.id.item_exit) {
-            AlertDialog.Builder bld = new AlertDialog.Builder(rootView.getContext());
-            DialogInterface.OnClickListener exitDo =
-                    new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            System.exit(0);
-                        }
-                    };
-
-            bld.setMessage(R.string.exitDialogMessage);
-            bld.setTitle(R.string.exitDialogTitle);
-            bld.setNegativeButton(R.string.exitDialogNegativeAnswer, null);
-            bld.setPositiveButton(R.string.exitDialogPositiveAnswer, exitDo);
-            bld.setCancelable(false);
-            AlertDialog dialog = bld.create();
-            dialog.show();
-        }
-
-        DrawerLayout drawer = rootView.findViewById(R.id.drawer_main_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
     }
 
     /**

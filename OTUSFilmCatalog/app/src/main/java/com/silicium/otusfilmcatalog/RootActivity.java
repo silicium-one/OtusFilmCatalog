@@ -1,29 +1,44 @@
 package com.silicium.otusfilmcatalog;
 
+import android.Manifest;
+import android.content.DialogInterface;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.google.android.material.navigation.NavigationView;
 import com.silicium.otusfilmcatalog.logic.controller.MetricsStorage;
 import com.silicium.otusfilmcatalog.logic.model.FragmentWithCallback;
 import com.silicium.otusfilmcatalog.logic.model.IGotoFragmentCallback;
 import com.silicium.otusfilmcatalog.logic.model.IOnBackPressedListener;
 import com.silicium.otusfilmcatalog.ui.AboutFragment;
 import com.silicium.otusfilmcatalog.ui.AddFragment;
+import com.silicium.otusfilmcatalog.ui.CinemasMapFragment;
 import com.silicium.otusfilmcatalog.ui.DetailFragment;
 import com.silicium.otusfilmcatalog.ui.MainFragment;
 
 import static android.content.res.Configuration.ORIENTATION_PORTRAIT;
 
-public class RootActivity extends AppCompatActivity implements IGotoFragmentCallback, FragmentManager.OnBackStackChangedListener {
+public class RootActivity extends AppCompatActivity implements IGotoFragmentCallback, FragmentManager.OnBackStackChangedListener, NavigationView.OnNavigationItemSelectedListener {
+
+    private static final int PERMISSIONS_REQUEST_FINE_LOCATION = 666;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -38,6 +53,18 @@ public class RootActivity extends AppCompatActivity implements IGotoFragmentCall
 
         getSupportFragmentManager().addOnBackStackChangedListener(this);
         MetricsStorage.getMetricNotifier().notifyObserversDataChanged();
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar,
+                R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
     }
 
     @Override
@@ -103,6 +130,16 @@ public class RootActivity extends AppCompatActivity implements IGotoFragmentCall
     }
 
     @Override
+    public void gotoCinemasFragment() {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.root_fragment, new CinemasMapFragment(), CinemasMapFragment.FRAGMENT_TAG)
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                .addToBackStack(null)
+                .commit();
+    }
+
+    @Override
     public void gotoAboutFragment() {
         getSupportFragmentManager()
                 .beginTransaction()
@@ -154,6 +191,67 @@ public class RootActivity extends AppCompatActivity implements IGotoFragmentCall
             } else { // Добавление и About - на весь экран
                 root_fragment.setLayoutParams(new ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
             }
+        }
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.item_home)
+            gotoMainFragment();
+        else if (id == R.id.item_cinemas) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                    != PackageManager.PERMISSION_GRANTED) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                            PERMISSIONS_REQUEST_FINE_LOCATION);
+                }
+            } else {
+                gotoCinemasFragment();
+            }
+        } else if (id == R.id.item_about)
+            gotoAboutFragment();
+        else if (id == R.id.item_exit) {
+            AlertDialog.Builder bld = new AlertDialog.Builder(this);
+            DialogInterface.OnClickListener exitDo =
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            System.exit(0);
+                        }
+                    };
+
+            bld.setMessage(R.string.exitDialogMessage);
+            bld.setTitle(R.string.exitDialogTitle);
+            bld.setNegativeButton(R.string.exitDialogNegativeAnswer, null);
+            bld.setPositiveButton(R.string.exitDialogPositiveAnswer, exitDo);
+            bld.setCancelable(false);
+            AlertDialog dialog = bld.create();
+            dialog.show();
+        }
+
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        if (requestCode == PERMISSIONS_REQUEST_FINE_LOCATION
+                && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+            gotoCinemasFragment();
+        } else {
+            AlertDialog.Builder bld = new AlertDialog.Builder(this);
+
+            bld.setMessage(R.string.locationPermissionErrorDialogMessage);
+            bld.setTitle(R.string.locationPermissionErrorDialogTitle);
+            bld.setNeutralButton(R.string.locationPermissionErrorDialogNeutralAnswer, null);
+            bld.setCancelable(false);
+            AlertDialog dialog = bld.create();
+            dialog.show();
         }
     }
 }

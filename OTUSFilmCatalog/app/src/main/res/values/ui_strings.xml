@@ -1,12 +1,11 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="DuplicateStrings">
     <string name="shareTextBtnText">Пригласить друга на просмотр</string>
     <string name="shareFilmDlgTitle">Выберите, как пригласить на просмотр</string>
-    <string name="isLikedCheckBoxText">Нравится</string>
-    <string name="filmCommentEditTextHint">Поделитесь впечатлениями о фильме</string>
-    <string name="filmCommentExpandTextHint">Ещё</string>
+    <string name="filmCommentExpandTextHint">Подробности</string>
     <string name="filmDetailBtnText">Детали</string>
 
-    <string name="homeMenuItem">Главный экран</string>
+    <string name="homeMenuItem">Фильмы</string>
+    <string name="cinemasMenuItem">Кинотеатры</string>
     <string name="aboutMenuItem">О программе</string>
     <string name="exitMenuItem">Выход</string>
 
@@ -18,6 +17,10 @@
     <string name="exitDialogMessage">Покинуть программу?</string>
     <string name="exitDialogNegativeAnswer">Нет</string>
     <string name="exitDialogPositiveAnswer">Да</string>
+
+    <string name="locationPermissionErrorDialogTitle">Не хватает разрешений</string>
+    <string name="locationPermissionErrorDialogMessage">Для поиска кинотеатров поблизости необходимо разрешить приложению доступ к данным о местоположении</string>
+    <string name="locationPermissionErrorDialogNeutralAnswer">Понятно</string>
 
     <string name="bottom_sheet_option_heading">Дополнительно</string>
     <string name="bottom_sheet_option_pic_photo">Выбрать обложку</string>
@@ -43,8 +46,18 @@
     <string name="appwidget_default_value">0</string>
 
     <string name="film_cover_preview_contentDescription">Предпросмотр обложки</string>
+    <string name="film_cover_contentDescription">Обложка в полном размере</string>
 
     <string name="main_favoritesList">Избранное</string>
     <string name="maim_fullList">Все фильмы</string>
+
+    <string name="detail_popularity_header">Популярность</string>
+    <string name="detail_vote_average_header">Оценка</string>
+    <string name="detail_vote_count_header">Количество голосов</string>
+    <string name="detail_release_date_header">Дата релиза</string>
+
+    <string name="cinema_photo_description_string">Фото кинотеатра</string>
+    <string name="cinema_url_pattern_string">&lt;a href=&quot;%s&quot;&gt;Сайт кинотеатра&lt;/a&gt;</string>
+    <string name="cinema_phone_string">телефон:</string>
 
 </resources>

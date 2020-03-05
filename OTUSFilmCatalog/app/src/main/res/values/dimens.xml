@@ -21,14 +21,18 @@
     <dimen name="bottomSheet_header">40dp</dimen>
     <dimen name="bottomSheet_checkboxSize">40dp</dimen>
     <dimen name="paddingStart">10dp</dimen>
+    <dimen name="elementPadding">4dp</dimen>
+    <dimen name="fullImageHeight">200dp</dimen>
 
     <!-- fragment_main -->
     <dimen name="padding">10dp</dimen>
     <dimen name="margin">10dp</dimen>
 
     <!-- text -->
-    <dimen name="text_body">14sp</dimen>
-    <dimen name="text_body_dp">14dp</dimen>
+    <dimen name="text_body">16sp</dimen>
+    <dimen name="text_body_dp">16dp</dimen>
+    <dimen name="text_header">20sp</dimen>
+    <dimen name="text_header_dp">20dp</dimen>
 
     <!--
 Refer to App Widget Documentation for margin information
@@ -36,8 +40,8 @@ http://developer.android.com/guide/topics/appwidgets/index.html#CreatingLayout
     -->
     <dimen name="widget_padding">4dp</dimen>
     <dimen name="widget_text_margin">2dp</dimen>
-    <dimen name="widget_text_header_size">16sp</dimen>
-    <dimen name="widget_text_column_header_size">14sp</dimen>
+    <dimen name="widget_text_header_size">14sp</dimen>
+    <dimen name="widget_text_column_header_size">12sp</dimen>
     <dimen name="widget_text_column_value_size">30sp</dimen>
 
     <!-- item_films -->
@@ -46,5 +50,19 @@ http://developer.android.com/guide/topics/appwidgets/index.html#CreatingLayout
     <dimen name="item_film_name_text_size">18sp</dimen>
     <dimen name="item_film_name_height">20dp</dimen>
     <dimen name="item_film_description_text_size">14sp</dimen>
+
+    <integer name="camera_zoom_size">14</integer>
+
+    <!-- В силу ограничений ключа Google быстро подкачивать страницы не получится, а может я - криворукий -->
+    <integer name="google_places_api_fetch_delay_ms">2000</integer>
+
+    <!-- fragment_cinemas_map -->
+    <integer name="placemark_cluster_font_size">15</integer>
+    <integer name="placemark_cluster_margin_size">3</integer>
+    <integer name="placemark_cluster_stroke_size">3</integer>
+    <integer name="placemark_cluster_radius">60</integer>
+    <integer name="placemark_cluster_min_zoom">15</integer>
+    <dimen name="description_element_padding">4dp</dimen>
+    <dimen name="cinema_image_height">200dp</dimen>
 
 </resources>

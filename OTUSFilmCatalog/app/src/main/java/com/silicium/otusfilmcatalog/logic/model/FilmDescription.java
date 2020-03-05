@@ -15,20 +15,45 @@ public class FilmDescription {
 
     @NonNull
     public final String ID;
-    public final Set<FilmGenre> Genre = new HashSet<>();
+
+    @NonNull
+    public final Set<Integer> genres = new HashSet<>();
+
     @NonNull
     private final IMetricNotifier metricNotifier;
+
     @NonNull
-    public String Name = "";
+    public String name = "";
+
     @NonNull
-    public String Description = "";
+    public String description = "";
+
     @NonNull
-    public String Url = "https://www.kinopoisk.ru/error";
+    public String url = "https://www.themoviedb.org/movie/0";
+
     @NonNull
-    public Bitmap Cover = BitmapFactory.decodeResource(App.getAppResources(), R.drawable.film_no_image);
+    public String coverUrl = "";
+
     @NonNull
-    public Bitmap CoverPreview = BitmapFactory.decodeResource(App.getAppResources(), R.drawable.film_no_image);
+    public Bitmap cover = BitmapFactory.decodeResource(App.getAppResources(), R.drawable.film_no_image);
+
+    @NonNull
+    public String coverPreviewUrl = "";
+
+    @NonNull
+    public Bitmap coverPreview = BitmapFactory.decodeResource(App.getAppResources(), R.drawable.film_no_image);
+
+    public float popularity;
+
+    public int voteCount;
+
+    public float voteAverage;
+
+    @NonNull
+    public String releaseDate = ""; //todo: сделать датой
+
     private boolean isFavorite;
+
     FilmDescription(@NonNull String ID, @NonNull IMetricNotifier metricNotifier) {
         this.ID = ID;
         this.metricNotifier = metricNotifier;
@@ -47,12 +72,4 @@ public class FilmDescription {
                 metricNotifier.decrement(metricNotifier.FAVORITES_TAG);
         }
     }
-
-    public enum FilmGenre {
-        comedy,
-        series,
-        cartoon,
-    }
 }
-
-

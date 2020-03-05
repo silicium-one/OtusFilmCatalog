@@ -8,6 +8,7 @@
         <item name="itemSelectedBackgroundColor">@color/itemSelectedBackgroundColor</item>
         <item name="multipleSelectionBackgroundColor">@color/multipleSelectionBackgroundColor</item>
         <item name="colorBackgroundFloating">@color/colorBackgroundFloating</item>
+        <item name="background">@color/colorBackground</item>
     </style>
 
     <style name="AppTheme.NoActionBar" parent="AppTheme">

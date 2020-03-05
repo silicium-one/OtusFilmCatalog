@@ -1,29 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/fragment_detail"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/fragment_detail_toolbar"
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/genre_chips_chip_group"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="?attr/colorPrimary" />
+            android:layout_margin="@dimen/elementPadding" />
 
-        <LinearLayout
-            android:id="@+id/film_root_layout"
+        <ImageView
+            android:id="@+id/cover_image_view"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="9"
-            android:orientation="vertical" />
+            android:layout_height="@dimen/fullImageHeight"
+            android:layout_below="@id/genre_chips_chip_group"
+            android:layout_centerHorizontal="true"
+            android:contentDescription="@string/film_cover_contentDescription"
+            android:padding="@dimen/elementPadding"
+            android:src="@drawable/film_no_image" />
 
-    </LinearLayout>
+        <TextView
+            android:id="@+id/film_description_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/cover_image_view"
+            android:padding="@dimen/elementPadding"
+            android:textIsSelectable="true"
+            android:textSize="@dimen/text_body"
+            tools:text="Подробное описание фильма, подробное описание фильма, подробное описание фильма, подробное описание фильма, подробное описание фильма, подробное описание фильма, подробное описание фильма, подробное описание фильма, подробное описание фильма, подробное описание фильма, подробное описание фильма." />
+
+    </RelativeLayout>
 
     <!-- include bottom sheet -->
     <include layout="@layout/fragment_detail_bottom_sheet" />

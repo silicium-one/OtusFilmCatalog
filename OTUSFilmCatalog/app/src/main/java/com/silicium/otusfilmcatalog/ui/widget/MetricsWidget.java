@@ -34,14 +34,14 @@ public class MetricsWidget extends AppWidgetProvider {
 
         // Construct the RemoteViews object
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.metrics_widget);
-        views.setViewVisibility(R.id.appwidget_total_header, totalVisibility ? View.VISIBLE : View.GONE);
-        views.setViewVisibility(R.id.appwidget_total_value, totalVisibility ? View.VISIBLE : View.GONE);
-        views.setViewVisibility(R.id.appwidget_favorites_header, favoritesVisibility ? View.VISIBLE : View.GONE);
-        views.setViewVisibility(R.id.appwidget_favorites_value, favoritesVisibility ? View.VISIBLE : View.GONE);
-        views.setViewVisibility(R.id.appwidget_shared_header, sharedVisibility ? View.VISIBLE : View.GONE);
-        views.setViewVisibility(R.id.appwidget_shared_value, sharedVisibility ? View.VISIBLE : View.GONE);
-        views.setViewVisibility(R.id.appwidget_cartoon_header, cartoonVisibility ? View.VISIBLE : View.GONE);
-        views.setViewVisibility(R.id.appwidget_cartoon_value, cartoonVisibility ? View.VISIBLE : View.GONE);
+        views.setViewVisibility(R.id.appwidget_total_header, totalVisibility ? View.VISIBLE : View.INVISIBLE);
+        views.setViewVisibility(R.id.appwidget_total_value, totalVisibility ? View.VISIBLE : View.INVISIBLE);
+        views.setViewVisibility(R.id.appwidget_favorites_header, favoritesVisibility ? View.VISIBLE : View.INVISIBLE);
+        views.setViewVisibility(R.id.appwidget_favorites_value, favoritesVisibility ? View.VISIBLE : View.INVISIBLE);
+        views.setViewVisibility(R.id.appwidget_shared_header, sharedVisibility ? View.VISIBLE : View.INVISIBLE);
+        views.setViewVisibility(R.id.appwidget_shared_value, sharedVisibility ? View.VISIBLE : View.INVISIBLE);
+        views.setViewVisibility(R.id.appwidget_cartoon_header, cartoonVisibility ? View.VISIBLE : View.INVISIBLE);
+        views.setViewVisibility(R.id.appwidget_cartoon_value, cartoonVisibility ? View.VISIBLE : View.INVISIBLE);
 
         views.setTextViewText(R.id.appwidget_total_value, totalValue.toString());
         views.setTextViewText(R.id.appwidget_favorites_value, favoritesValue.toString());

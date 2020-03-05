@@ -1,33 +1,43 @@
 package com.silicium.otusfilmcatalog.ui;
 
+import android.animation.Animator;
 import android.annotation.SuppressLint;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
+import com.silicium.otusfilmcatalog.App;
 import com.silicium.otusfilmcatalog.R;
+import com.silicium.otusfilmcatalog.SharedQuantityCounter;
+import com.silicium.otusfilmcatalog.logic.controller.MetricsStorage;
 import com.silicium.otusfilmcatalog.logic.model.FilmDescription;
 import com.silicium.otusfilmcatalog.logic.model.FilmDescriptionFactory;
 import com.silicium.otusfilmcatalog.logic.model.FragmentWithCallback;
+import com.silicium.otusfilmcatalog.logic.model.IMetricNotifier;
 import com.silicium.otusfilmcatalog.logic.model.IOnBackPressedListener;
-import com.silicium.otusfilmcatalog.logic.view.FilmViewWrapper;
 import com.silicium.otusfilmcatalog.ui.cuctomcomponents.DisappearingSnackCircularProgressBar;
 import com.tingyik90.snackprogressbar.SnackProgressBar;
 import com.tingyik90.snackprogressbar.SnackProgressBarLayout;
 import com.tingyik90.snackprogressbar.SnackProgressBarManager;
+
+import java.util.Locale;
 
 import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
 
@@ -38,11 +48,10 @@ public class DetailFragment extends FragmentWithCallback implements IOnBackPress
     private String filmID = "";
     @NonNull
     private FilmDescription film = FilmDescriptionFactory.getStubFilmDescription();
-    @SuppressWarnings({"FieldCanBeLocal", "unused"})
-    private CheckBox film_is_liked;
-    @SuppressWarnings({"FieldCanBeLocal", "unused"})
-    private EditText film_comment;
     private View rootView;
+    private Toolbar toolbar;
+    private View more_header;
+    private BottomSheetBehavior bShBehavior;
     private DisappearingSnackCircularProgressBar snackProgressBar;
     private boolean doubleBackToExitPressedOnce = false;
 
@@ -82,24 +91,55 @@ public class DetailFragment extends FragmentWithCallback implements IOnBackPress
 
         rootView = view;
 
-        final LinearLayout root = rootView.findViewById(R.id.film_root_layout);
-        film_is_liked = rootView.findViewById(R.id.film_is_liked);
-        film_comment = rootView.findViewById(R.id.film_comment);
-        FilmViewWrapper instance = FilmViewWrapper.getInstance();
-        film = instance.getFilmByID(filmID);
-        root.addView(instance.getFilmViewDetails(film, getContext()));
+        film = App.getFilmDescriptionStorage().getFilmByID(filmID);
 
-        final View more_header = rootView.findViewById(R.id.more_text_view);
+        ChipGroup genre_chips_chip_group = view.findViewById(R.id.genre_chips_chip_group);
+        for (int filmGenreID : film.genres) {
+            Chip genre = new Chip(view.getContext());
+            genre.setText(App.getFilmDescriptionStorage().getReadableGenre(filmGenreID));
+            genre_chips_chip_group.addView(genre);
+        }
+
+        ImageView cover_image_view = view.findViewById(R.id.cover_image_view);
+        cover_image_view.setImageBitmap(film.cover);
+
+        TextView film_description_text_view = view.findViewById(R.id.film_description_text_view);
+        film_description_text_view.setText(film.description);
+
+        if (film.coverUrl.isEmpty()) {
+            cover_image_view.setImageBitmap(film.cover);
+        } else {
+            //todo: добавить поддержку темы, размеры получать из cover_image_view
+            CircularProgressDrawable circularProgressDrawable = new CircularProgressDrawable(view.getContext());
+            circularProgressDrawable.setStrokeWidth(5f);
+            circularProgressDrawable.setCenterRadius(30f);
+            circularProgressDrawable.start();
+
+            Glide.with(App.getApplication().getApplicationContext())
+                    .load(film.coverUrl)
+                    .fitCenter()
+                    .placeholder(circularProgressDrawable)
+                    .error(R.drawable.ic_error_outline)
+                    .into(cover_image_view);
+        }
+
+        ((TextView) view.findViewById(R.id.name_text_view)).setText(film.name);
+        ((TextView) view.findViewById(R.id.popularity_value_text_view)).setText(String.format(Locale.getDefault(), "%.3f", film.popularity));
+        ((TextView) view.findViewById(R.id.vote_average_value_text_view)).setText(String.format(Locale.getDefault(), "%.1f", film.voteAverage));
+        ((TextView) view.findViewById(R.id.vote_count_value_text_view)).setText(String.format(Locale.getDefault(), "%d", film.voteCount));
+        ((TextView) view.findViewById(R.id.release_date_value_text_view)).setText(film.releaseDate);
+
+        more_header = rootView.findViewById(R.id.more_text_view);
         final int oldHeight = more_header.getLayoutParams().height;
-
 
         // get the bottom sheet view
         ConstraintLayout bottomSheet = rootView.findViewById(R.id.detail_bottom_sheet);
         // init the bottom sheet behavior
-        final BottomSheetBehavior bShBehavior = BottomSheetBehavior.from(bottomSheet);
+        bShBehavior = BottomSheetBehavior.from(bottomSheet);
 
         bShBehavior.setBottomSheetCallback(
                 new BottomSheetBehavior.BottomSheetCallback() {
+                    @SuppressLint("SyntheticAccessor")
                     @Override
                     public void onStateChanged(@NonNull final View view, int newState) {
                         if (newState == BottomSheetBehavior.STATE_HIDDEN) {
@@ -111,9 +151,47 @@ public class DetailFragment extends FragmentWithCallback implements IOnBackPress
                             }, getResources().getInteger(R.integer.foolproof_time_ms));
                         } else if (newState == BottomSheetBehavior.STATE_EXPANDED) {
                             float scaleFactor = 0.1F;
-                            more_header.animate().y(-(oldHeight * (1 - scaleFactor) / 2F)).scaleY(scaleFactor).start();
+                            more_header.animate().y(-(oldHeight * (1 - scaleFactor) / 2F)).scaleY(scaleFactor).setListener(new Animator.AnimatorListener() {
+                                @Override
+                                public void onAnimationStart(Animator animation) {
+
+                                }
+
+                                @Override
+                                public void onAnimationEnd(Animator animation) {
+                                    more_header.setVisibility(View.GONE);
+                                }
+
+                                @Override
+                                public void onAnimationCancel(Animator animation) {
+
+                                }
+
+                                @Override
+                                public void onAnimationRepeat(Animator animation) {
+
+                                }
+                            }).start();
                         } else if (newState == BottomSheetBehavior.STATE_COLLAPSED) {
-                            more_header.animate().setDuration(getResources().getInteger(R.integer.smooth_transition_time_ms)).y(0).scaleY(1F).start();
+                            more_header.animate().setDuration(getResources().getInteger(R.integer.smooth_transition_time_ms)).y(0).scaleY(1F).setListener(new Animator.AnimatorListener() {
+                                @Override
+                                public void onAnimationStart(Animator animation) {
+                                    more_header.setVisibility(View.VISIBLE);
+                                }
+
+                                @Override
+                                public void onAnimationEnd(Animator animation) {
+                                }
+
+                                @Override
+                                public void onAnimationCancel(Animator animation) {
+                                }
+
+                                @Override
+                                public void onAnimationRepeat(Animator animation) {
+
+                                }
+                            }).start();
                         }
                     }
 
@@ -122,6 +200,15 @@ public class DetailFragment extends FragmentWithCallback implements IOnBackPress
                     }
                 }
         );
+
+        more_header.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("SyntheticAccessor")
+            @Override
+            public void onClick(View v) {
+                if (bShBehavior.getState() == BottomSheetBehavior.STATE_COLLAPSED)
+                    bShBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+            }
+        });
 
         snackProgressBar = new DisappearingSnackCircularProgressBar(rootView.findViewById(R.id.fragment_detail),
                 getString(R.string.backPressedToastText),
@@ -141,7 +228,13 @@ public class DetailFragment extends FragmentWithCallback implements IOnBackPress
                     }
                 }, this);
 
-        Toolbar toolbar = view.findViewById(R.id.fragment_detail_toolbar);
+        toolbar = requireActivity().findViewById(R.id.toolbar);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
         toolbar.inflateMenu(R.menu.fragment_detail_menu);
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @SuppressLint("SyntheticAccessor")
@@ -154,40 +247,50 @@ public class DetailFragment extends FragmentWithCallback implements IOnBackPress
                 return false;
             }
         });
+
+        if (bShBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED)
+            more_header.setVisibility(View.GONE);
+        else if (bShBehavior.getState() == BottomSheetBehavior.STATE_COLLAPSED)
+            more_header.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        toolbar.getMenu().clear(); // убираем кнопку "поделиться" из панели инструментов
     }
 
     private void onShareBtnClick() {
-        String textMessage = getString(R.string.shareFilmMsg) + FilmViewWrapper.getInstance().getFilmUrl(film);
+        String textMessage = getString(R.string.shareFilmMsg) + String.format("<a href=\"%s\">%s</a>", film.url, film.name);
         Intent sendIntent = new Intent();
         sendIntent.setAction(Intent.ACTION_SEND);
         sendIntent.putExtra(Intent.EXTRA_TEXT, textMessage);
         sendIntent.setType("text/html");
 
         String title = getResources().getString(R.string.shareFilmDlgTitle);
-        Intent chooser = Intent.createChooser(sendIntent, title);
+
+        Intent chooser;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP_MR1) {
+            Intent receiver = new Intent(getContext(), SharedQuantityCounter.class);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(), 0, receiver, PendingIntent.FLAG_UPDATE_CURRENT);
+            chooser = Intent.createChooser(sendIntent, title, pendingIntent.getIntentSender());
+        } else {
+            chooser = Intent.createChooser(sendIntent, title);
+            MetricsStorage.getMetricNotifier().increment(IMetricNotifier.SHARED_TAG);
+        }
 
         if (sendIntent.resolveActivity(rootView.getContext().getPackageManager()) != null) {
             startActivity(chooser);
         }
     }
 
-    /**
-     * Если вернуть ИСТИНА, то нажатие кнопки "назад" обрабтано. Если вернуть ЛОЖЬ, то требуется обработка выше по стэку.
-     *
-     * @return ИСТИНА, если нажание кнопки back обработано и ЛОЖЬ в противном случае
-     */
     @Override
     public boolean onBackPressed() {
         if (isLandscape())
             return false;
 
         if (doubleBackToExitPressedOnce) {
-//            Intent intent = new Intent();
-//            intent.putExtra("film_is_liked", film_is_liked.isChecked());
-//            intent.putExtra("film_comment", film_comment.getText().toString());
-//            setResult(RESULT_OK, intent);
-//            finish();
-            // TODO: придумать, как обработать полученные даннве. Возможно, упокавать их в базу
             return false;
         } else {
             snackProgressBar.Show();

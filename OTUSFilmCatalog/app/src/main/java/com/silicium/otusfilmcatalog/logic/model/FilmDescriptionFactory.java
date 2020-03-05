@@ -1,55 +1,49 @@
 package com.silicium.otusfilmcatalog.logic.model;
 
-import android.graphics.BitmapFactory;
-
 import androidx.annotation.NonNull;
 
-import com.silicium.otusfilmcatalog.App;
-import com.silicium.otusfilmcatalog.R;
 import com.silicium.otusfilmcatalog.logic.controller.MetricsStorage;
 
 import org.jetbrains.annotations.Contract;
 
+import java.util.Locale;
 import java.util.UUID;
 
 public class FilmDescriptionFactory {
     @NonNull
-    public static FilmDescription getNewFilmDescription() {
-        FilmDescription ret = new FilmDescription(UUID.randomUUID().toString(), MetricsStorage.getMetricNotifier());
+    public static FilmDescription getFilmDescriptionFromTMDBJson(@NonNull MovieDescriptionJson movieDescriptionJson) {
+        final FilmDescription ret = getFilmDescription(Integer.toString(movieDescriptionJson.id));
 
-        ret.Name = "";
-        ret.Description = "";
-        ret.Url = "https://www.kinopoisk.ru/error";
-        ret.Cover = BitmapFactory.decodeResource(App.getAppResources(), R.drawable.film_no_image);
-        ret.CoverPreview = BitmapFactory.decodeResource(App.getAppResources(), R.drawable.film_no_image);
+        ret.name = movieDescriptionJson.title;
+        ret.description = movieDescriptionJson.overview;
+        ret.url = String.format(Locale.getDefault(), "https://www.themoviedb.org/movie/%d?language=ru-RU", movieDescriptionJson.id);
+        ret.genres.addAll(movieDescriptionJson.genreIds);
+
+        ret.coverUrl = "http://image.tmdb.org/t/p/w1280" + movieDescriptionJson.backdropPath;
+        ret.coverPreviewUrl = "http://image.tmdb.org/t/p/w300" + movieDescriptionJson.posterPath;
+
+        ret.popularity = movieDescriptionJson.popularity;
+        ret.voteCount = movieDescriptionJson.voteCount;
+        ret.voteAverage = movieDescriptionJson.voteAverage;
+        ret.releaseDate = movieDescriptionJson.releaseDate;
 
         return ret;
     }
 
+    @NonNull
+    public static FilmDescription getNewFilmDescription() {
+        return getFilmDescription(UUID.randomUUID().toString());
+    }
+
     @Contract("_ -> new")
     @NonNull
-    public static FilmDescription getFilmDescription(@NonNull String ID) {
+    private static FilmDescription getFilmDescription(@NonNull String ID) {
         return new FilmDescription(ID, MetricsStorage.getMetricNotifier());
     }
 
     @Contract(" -> new")
     @NonNull
     public static FilmDescription getStubFilmDescription() {
-        return new FilmDescription("", MetricsStorage.getMetricNotifier());
-    }
-
-    //todo: добавить работу с разными локалями
-    @NonNull
-    public static String getReadableGenre(@NonNull FilmDescription.FilmGenre genre) {
-        switch (genre) {
-            case comedy:
-                return "Комедия";
-            case series:
-                return "Сериал";
-            case cartoon:
-                return "Мультфильм";
-            default:
-                throw new UnsupportedOperationException("Неизвестный жанр");
-        }
+        return getFilmDescription("");
     }
 }

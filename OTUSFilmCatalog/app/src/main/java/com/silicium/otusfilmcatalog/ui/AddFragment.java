@@ -14,8 +14,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import com.silicium.otusfilmcatalog.App;
 import com.silicium.otusfilmcatalog.R;
-import com.silicium.otusfilmcatalog.logic.controller.FilmDescriptionStorage;
 import com.silicium.otusfilmcatalog.logic.model.FilmDescription;
 import com.silicium.otusfilmcatalog.logic.model.FilmDescriptionFactory;
 import com.silicium.otusfilmcatalog.logic.model.FragmentWithCallback;
@@ -107,10 +107,10 @@ public class AddFragment extends FragmentWithCallback implements IOnBackPressedL
         EditText film_description = rootLayout.findViewById(R.id.film_description);
 
         FilmDescription film = FilmDescriptionFactory.getNewFilmDescription();
-        film.Name = film_name.getText().toString();
-        film.Description = film_description.getText().toString();
+        film.name = film_name.getText().toString();
+        film.description = film_description.getText().toString();
 
-        FilmDescriptionStorage.getInstance().addFilm(film);
+        App.getFilmDescriptionStorage().addFilm(film);
     }
 
     private void onItemClick(@NonNull View view) {
