@@ -87,6 +87,7 @@ public class CinemasMapFragment extends FragmentWithCallback implements CameraLi
     private ProgressBar cinema_photo_loading_progress_bar;
 
     private Collection<CinemaDescription> actualCinemas;
+    private boolean techMoveFlag;
 
     public CinemasMapFragment() {
         Places.initialize(App.getApplication().getApplicationContext(), BuildConfig.GOOGLE_PLACES_API_KEY);
@@ -178,8 +179,17 @@ public class CinemasMapFragment extends FragmentWithCallback implements CameraLi
 
     @Override
     public void onCameraPositionChanged(@NonNull Map map, @NonNull CameraPosition cameraPosition, @NonNull CameraUpdateSource cameraUpdateSource, boolean finished) {
-        content_loading_progress_bar.setVisibility(View.VISIBLE);
+        if (!techMoveFlag)
+            content_loading_progress_bar.setVisibility(View.VISIBLE);
+
         if (finished) {
+
+            if (techMoveFlag) {
+                content_loading_progress_bar.setVisibility(View.GONE); // redundant
+                techMoveFlag = false;
+                return;
+            }
+
             CinemaDescriptionFromGooglePlacesFetcher.getInstance().getCinemasAsync(cameraPosition.getTarget().getLatitude(), cameraPosition.getTarget().getLongitude(),
                     new Consumer<Collection<CinemaDescription>>() {
                         @SuppressLint({"SyntheticAccessor", "LogConditional"})
@@ -303,6 +313,7 @@ public class CinemasMapFragment extends FragmentWithCallback implements CameraLi
 
                 CameraPosition oldCameraPosition = mapview.getMap().getCameraPosition();
                 CameraPosition newCameraPosition = new CameraPosition(newCenterOfMap, oldCameraPosition.getZoom(), oldCameraPosition.getAzimuth(), oldCameraPosition.getTilt());
+                techMoveFlag = true;
                 mapview.getMap().move(newCameraPosition,
                         new Animation(Animation.Type.SMOOTH, getResources().getInteger(R.integer.camera_smooth_time_s)), null);
             }
