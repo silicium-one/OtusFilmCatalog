@@ -72,12 +72,11 @@ import java.util.List;
 
 public class CinemasMapFragment extends FragmentWithCallback implements CameraListener, MapObjectTapListener {
     public final static String FRAGMENT_TAG = CinemasMapFragment.class.getSimpleName();
-
+    LinearLayout cinemas_map_bottom_sheet;
     private MapView mapview;
     private PlacesClient placesClient;
     private ClusterizedPlacemarkCollection clusterizedCollection;
     private ImageProvider placemarkImg;
-    LinearLayout cinemas_map_bottom_sheet;
     private BottomSheetBehavior bShBehavior;
     private TextView cinema_name_text_view;
     private TextView cinema_address_text_view;
@@ -146,8 +145,13 @@ public class CinemasMapFragment extends FragmentWithCallback implements CameraLi
                     public void onSuccess(Location location) {
                         if (location == null)
                             Toast.makeText(CinemasMapFragment.this.requireContext(), R.string.error_location, Toast.LENGTH_LONG).show();
-                        else
-                            moveCameraToLocation(location.getLatitude(), location.getLongitude());
+                        else {
+                            float zoom = getResources().getInteger(R.integer.camera_zoom_size);
+                            Point myLocation = new Point(location.getLatitude(), location.getLongitude());
+                            mapview.getMap().move(new CameraPosition(myLocation, zoom, 0f, 0f),
+                                    new Animation(Animation.Type.SMOOTH, getResources().getInteger(R.integer.camera_smooth_time_s)),
+                                    null);
+                        }
                     }
                 });
 
@@ -294,9 +298,13 @@ public class CinemasMapFragment extends FragmentWithCallback implements CameraLi
                 // хитрый финт ушами, что бы точка встала в центр свободного экрана
                 int height = mapview.height() - cinemas_map_bottom_sheet.getHeight();
                 Point centerOfVisibleRect = mapview.screenToWorld(new ScreenPoint(mapview.width(), height / 2f));
-                Point currentPointOfView = mapview.getMap().getCameraPosition().getTarget();
-                Point newPointOfView = new Point(currentPointOfView.getLatitude() - (centerOfVisibleRect.getLatitude() - pickedCinema.latitude), pickedCinema.longitude);
-                moveCameraToLocation(newPointOfView.getLatitude(), newPointOfView.getLongitude());
+                Point currentCenterOfMap = mapview.getMap().getCameraPosition().getTarget();
+                Point newCenterOfMap = new Point(currentCenterOfMap.getLatitude() - (centerOfVisibleRect.getLatitude() - pickedCinema.latitude), pickedCinema.longitude);
+
+                CameraPosition oldCameraPosition = mapview.getMap().getCameraPosition();
+                CameraPosition newCameraPosition = new CameraPosition(newCenterOfMap, oldCameraPosition.getZoom(), oldCameraPosition.getAzimuth(), oldCameraPosition.getTilt());
+                mapview.getMap().move(newCameraPosition,
+                        new Animation(Animation.Type.SMOOTH, getResources().getInteger(R.integer.camera_smooth_time_s)), null);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -314,14 +322,6 @@ public class CinemasMapFragment extends FragmentWithCallback implements CameraLi
         });
 
         return true;
-    }
-
-    private void moveCameraToLocation(double latitude, double longitude) {
-        float zoom = getResources().getInteger(R.integer.camera_zoom_size);
-        Point newLocation = new Point(latitude, longitude);
-        mapview.getMap().move(new CameraPosition(newLocation, zoom, 0f, 0f),
-                new Animation(Animation.Type.SMOOTH, getResources().getInteger(R.integer.camera_smooth_time_s)),
-                null);
     }
 
     public class TextImageProvider extends ImageProvider {
