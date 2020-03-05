@@ -356,7 +356,7 @@ public class CinemasMapFragment extends FragmentWithCallback implements CameraLi
             Paint.FontMetrics textMetrics = textPaint.getFontMetrics();
             float heightF = Math.abs(textMetrics.bottom) + Math.abs(textMetrics.top);
             float textRadius = (float) Math.sqrt(widthF * widthF + heightF * heightF) / 2;
-            float internalRadius = textRadius + App.getAppResources().getInteger(R.integer.placemark_cluster_marign_size) * metrics.density;
+            float internalRadius = textRadius + App.getAppResources().getInteger(R.integer.placemark_cluster_margin_size) * metrics.density;
             float externalRadius = internalRadius + App.getAppResources().getInteger(R.integer.placemark_cluster_stroke_size) * metrics.density;
 
             int width = (int) (2 * externalRadius + 0.5);

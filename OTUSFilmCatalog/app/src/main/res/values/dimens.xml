@@ -58,7 +58,7 @@ http://developer.android.com/guide/topics/appwidgets/index.html#CreatingLayout
 
     <!-- fragment_cinemas_map -->
     <integer name="placemark_cluster_font_size">15</integer>
-    <integer name="placemark_cluster_marign_size">3</integer>
+    <integer name="placemark_cluster_margin_size">3</integer>
     <integer name="placemark_cluster_stroke_size">3</integer>
     <integer name="placemark_cluster_radius">60</integer>
     <integer name="placemark_cluster_min_zoom">15</integer>
