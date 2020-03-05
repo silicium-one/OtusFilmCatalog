@@ -170,8 +170,6 @@ public class CinemaDescriptionFromGooglePlacesFetcher {
                 if (errorCallback != null)
                     errorCallback.accept(new ErrorResponse(R.string.connectGooglePlacesFailure, t));
             }
-
-
         };
 
         Handler handler = new Handler();
