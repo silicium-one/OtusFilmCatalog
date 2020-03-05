@@ -307,18 +307,30 @@ public class CinemasMapFragment extends FragmentWithCallback implements CameraLi
 
             @SuppressLint("SyntheticAccessor")
             private void showBottomSheet() {
-                bShBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-                // хитрый финт ушами, что бы точка встала в центр свободного экрана
-                int height = mapview.height() - cinemas_map_bottom_sheet.getHeight();
-                Point centerOfVisibleRect = mapview.screenToWorld(new ScreenPoint(mapview.width(), height / 2f));
-                Point currentCenterOfMap = mapview.getMap().getCameraPosition().getTarget();
-                Point newCenterOfMap = new Point(currentCenterOfMap.getLatitude() - (centerOfVisibleRect.getLatitude() - pickedCinema.latitude), pickedCinema.longitude);
+                bShBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+                    @Override
+                    public void onStateChanged(@NonNull View view, int newState) {
+                        if (newState == BottomSheetBehavior.STATE_EXPANDED) {
+                            // хитрый финт ушами, что бы точка встала в центр свободного экрана
+                            int height = mapview.height() - cinemas_map_bottom_sheet.getHeight();
+                            Point centerOfVisibleRect = mapview.screenToWorld(new ScreenPoint(mapview.width(), height / 2f));
+                            Point currentCenterOfMap = mapview.getMap().getCameraPosition().getTarget();
+                            Point newCenterOfMap = new Point(currentCenterOfMap.getLatitude() - (centerOfVisibleRect.getLatitude() - pickedCinema.latitude), pickedCinema.longitude);
 
-                CameraPosition oldCameraPosition = mapview.getMap().getCameraPosition();
-                CameraPosition newCameraPosition = new CameraPosition(newCenterOfMap, oldCameraPosition.getZoom(), oldCameraPosition.getAzimuth(), oldCameraPosition.getTilt());
-                techMoveFlag = true;
-                mapview.getMap().move(newCameraPosition,
-                        new Animation(Animation.Type.SMOOTH, getResources().getInteger(R.integer.camera_smooth_time_s)), null);
+                            CameraPosition oldCameraPosition = mapview.getMap().getCameraPosition();
+                            CameraPosition newCameraPosition = new CameraPosition(newCenterOfMap, oldCameraPosition.getZoom(), oldCameraPosition.getAzimuth(), oldCameraPosition.getTilt());
+                            techMoveFlag = true;
+                            mapview.getMap().move(newCameraPosition,
+                                    new Animation(Animation.Type.SMOOTH, getResources().getInteger(R.integer.camera_smooth_time_s)), null);
+                        }
+                    }
+
+                    @Override
+                    public void onSlide(@NonNull View view, float v) {
+
+                    }
+                });
+                bShBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override

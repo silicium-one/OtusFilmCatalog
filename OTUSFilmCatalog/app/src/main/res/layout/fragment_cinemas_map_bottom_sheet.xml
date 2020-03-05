@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/cinemas_map_bottom_sheet"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/cinema_map_bottom_sheet_height"
+    android:layout_height="wrap_content"
     android:background="?background"
     android:orientation="vertical"
     app:behavior_hideable="true"

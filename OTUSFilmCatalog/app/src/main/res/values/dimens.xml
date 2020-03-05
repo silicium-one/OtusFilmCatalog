@@ -64,6 +64,5 @@ http://developer.android.com/guide/topics/appwidgets/index.html#CreatingLayout
     <integer name="placemark_cluster_min_zoom">15</integer>
     <dimen name="description_element_padding">4dp</dimen>
     <dimen name="cinema_image_height">200dp</dimen>
-    <dimen name="cinema_map_bottom_sheet_height">350dp</dimen>
 
 </resources>
