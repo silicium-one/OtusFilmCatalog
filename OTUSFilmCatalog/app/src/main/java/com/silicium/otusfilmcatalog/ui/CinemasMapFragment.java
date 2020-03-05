@@ -149,7 +149,7 @@ public class CinemasMapFragment extends FragmentWithCallback implements CameraLi
                             float zoom = getResources().getInteger(R.integer.camera_zoom_size);
                             Point myLocation = new Point(location.getLatitude(), location.getLongitude());
                             mapview.getMap().move(new CameraPosition(myLocation, zoom, 0f, 0f),
-                                    new Animation(Animation.Type.SMOOTH, getResources().getInteger(R.integer.camera_smooth_time_s)),
+                                    new Animation(Animation.Type.SMOOTH, getResources().getInteger(R.integer.camera_initial_smooth_time_s)),
                                     null);
                         }
                     }
