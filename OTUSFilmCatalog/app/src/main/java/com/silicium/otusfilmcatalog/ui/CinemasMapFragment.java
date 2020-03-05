@@ -106,6 +106,9 @@ public class CinemasMapFragment extends FragmentWithCallback implements CameraLi
 
         mapview = view.findViewById(R.id.mapview);
         mapview.getMap().addCameraListener(this);
+        mapview.getMap().setRotateGesturesEnabled(false);
+        mapview.getMap().setTiltGesturesEnabled(false);
+        mapview.getMap().set2DMode(true);
 
         clusterizedCollection = mapview.getMap().getMapObjects().addClusterizedPlacemarkCollection(new ClusterListener() {
             @Override
