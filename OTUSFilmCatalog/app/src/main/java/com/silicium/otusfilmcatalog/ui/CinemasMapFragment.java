@@ -274,7 +274,6 @@ public class CinemasMapFragment extends FragmentWithCallback implements CameraLi
                 List<PhotoMetadata> photoMetadatas = place.getPhotoMetadatas();
                 if (photoMetadatas != null && !photoMetadatas.isEmpty()) {
                     cinema_photo_loading_progress_bar.setVisibility(View.VISIBLE);
-                    cinema_photo_image_view.setImageBitmap(null);
 
                     Task<FetchPhotoResponse> photoTask = placesClient.fetchPhoto(FetchPhotoRequest.builder(photoMetadatas.get(0)).build());
 
@@ -291,6 +290,7 @@ public class CinemasMapFragment extends FragmentWithCallback implements CameraLi
                             Toast.makeText(App.getApplication().getApplicationContext(), e.toString(), Toast.LENGTH_SHORT).show();
                             e.printStackTrace();
                             Log.e(FRAGMENT_TAG, "onFailure: " + e.toString());
+                            cinema_photo_image_view.setImageBitmap(null);
                             cinema_photo_image_view.setVisibility(View.GONE);
                         }
                     }).addOnCompleteListener(new OnCompleteListener<FetchPhotoResponse>() {
