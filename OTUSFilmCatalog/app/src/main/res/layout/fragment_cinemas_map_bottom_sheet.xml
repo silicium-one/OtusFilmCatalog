@@ -10,19 +10,9 @@
     app:behavior_hideable="true"
     app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <ProgressBar
-            android:id="@+id/cinema_photo_loading_progress_bar"
-            style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:indeterminate="true"
-            android:visibility="gone"
-            tools:visibility="visible" />
+        android:layout_height="wrap_content">
 
         <ImageView
             android:id="@+id/cinema_photo_image_view"
@@ -35,7 +25,16 @@
             tools:src="@drawable/film_no_image"
             tools:visibility="visible" />
 
-    </LinearLayout>
+        <ProgressBar
+            android:id="@+id/cinema_photo_loading_progress_bar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            android:visibility="gone"
+            tools:visibility="visible" />
+
+    </RelativeLayout>
 
     <TextView
         android:id="@+id/cinema_name_text_view"
