@@ -72,7 +72,7 @@ import java.util.List;
 
 public class CinemasMapFragment extends FragmentWithCallback implements CameraListener, MapObjectTapListener {
     public final static String FRAGMENT_TAG = CinemasMapFragment.class.getSimpleName();
-    LinearLayout cinemas_map_bottom_sheet;
+    private LinearLayout cinemas_map_bottom_sheet;
     private MapView mapview;
     private PlacesClient placesClient;
     private ClusterizedPlacemarkCollection clusterizedCollection;
