@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Locale;
+import java.util.concurrent.Semaphore;
 
 import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
@@ -47,6 +48,8 @@ public class CinemaDescriptionFromGooglePlacesFetcher {
 
     @NonNull
     private final IGooglePlacesDiscoverMovieTheatersService service;
+
+    private Semaphore requestsToQueueSemaphore = new Semaphore(1, true);
 
     private CinemaDescriptionFromGooglePlacesFetcher() {
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
@@ -91,39 +94,60 @@ public class CinemaDescriptionFromGooglePlacesFetcher {
         return instance;
     }
 
-    public void getCinemasAsync(double latitude, double longitude, @NonNull final Consumer<Collection<CinemaDescription>> callback, @Nullable final Consumer<ErrorResponse> errorResponse) {
+    public void getCinemasAsync(double latitude, double longitude, @NonNull final Consumer<Collection<CinemaDescription>> successCallback, @Nullable final Consumer<ErrorResponse> errorCallback) {
+
+        if (!requestsToQueueSemaphore.tryAcquire())
+            return;
+
         Collection<CinemaDescription> ret = new ArrayList<>();
         String location = String.format(Locale.ENGLISH, "%.3f,%.3f", latitude, longitude);
-        getCinemasAsync(location, callback, errorResponse, null, ret);
+        getCinemasAsync(location, new Consumer<Collection<CinemaDescription>>() {
+            @SuppressLint("SyntheticAccessor")
+            @Override
+            public void accept(Collection<CinemaDescription> cinemaDescriptions) {
+                requestsToQueueSemaphore.release();
+                successCallback.accept(cinemaDescriptions);
+            }
+        }, new Consumer<ErrorResponse>() {
+            @SuppressLint("SyntheticAccessor")
+            @Override
+            public void accept(ErrorResponse errorResponse) {
+                requestsToQueueSemaphore.release();
+                if (errorCallback != null)
+                    errorCallback.accept(errorResponse);
+            }
+        }, null, ret);
     }
 
-    private void getCinemasAsync(@NonNull final String location, @NonNull final Consumer<Collection<CinemaDescription>> callback, @Nullable final Consumer<ErrorResponse> errorResponse,
+    private void getCinemasAsync(@NonNull final String location, @NonNull final Consumer<Collection<CinemaDescription>> successCallback, @Nullable final Consumer<ErrorResponse> errorCallback,
                                  @Nullable final String nextPageToken, @NonNull final Collection<CinemaDescription> alreadyFetchedCinemas) {
+
+        // проверки на Null после добавления семафора избыточны
         final Callback<DiscoverPlacesResultJson> serviceCallback = new Callback<DiscoverPlacesResultJson>() {
             @SuppressLint("SyntheticAccessor")
             @Override
             public void onResponse(@NonNull Call<DiscoverPlacesResultJson> call, @NonNull final retrofit2.Response<DiscoverPlacesResultJson> response) {
                 if (!response.isSuccessful()) {
                     if (alreadyFetchedCinemas.size() > 0)
-                        callback.accept(alreadyFetchedCinemas);
-                    if (errorResponse != null)
-                        errorResponse.accept(new ErrorResponse(R.string.httpRequestFail, response.code()));
+                        successCallback.accept(alreadyFetchedCinemas);
+                    if (errorCallback != null)
+                        errorCallback.accept(new ErrorResponse(R.string.httpRequestFail, response.code()));
                     return;
                 }
 
                 if (response.body() == null) {
                     if (alreadyFetchedCinemas.size() > 0)
-                        callback.accept(alreadyFetchedCinemas);
-                    if (errorResponse != null)
-                        errorResponse.accept(new ErrorResponse(R.string.httpResponseEmptyBody));
+                        successCallback.accept(alreadyFetchedCinemas);
+                    if (errorCallback != null)
+                        errorCallback.accept(new ErrorResponse(R.string.httpResponseEmptyBody));
                     return;
                 }
 
                 if (!response.body().status.equals("OK")) {
                     if (alreadyFetchedCinemas.size() > 0)
-                        callback.accept(alreadyFetchedCinemas);
-                    if (errorResponse != null) {
-                        errorResponse.accept(
+                        successCallback.accept(alreadyFetchedCinemas);
+                    if (errorCallback != null) {
+                        errorCallback.accept(
                                 new ErrorResponse(response.body().errorMessage == null ? response.body().status : response.body().status + " " + response.body().errorMessage));
                     }
                     return;
@@ -134,17 +158,20 @@ public class CinemaDescriptionFromGooglePlacesFetcher {
                     alreadyFetchedCinemas.add(cinemaDescription);
                 }
 
-                if (response.body().nextPageToken == null || alreadyFetchedCinemas.size() >= MAX_CINEMAS_COUNT)
-                    callback.accept(alreadyFetchedCinemas);
-                else
-                    getCinemasAsync(location, callback, errorResponse, response.body().nextPageToken, alreadyFetchedCinemas);
+                if (response.body().nextPageToken == null || alreadyFetchedCinemas.size() >= MAX_CINEMAS_COUNT) {
+                    successCallback.accept(alreadyFetchedCinemas);
+                } else
+                    getCinemasAsync(location, successCallback, errorCallback, response.body().nextPageToken, alreadyFetchedCinemas);
             }
 
+            @SuppressLint("SyntheticAccessor")
             @Override
             public void onFailure(@NonNull Call<DiscoverPlacesResultJson> call, @NonNull Throwable t) {
-                if (errorResponse != null)
-                    errorResponse.accept(new ErrorResponse(R.string.connectGooglePlacesFailure, t));
+                if (errorCallback != null)
+                    errorCallback.accept(new ErrorResponse(R.string.connectGooglePlacesFailure, t));
             }
+
+
         };
 
         Handler handler = new Handler();
